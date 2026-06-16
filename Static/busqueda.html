@@ -6443,8 +6443,9 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
                 dataType: "html",
                 success: function (data) {
 
-                    if (data.Error) {
-                        qvPartial.attr('modeloid', 0);
+                    if (!data || !String(data).trim() || data.Error) {
+                        qvPartial.attr('modeloid', modeloId);
+                        qvPartial.html(buildLocalQuickViewContent($relatedTarget));
                         return;
                     }
 
@@ -6456,6 +6457,7 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
                 },
                 error: function () {
                     qvPartial.attr('modeloid', modeloId);
+                    qvPartial.html(buildLocalQuickViewContent($relatedTarget));
                 }
             });
         });
