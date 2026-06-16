@@ -6459,6 +6459,22 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
                 }
             });
         });
+
+        $('#quick-view').on('shown.bs.modal', function () {
+            var modal = this;
+            setTimeout(function () {
+                $(modal).trigger('focus');
+            }, 0);
+        });
+
+        $('#quick-view').on('hide.bs.modal hidden.bs.modal', function () {
+            var active = document.activeElement;
+            if (active && this.contains(active) && typeof active.blur === 'function') {
+                active.blur();
+            }
+            document.body && document.body.focus && document.body.focus();
+            lastQuickViewTarget = null;
+        });
     </script>
 
                                         </div>
