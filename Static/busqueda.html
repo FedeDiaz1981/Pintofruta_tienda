@@ -6352,6 +6352,28 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
         $(window).scroll(scrollHandler);
 
 
+        var lastQuickViewTarget = null;
+
+        $(document).on('click', '.btn-vista-rapida', function () {
+            lastQuickViewTarget = $(this);
+        });
+
+        function resolveQuickViewTarget(e) {
+            var $relatedTarget = $(e && e.relatedTarget ? e.relatedTarget : []);
+
+            if ($relatedTarget && $relatedTarget.length)
+                return $relatedTarget;
+
+            if (lastQuickViewTarget && lastQuickViewTarget.length)
+                return lastQuickViewTarget;
+
+            var $active = $(document.activeElement).closest('.btn-vista-rapida');
+            if ($active.length)
+                return $active;
+
+            return $();
+        }
+
         function buildLocalQuickViewContent($relatedTarget) {
             var escapeHtml = function (value) {
                 return String(value || '').replace(/[&<>"']/g, function (char) {
@@ -6399,19 +6421,16 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
         }
 
         $('#quick-view').on('show.bs.modal', function (e) {
-            var $relatedTarget = $(e.relatedTarget);
+            var $relatedTarget = resolveQuickViewTarget(e);
             var modeloId = $relatedTarget.data('modelo-id');
             var linkUrl = $relatedTarget.data('link-url');
-            var rtsData = $relatedTarget.closest('section');
             var qvPartial = $("#qvPartial");
             var modeloAnterior = qvPartial.attr('modeloid');
 
-            if (modeloAnterior != modeloId)
-                qvPartial.html('Cargando...');
+            qvPartial.attr('modeloid', modeloId || '');
+            qvPartial.html(buildLocalQuickViewContent($relatedTarget));
 
-            if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                qvPartial.attr('modeloid', modeloId);
-                qvPartial.html(buildLocalQuickViewContent($relatedTarget));
+            if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || !modeloId) {
                 return;
             }
 
@@ -6426,7 +6445,6 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
 
                     if (data.Error) {
                         qvPartial.attr('modeloid', 0);
-                        qvPartial.html('Ocurrió un error');
                         return;
                     }
 
@@ -6438,7 +6456,6 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
                 },
                 error: function () {
                     qvPartial.attr('modeloid', modeloId);
-                    qvPartial.html(buildLocalQuickViewContent($relatedTarget));
                 }
             });
         });
