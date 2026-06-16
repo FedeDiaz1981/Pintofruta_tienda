@@ -1,0 +1,17 @@
+services:
+  - type: static_site
+    name: pintofruta-tienda
+    staticPublishPath: ./Static
+    routes:
+      - type: rewrite
+        source: /Galeria/*
+        destination: /busqueda.html
+      - type: rewrite
+        source: /Busqueda
+        destination: /busqueda.html
+      - type: rewrite
+        source: /Busqueda/*
+        destination: /busqueda.html
+      - type: rewrite
+        source: /DetalleArticulo/*
+        destination: /busqueda.html
