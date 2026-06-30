@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Demo estatica del backend comercial con ABM de productos, categorias, usuarios y listas de precios.">
+    <title>Pintofruta | Demo Backend Estatico</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-demo.css">
+    <script src="data/site-content-data.js" defer></script>
+    <script defer src="site-content.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+    <script src="admin-demo.js" defer></script>
+</head>
+<body>
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+    <main class="shell">
+        <section class="panel-app" id="panelApp">
+            <aside class="panel-sidebar">
+                <div class="brand-block">
+                    <div class="brand-mark">PF</div>
+                    <div>
+                        <strong>Pintofruta</strong>
+                        <span>Panel de administracion</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-accordion is-open" data-accordion="lists">
+                    <button class="sidebar-accordion-toggle" type="button" data-accordion-toggle="lists" aria-expanded="true">
+                        <span class="sidebar-label">ABM - listas</span>
+                        <span class="accordion-caret">▾</span>
+                    </button>
+                    <div class="sidebar-accordion-panel">
+                        <nav class="sidebar-nav" id="panelSidebar">
+                            <button class="sidebar-link active" type="button" data-panel-nav="products">Productos</button>
+                            <button class="sidebar-link" type="button" data-panel-nav="categories">Categorias</button>
+                            <button class="sidebar-link" type="button" data-panel-nav="users">Usuarios</button>
+                            <button class="sidebar-link" type="button" data-panel-nav="hero">Hero / Carrusel</button>
+                            <button class="sidebar-link" type="button" data-panel-nav="navigation">Navegación</button>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="sidebar-accordion" data-accordion="tools">
+                    <button class="sidebar-accordion-toggle" type="button" data-accordion-toggle="tools" aria-expanded="false">
+                        <span class="sidebar-label">Herramientas</span>
+                        <span class="accordion-caret">▾</span>
+                    </button>
+                    <div class="sidebar-accordion-panel">
+                        <nav class="sidebar-nav">
+                            <button class="sidebar-link" type="button" data-panel-nav="bulk">Cargas masivas</button>
+                            <button class="sidebar-link" type="button" id="downloadJsonCard">Exportar JSON</button>
+                        </nav>
+                    </div>
+                </div>
+
+            </aside>
+
+            <section class="panel-content">
+                <header class="topbar">
+                    <div class="topbar-title">
+                        <h1 id="panelTitle">Productos</h1>
+                    </div>
+                    <div class="topbar-meta">
+                        <div class="meta-chip">
+                            <span>Productos</span>
+                            <strong id="topbarProducts">0</strong>
+                        </div>
+                        <div class="meta-chip">
+                            <span>Categorias</span>
+                            <strong id="topbarCategories">0</strong>
+                        </div>
+                        <div class="meta-chip">
+                            <span>Usuarios</span>
+                            <strong id="topbarUsers">0</strong>
+                        </div>
+                        <div class="meta-chip">
+                            <span>Registro</span>
+                            <strong id="topbarCount">0</strong>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="toolbar">
+                    <div class="search-shell">
+                        <label for="panelSearch" class="sr-only">Buscar</label>
+                        <input type="search" id="panelSearch" placeholder="Buscar por SKU, nombre, email o estado">
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="btn btn-primary" type="button" id="panelCreate">Nuevo registro</button>
+                    </div>
+                </section>
+
+                <section class="table-shell">
+                    <div class="table-shell-head">
+                        <div>
+                            <span class="table-kicker" id="panelKicker">ABM</span>
+                            <h2 id="panelTableTitle">Listado de productos</h2>
+                        </div>
+                        <div class="table-kpis" id="panelKpis"></div>
+                    </div>
+                    <div class="sql-table-wrap">
+                        <table class="sql-table" id="panelTable">
+                            <thead id="panelTableHead"></thead>
+                            <tbody id="panelTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </section>
+
+        <section class="hero">
+                <div class="hero-copy">
+                    <div class="eyebrow">Demo comercial sin backend real</div>
+                    <h1>Backend estatico para mostrar 2 listas de precio, ABM y cargas masivas</h1>
+                <p>
+                    Esta vista simula el flujo que veria la cliente: precio publico para invitados,
+                    precio especial para usuarios logueados y panel admin con productos, categorias,
+                    usuarios y actualizacion masiva por Excel.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#tienda">Ver tienda</a>
+                    <a class="btn btn-secondary" href="#admin">Ver admin</a>
+                </div>
+            </div>
+
+            <aside class="login-card">
+                <div class="card-title">Acceso fijo</div>
+                <div class="login-status">
+                    <div>
+                        <strong>Administrador</strong>
+                        <p>Panel configurado para mostrar el acceso completo.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="price-strip">
+            <div class="price-mode">
+                <span class="chip-label">Vista de precios</span>
+                <div class="toggle-row">
+                    <button class="toggle-btn active" data-view="public" type="button">Precio publico</button>
+                    <button class="toggle-btn" data-view="member" type="button">Precio logueado</button>
+                </div>
+            </div>
+            <div class="price-summary">
+                <div class="summary-box">
+                    <span>Precio publico</span>
+                    <strong id="featuredPublic">$0</strong>
+                </div>
+                <div class="summary-box">
+                    <span>Precio logueado</span>
+                    <strong id="featuredMember">$0</strong>
+                </div>
+                <div class="summary-box">
+                    <span>Diferencia</span>
+                    <strong id="featuredDiff">0%</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="tienda" class="section">
+            <div class="section-head">
+                <div>
+                    <div class="eyebrow">Escaparate</div>
+                    <h2>La tienda cambia de precio segun el tipo de usuario</h2>
+                </div>
+                <p>La clienta ve como el mismo producto puede mostrar dos listas distintas sin tocar el backend real.</p>
+            </div>
+            <div class="product-grid" id="storefrontGrid"></div>
+        </section>
+
+        <section id="admin" class="section admin-section">
+            <div class="section-head">
+                <div>
+                    <div class="eyebrow">Panel comercial</div>
+                    <h2>ABM de productos, categorias, usuarios y precios masivos</h2>
+                </div>
+                <p>Todo lo que se ve debajo funciona en el navegador y queda guardado en localStorage para la demo.</p>
+            </div>
+
+            <div class="admin-lock" id="adminLock">
+                <strong>Acceso de administrador requerido</strong>
+                <p>Selecciona el perfil Administrador arriba para mostrar el ABM completo.</p>
+            </div>
+
+            <div class="admin-launcher" id="adminLauncher">
+                <button class="admin-card" type="button" data-open-panel="products">
+                    <span class="admin-card-kicker">ABM</span>
+                    <strong>Productos</strong>
+                    <p>Alta, edicion y listado dentro de un modal.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="categories">
+                    <span class="admin-card-kicker">Catalogo</span>
+                    <strong>Categorias</strong>
+                    <p>Administracion de las categorias visibles en tienda.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="users">
+                    <span class="admin-card-kicker">Accesos</span>
+                    <strong>Usuarios</strong>
+                    <p>Clientes con login y administradores autorizados.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="hero">
+                    <span class="admin-card-kicker">Contenido</span>
+                    <strong>Hero / Carrusel</strong>
+                    <p>Edicion de slides, orden e imagen principal.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="navigation">
+                    <span class="admin-card-kicker">Header</span>
+                    <strong>Navegación</strong>
+                    <p>Listas del header, secciones y grupos anidados del index.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="bulk">
+                    <span class="admin-card-kicker">Excel</span>
+                    <strong>Precios masivos</strong>
+                    <p>Plantilla, importacion y exportacion de catalogo.</p>
+                </button>
+                <button class="admin-card alt" type="button" data-download-json>
+                    <span class="admin-card-kicker">JSON</span>
+                    <strong>Exportar contenido</strong>
+                    <p>Descarga el estado completo para presentar la demo.</p>
+                </button>
+            </div>
+
+            <div class="modal-backdrop hidden" id="adminModalBackdrop">
+                <div class="admin-modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+                    <div class="admin-modal-head">
+                        <div>
+                            <div class="eyebrow" id="adminModalKicker">Panel</div>
+                            <h3 id="adminModalTitle">Titulo</h3>
+                        </div>
+                        <button class="modal-close" type="button" id="closeAdminModal" aria-label="Cerrar modal">&times;</button>
+                    </div>
+                    <div class="admin-modal-tabs" id="adminModalTabs">
+                        <button class="modal-tab active" type="button" data-open-panel="products">Productos</button>
+                        <button class="modal-tab" type="button" data-open-panel="categories">Categorias</button>
+                        <button class="modal-tab" type="button" data-open-panel="users">Usuarios</button>
+                        <button class="modal-tab" type="button" data-open-panel="hero">Hero</button>
+                        <button class="modal-tab" type="button" data-open-panel="navigation">Navegación</button>
+                        <button class="modal-tab" type="button" data-open-panel="bulk">Excel</button>
+                    </div>
+                    <div class="admin-modal-body">
+                        <section class="modal-panel active" data-panel="products">
+                            <div class="panel-head">
+                                <h3>Productos</h3>
+                                <span class="panel-badge">ABM</span>
+                            </div>
+                            <form id="productForm" class="form-grid">
+                                <input type="hidden" id="productId">
+                                <label>
+                                    SKU
+                                    <input type="text" id="productSku" placeholder="Ej: MERA09" required>
+                                </label>
+                                <label>
+                                    Nombre
+                                    <input type="text" id="productName" placeholder="Producto" required>
+                                </label>
+                                <label>
+                                    Categoria
+                                    <select id="productCategory" required></select>
+                                </label>
+                                <label>
+                                    Marca
+                                    <input type="text" id="productBrand" placeholder="Marca" required>
+                                </label>
+                                <label>
+                                    Precio publico
+                                    <input type="number" id="productPublicPrice" min="0" step="1" required>
+                                </label>
+                                <label>
+                                    Precio logueado
+                                    <input type="number" id="productMemberPrice" min="0" step="1" required>
+                                </label>
+                                <label>
+                                    Stock
+                                    <input type="number" id="productStock" min="0" step="1" required>
+                                </label>
+                                <label>
+                                    Estado
+                                    <select id="productStatus">
+                                        <option value="published">Publicado</option>
+                                        <option value="draft">Borrador</option>
+                                        <option value="hidden">Oculto</option>
+                                    </select>
+                                </label>
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="productFeatured">
+                                    Destacado en home
+                                </label>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Guardar producto</button>
+                                    <button class="btn btn-ghost" type="button" id="resetProductForm">Limpiar</button>
+                                </div>
+                            </form>
+                            <div class="table-wrap">
+                                <table class="table" id="productTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SKU</th>
+                                            <th>Nombre</th>
+                                            <th>Categoria</th>
+                                            <th>Precios</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="modal-panel" data-panel="categories">
+                            <div class="panel-head">
+                                <h3>Categorias</h3>
+                                <span class="panel-badge soft">Catalogo</span>
+                            </div>
+                            <form id="categoryForm" class="mini-form">
+                                <input type="hidden" id="categoryId">
+                                <label>
+                                    Nombre
+                                    <input type="text" id="categoryName" placeholder="Ej: Bebidas" required>
+                                </label>
+                                <label>
+                                    Slug
+                                    <input type="text" id="categorySlug" placeholder="bebidas" required>
+                                </label>
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="categoryVisible" checked>
+                                    Visible en tienda
+                                </label>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Guardar categoria</button>
+                                    <button class="btn btn-ghost" type="button" id="resetCategoryForm">Limpiar</button>
+                                </div>
+                            </form>
+                            <div class="list-stack" id="categoryList"></div>
+                        </section>
+
+                        <section class="modal-panel" data-panel="users">
+                            <div class="panel-head">
+                                <h3>Usuarios</h3>
+                                <span class="panel-badge accent">Accesos</span>
+                            </div>
+                            <form id="userForm" class="mini-form">
+                                <input type="hidden" id="userId">
+                                <label>
+                                    Nombre
+                                    <input type="text" id="userName" placeholder="Nombre y apellido" required>
+                                </label>
+                                <label>
+                                    Email
+                                    <input type="email" id="userEmail" placeholder="correo@dominio.com" required>
+                                </label>
+                                <label>
+                                    Rol
+                                    <select id="userRole">
+                                        <option value="customer">Cliente con login</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </label>
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="userCanSeePrices" checked>
+                                    Acceso a lista de precios
+                                </label>
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="userActive" checked>
+                                    Usuario activo
+                                </label>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Guardar usuario</button>
+                                    <button class="btn btn-ghost" type="button" id="resetUserForm">Limpiar</button>
+                                </div>
+                            </form>
+                            <div class="table-wrap compact">
+                                <table class="table" id="userTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Rol</th>
+                                            <th>Acceso</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="modal-panel" data-panel="hero">
+                            <div class="panel-head">
+                                <h3>Hero / Carrusel principal</h3>
+                                <span class="panel-badge">Contenido</span>
+                            </div>
+                            <div class="bulk-grid">
+                                <form id="heroForm" class="mini-form">
+                                    <input type="hidden" id="heroId">
+                                    <label>
+                                        Titulo
+                                        <input type="text" id="heroTitle" placeholder="Titulo del slide" required>
+                                    </label>
+                                    <label>
+                                        Subtitulo
+                                        <input type="text" id="heroSubtitle" placeholder="Texto secundario" required>
+                                    </label>
+                                    <label>
+                                        Imagen
+                                        <input type="text" id="heroImage" placeholder="Content/Images/Banners/...jpg" required>
+                                    </label>
+                                    <label>
+                                        Link
+                                        <input type="text" id="heroLink" placeholder="/Galeria/123-campania" required>
+                                    </label>
+                                    <label>
+                                        Badge
+                                        <input type="text" id="heroBadge" placeholder="Promo / Marca / Nuevo" required>
+                                    </label>
+                                    <label>
+                                        Orden
+                                        <input type="number" id="heroOrder" min="1" step="1" required>
+                                    </label>
+                                    <label class="checkbox-row">
+                                        <input type="checkbox" id="heroActive" checked>
+                                        Slide activo
+                                    </label>
+                                    <div class="form-actions">
+                                        <button class="btn btn-primary" type="submit">Guardar slide</button>
+                                        <button class="btn btn-ghost" type="button" id="resetHeroForm">Limpiar</button>
+                                        <button class="btn btn-secondary" type="button" id="downloadJson">Descargar JSON</button>
+                                    </div>
+                                </form>
+                                <div class="table-wrap compact">
+                                    <table class="table" id="heroTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Orden</th>
+                                                <th>Titulo</th>
+                                                <th>Imagen</th>
+                                                <th>Estado</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="modal-panel" data-panel="navigation">
+                            <div class="panel-head">
+                                <h3>Navegación del header</h3>
+                                <span class="panel-badge accent">Header</span>
+                            </div>
+                            <div class="admin-grid nav-grid">
+                                <div class="panel">
+                                    <div class="panel-head">
+                                        <h3>Accesos rápidos</h3>
+                                        <span class="panel-badge soft">Scopes</span>
+                                    </div>
+                                    <div class="list-stack" id="navScopesList"></div>
+                                </div>
+                                <div class="panel wide">
+                                    <div class="panel-head">
+                                        <h3>Secciones y grupos</h3>
+                                        <span class="panel-badge warning">Mega menú</span>
+                                    </div>
+                                    <div class="list-stack" id="navSectionsList"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="modal-panel" data-panel="bulk">
+                            <div class="panel-head">
+                                <h3>Carga masiva de precios</h3>
+                                <span class="panel-badge warning">Excel</span>
+                            </div>
+                            <div class="bulk-grid">
+                                <div class="bulk-copy">
+                                    <p>
+                                        Sube un archivo .xlsx o .csv con columnas <code>sku</code>, <code>publicPrice</code>
+                                        y <code>memberPrice</code>. La demo actualiza los valores en pantalla y muestra un resumen.
+                                    </p>
+                                    <div class="bulk-actions">
+                                        <button class="btn btn-primary" type="button" id="downloadTemplate">Descargar plantilla Excel</button>
+                                        <button class="btn btn-secondary" type="button" id="downloadCatalog">Descargar catalogo actual</button>
+                                    </div>
+                                </div>
+                                <div class="bulk-upload">
+                                    <label class="file-drop">
+                                        <input type="file" id="priceFile" accept=".xlsx,.xls,.csv">
+                                        <span>Soltar archivo o elegirlo aqui</span>
+                                    </label>
+                                    <div class="bulk-footer">
+                                        <button class="btn btn-primary" type="button" id="importPrices">Procesar archivo</button>
+                                        <div class="import-state" id="importState">Esperando archivo</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
