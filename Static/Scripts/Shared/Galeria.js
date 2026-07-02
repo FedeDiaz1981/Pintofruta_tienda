@@ -5,6 +5,45 @@ var Galeria = {
 
         Galeria.initEvents();
         Galeria.conectarConMiniCart();
+        Galeria.actualizarBotonesMovil();
+
+        $(window)
+            .off('resize.galeriaBotonesMovil')
+            .on('resize.galeriaBotonesMovil', function () {
+                Galeria.actualizarBotonesMovil();
+            });
+    },
+
+    actualizarBotonesMovil: function () {
+        var esMovil = window.innerWidth <= 768;
+
+        $('#contenedorArticulos .add-button:not(.add-button-cajas), #contenedorArticulos .addtocart_btn button, #contenedorArticulos .addtocart_btn a, #contenedorArticulos .addtocart_btn .btnAgregarAlCarrito').each(function () {
+            var $btn = $(this);
+            var texto = ($btn.text() || '').trim().toLowerCase();
+            var esCTAAgregar = $btn.hasClass('add-button') || $btn.hasClass('btnAgregarAlCarrito') || texto.indexOf('agregar') !== -1 || texto === '+';
+
+            if (!esCTAAgregar) {
+                return;
+            }
+
+            if (esMovil) {
+                if (!$btn.data('html-original')) {
+                    $btn.data('html-original', $btn.html());
+                }
+                $btn.addClass('add-button-movil');
+                $btn.html('<i class="fa fa-plus" aria-hidden="true"></i>');
+                $btn.attr('aria-label', 'Agregar al pedido');
+                $btn.attr('title', 'Agregar al pedido');
+            } else {
+                var original = $btn.data('html-original');
+                if (original) {
+                    $btn.html(original);
+                }
+                $btn.removeClass('add-button-movil');
+                $btn.removeAttr('aria-label');
+                $btn.removeAttr('title');
+            }
+        });
     },
 
     initEvents: function () {

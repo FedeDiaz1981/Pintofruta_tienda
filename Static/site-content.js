@@ -1,5 +1,5 @@
 (function () {
-    const STORAGE_KEY = "pintofruta-static-site-content-v1";
+    const STORAGE_KEY = "pintofruta-static-site-content-v2";
     const DATA_URL = "data/site-content.json";
     const fallbackContent = {
         heroSlides: [
@@ -10,6 +10,7 @@
                 subtitle: "Contenido compartido desde un JSON estatica.",
                 badge: "",
                 image: "Content/Images/Banners/Banner SM 1.jpg",
+                imageMobile: "Content/Images/Banners/pf-hero-01-mobile.jpg",
                 link: "/Galeria/1015-sierra-de-los-padres",
                 active: true
             }
@@ -39,6 +40,37 @@
             }
         });
         return result;
+    }
+
+    function mergeRecordsById(baseRecords, overlayRecords) {
+        const baseList = Array.isArray(baseRecords) ? baseRecords : [];
+        const overlayList = Array.isArray(overlayRecords) ? overlayRecords : [];
+        if (!baseList.length && !overlayList.length) {
+            return [];
+        }
+
+        const overlayById = new Map(
+            overlayList
+                .filter((item) => item && item.id !== undefined && item.id !== null)
+                .map((item) => [item.id, item])
+        );
+        const merged = baseList.map((item) => {
+            if (!item || item.id === undefined || item.id === null) {
+                return item;
+            }
+            return overlayById.has(item.id) ? { ...item, ...overlayById.get(item.id) } : item;
+        });
+
+        overlayList.forEach((item) => {
+            if (!item || item.id === undefined || item.id === null) {
+                return;
+            }
+            if (!baseList.some((baseItem) => baseItem && baseItem.id === item.id)) {
+                merged.push(item);
+            }
+        });
+
+        return merged;
     }
 
     async function fetchJson() {
@@ -78,6 +110,10 @@
             const remote = (await fetchJson()) || {};
             const local = readStoredContent() || {};
             cachedContent = deepMerge(deepMerge(baseContent, remote), local);
+            cachedContent.heroSlides = mergeRecordsById(
+                baseContent.heroSlides,
+                mergeRecordsById(remote.heroSlides, local.heroSlides)
+            );
             return cachedContent;
         })();
 
@@ -115,6 +151,20 @@
             .replace(/'/g, "&#39;");
     }
 
+    function isMobileHeroViewport() {
+        return window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function heroImageForViewport(slide) {
+        if (!slide) {
+            return "assets/images/metaimage.jpg";
+        }
+        if (isMobileHeroViewport() && slide.imageMobile) {
+            return slide.imageMobile;
+        }
+        return slide.image || "assets/images/metaimage.jpg";
+    }
+
     function renderHeroCarousel(content) {
         const root = document.getElementById("carouselExampleCaptions");
         if (!root || !content || !Array.isArray(content.heroSlides)) {
@@ -142,7 +192,7 @@
 
         inner.innerHTML = slides.map((slide, index) => {
             const link = normalizeLink(slide.link);
-            const image = slide.image || "assets/images/metaimage.jpg";
+            const image = heroImageForViewport(slide);
             return `
                 <div class="carousel-item ${index === 0 ? "active" : ""} hero-slide-${slide.id}">
                     <a href="${escapeHtml(link)}">
@@ -155,6 +205,36 @@
         if (window.jQuery && window.jQuery.fn && window.jQuery.fn.carousel) {
             window.jQuery(root).carousel("pause");
         }
+    }
+
+    function renderHomeSpotlightBanner(content) {
+        const root = document.querySelector(".deal-banner2");
+        if (!root || !content || !Array.isArray(content.heroSlides)) {
+            return;
+        }
+
+        const slides = content.heroSlides
+            .filter((slide) => slide && slide.active !== false)
+            .slice()
+            .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+
+        if (!slides.length) {
+            return;
+        }
+
+        const selected = slides.find((slide) => slide.homeSpotlight || slide.highlightHome || slide.featuredHome) || slides[0];
+        if (!selected) {
+            return;
+        }
+
+        const link = normalizeLink(selected.link || "galeria.html");
+        const image = heroImageForViewport(selected);
+
+        root.innerHTML = `
+            <a class="deal-banner-link" href="${escapeHtml(link)}" data-hero-spotlight="${escapeHtml(String(selected.id || ""))}">
+                <img src="${escapeHtml(image)}" class="img-fluid w-100" alt="${escapeHtml(selected.title || "Banner destacado")}">
+            </a>
+        `;
     }
 
     function renderHeaderSearchScopes(content) {
@@ -181,14 +261,27 @@
     async function initHeroCarousel() {
         const content = await load();
         renderHeroCarousel(content);
+        renderHomeSpotlightBanner(content);
         renderHeaderSearchScopes(content);
+
+        let lastMobileState = isMobileHeroViewport();
+        window.addEventListener("resize", () => {
+            const mobileState = isMobileHeroViewport();
+            if (mobileState === lastMobileState) {
+                return;
+            }
+            lastMobileState = mobileState;
+            renderHeroCarousel(content);
+            renderHomeSpotlightBanner(content);
+        });
     }
 
     window.PFContent = {
         load,
         save,
         get,
-        renderHeroCarousel
+        renderHeroCarousel,
+        renderHomeSpotlightBanner
     };
 
     document.addEventListener("DOMContentLoaded", initHeroCarousel);
@@ -196,6 +289,10 @@
         if (event.key !== STORAGE_KEY) {
             return;
         }
-        load(true).then(renderHeroCarousel);
+        load(true).then((content) => {
+            renderHeroCarousel(content);
+            renderHomeSpotlightBanner(content);
+            renderHeaderSearchScopes(content);
+        });
     });
 })();

@@ -28,6 +28,9 @@ function isLocalPreview() {
 }
 
 function showGenericModal(event) {
+    if (isLocalPreview()) {
+        return;
+    }
     var src = event.target || event.srcElement;
 
     // find the parent that contains proper decorations

@@ -65,6 +65,7 @@
 <!-- #endregion -->
 
 <script type="text/javascript" src="Scripts/ScriptsMaer.js"></script>
+<script type="text/javascript" src="auth.js"></script>
 <script type="text/javascript" src="Scripts/Shared/MiniCart.js"></script>
 <script type="text/javascript" src="Scripts/Shared/MenuUsuario.js"></script>
 <script type="text/javascript" src="Scripts/Shared/GoogleAnalytics.js"></script>
@@ -163,7 +164,7 @@
                             </span>
                         </div>
                         <div class="logo-block">
-    <a href="#" onclick="if(window.location.protocol !== 'file:'){window.location.href='index.html';}return false;"><img src="assets/images/logo/logo-Pintofruta.png" class="img-fluid-ovr" alt="logo"></a>
+    <a href="index.html"><img src="assets/images/logo/logo-Pintofruta.png" class="img-fluid-ovr" alt="logo"></a>
 </div>
                         <div>
     <div>
@@ -6287,9 +6288,9 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
             NotificacionesDeStockEnGaleria.init(configs);
         });
 
-        var moreRowsUrl = '/Galeria/0';
+        var moreRowsUrl = 'galeria.html?source=/Galeria/0';
         if (typeof Filtros != 'undefined')
-            moreRowsUrl = Filtros.getUrlConFiltros('/Galeria/');
+            moreRowsUrl = Filtros.getUrlConFiltros('galeria.html?source=/Galeria/');
 
         var page = 1,
             inCallback = false;
@@ -6779,7 +6780,7 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
 
             <li>
                 <div class="buttons">
-                        <a href="/Galeria" class="btn btn-rounded btn-xs">Ir a la galería</a>
+                        <a href="carrito.html" class="btn btn-rounded btn-xs">Ver pedido</a>
                 </div>
             </li>
         </ul>
@@ -6892,6 +6893,7 @@ Harina de Mani Proteica Desgrasada PB Slim x 250g - Snackwell                </h
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script type="text/javascript" src="Scripts/theme/script.js"></script>
     <script src="Scripts/theme/modal.js"></script>
+    <script type="text/javascript" src="demo-circuit.js"></script>
 
 <script type="text/javascript">
     if (window.location.protocol !== 'file:') {

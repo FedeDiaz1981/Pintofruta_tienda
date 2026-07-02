@@ -1051,9 +1051,9 @@
                     }
                 },
                 {
-                    breakpoint: 576,
+                    breakpoint: 768,
                     settings: {
-                        slidesToShow: 1,
+                        slidesToShow: 2,
                         slidesToScroll: 1
                     }
                 }
@@ -1158,7 +1158,7 @@
                 }
             },
             {
-                breakpoint: 576,
+                breakpoint: 768,
                 settings: {
                     slidesToShow: Math.min(2, MaxSlidesToShow),
                     slidesToScroll: 1
@@ -1575,7 +1575,16 @@
 })(jQuery);
 
 function openAccount() {
-    document.getElementById("myAccount").classList.add('open-side');
+    if (window.PFAuth && typeof window.PFAuth.isAuthenticated === "function" && !window.PFAuth.isAuthenticated()) {
+        var returnUrl = encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+        window.location.href = "login.html?return=" + returnUrl;
+        return;
+    }
+
+    var account = document.getElementById("myAccount");
+    if (account) {
+        account.classList.add('open-side');
+    }
 }
 function closeAccount() {
     document.getElementById("myAccount").classList.remove('open-side');

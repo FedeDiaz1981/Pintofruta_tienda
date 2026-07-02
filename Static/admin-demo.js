@@ -5,6 +5,7 @@ const defaultState = {
     viewMode: "public",
     activeAdminPanel: "products",
     panelSearchQuery: "",
+    activeModalAction: "view",
     headerNavigation: window.PF_BASE_CONTENT?.headerNavigation || { searchScopes: [], sections: [] },
     heroSlides: [
         {
@@ -14,8 +15,10 @@ const defaultState = {
             subtitle: "Destacados de temporada con visual principal del home.",
             badge: "Campana activa",
             image: "Content/Images/Banners/Banner SM 1.jpg",
-            link: "/Galeria/1015-sierra-de-los-padres",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/1015-sierra-de-los-padres",
+            active: true,
+            homeSpotlight: true
         },
         {
             id: 2,
@@ -24,8 +27,10 @@ const defaultState = {
             subtitle: "Oferta destacada con acceso directo a la galeria.",
             badge: "Promo",
             image: "Content/Images/Banners/Banner Suma 2.jpg",
-            link: "/Galeria/954-suma",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/954-suma",
+            active: true,
+            homeSpotlight: false
         },
         {
             id: 3,
@@ -34,8 +39,10 @@ const defaultState = {
             subtitle: "Contenido editable para comunicar lanzamientos o marcas.",
             badge: "Lanzamiento",
             image: "Content/Images/Banners/Un Mate Banner 3.jpg",
-            link: "/Galeria/984-un-mate",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/984-un-mate",
+            active: true,
+            homeSpotlight: false
         },
         {
             id: 4,
@@ -44,8 +51,10 @@ const defaultState = {
             subtitle: "Banner de marca con link a categoria especifica.",
             badge: "Marca",
             image: "Content/Images/Banners/Banner QU Cocoiogo 4.jpg",
-            link: "/Galeria/644-qu",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/644-qu",
+            active: true,
+            homeSpotlight: false
         },
         {
             id: 5,
@@ -54,8 +63,10 @@ const defaultState = {
             subtitle: "Slide pensado para mostrar una nueva campana visual.",
             badge: "Nuevo",
             image: "Content/Images/Banners/Meraki Banner.jpg",
-            link: "/Galeria/129-meraki",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/129-meraki",
+            active: true,
+            homeSpotlight: false
         },
         {
             id: 6,
@@ -64,8 +75,10 @@ const defaultState = {
             subtitle: "Cierre del carrusel con foco en la lista de productos.",
             badge: "Promo",
             image: "Content/Images/Banners/Banner VA 6.jpg",
-            link: "/Galeria/657-veg-abundancia",
-            active: true
+            imageMobile: "",
+            link: "galeria.html?source=/Galeria/657-veg-abundancia",
+            active: true,
+            homeSpotlight: false
         }
     ],
     products: [
@@ -107,13 +120,13 @@ function bindElements() {
         "panelApp", "panelSidebar", "panelTitle", "topbarProducts", "topbarCategories", "topbarUsers", "topbarCount", "panelKicker",
         "panelTableTitle", "panelKpis", "panelSearch", "panelCreate", "panelTable", "panelTableHead", "panelTableBody",
         "featuredPublic", "featuredMember", "featuredDiff", "storefrontGrid", "adminLock",
-        "adminLauncher", "adminModalBackdrop", "adminModalTitle", "adminModalKicker", "closeAdminModal", "adminModalTabs",
+        "adminLauncher", "adminModalBackdrop", "adminModalTitle", "adminModalKicker", "closeAdminModal",
         "downloadJsonCard",
         "productForm", "productId", "productSku", "productName", "productCategory", "productBrand", "productPublicPrice",
         "productMemberPrice", "productStock", "productStatus", "productFeatured", "productTable", "resetProductForm",
         "categoryForm", "categoryId", "categoryName", "categorySlug", "categoryVisible", "categoryList", "resetCategoryForm",
         "userForm", "userId", "userName", "userEmail", "userRole", "userCanSeePrices", "userActive", "userTable", "resetUserForm",
-        "heroForm", "heroId", "heroTitle", "heroSubtitle", "heroImage", "heroLink", "heroBadge", "heroOrder", "heroActive",
+        "heroForm", "heroId", "heroTitle", "heroSubtitle", "heroImage", "heroImageMobile", "heroLink", "heroBadge", "heroOrder", "heroActive", "heroHomeSpotlight",
         "heroTable", "resetHeroForm", "navScopesList", "navSectionsList", "downloadTemplate", "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson"
     ];
     ids.forEach((id) => {
@@ -173,7 +186,6 @@ function bindEvents() {
     els.downloadJsonCard.addEventListener("click", downloadJson);
 
     els.adminLauncher.addEventListener("click", handleLauncherClick);
-    els.adminModalTabs.addEventListener("click", handleLauncherClick);
     els.closeAdminModal.addEventListener("click", closeAdminModal);
     els.adminModalBackdrop.addEventListener("click", handleBackdropClick);
 
@@ -189,7 +201,7 @@ function handlePanelSidebarClick(event) {
     els.panelSearch.value = "";
     persistAndRender();
     if (panel === "bulk") {
-        openAdminModal("bulk");
+        openAdminModal("bulk", "view");
     } else {
         closeAdminModal();
     }
@@ -209,8 +221,9 @@ function handlePanelSearch(event) {
 }
 
 function handlePanelCreate() {
+    state.activeModalAction = "create";
     if (state.activeAdminPanel === "bulk") {
-        openAdminModal("bulk");
+        openAdminModal("bulk", "view");
         return;
     }
     openAdminModal(state.activeAdminPanel);
@@ -221,6 +234,7 @@ function openEditor(type, id) {
     if (type === "category") editCategory(id);
     if (type === "user") editUser(id);
     if (type === "hero") editHeroSlide(id);
+    state.activeModalAction = "edit";
     openAdminModal(type);
 }
 
@@ -252,7 +266,7 @@ function handlePanelTableClick(event) {
     }
 
     if (bulkButton) {
-        openAdminModal("bulk");
+        openAdminModal("bulk", "view");
     }
 }
 
@@ -260,7 +274,7 @@ function handleLauncherClick(event) {
     const button = event.target.closest("[data-open-panel]");
     if (!button) return;
     const panel = button.dataset.openPanel;
-    openAdminModal(panel);
+    openAdminModal(panel, "view");
 }
 
 function handleBackdropClick(event) {
@@ -280,8 +294,9 @@ function persistAndRender() {
     renderAll();
 }
 
-function openAdminModal(panel) {
+function openAdminModal(panel, action = state.activeModalAction || "view") {
     state.activeAdminPanel = panel;
+    state.activeModalAction = action;
     els.adminModalBackdrop.classList.remove("hidden");
     persistAndRender();
 }
@@ -307,6 +322,7 @@ function loadState() {
             ...parsed,
             nextIds: { ...defaultState.nextIds, ...(parsed.nextIds || {}) },
             panelSearchQuery: parsed.panelSearchQuery || "",
+            activeModalAction: parsed.activeModalAction || "view",
             sessionRole: "admin",
             heroSlides: Array.isArray(parsed.heroSlides) && parsed.heroSlides.length ? parsed.heroSlides : structuredClone(defaultState.heroSlides),
             products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : structuredClone(defaultState.products),
@@ -339,6 +355,7 @@ function mergeState(base, incoming) {
     };
     merged.sessionRole = "admin";
     merged.activeAdminPanel = incoming.activeAdminPanel || base.activeAdminPanel;
+    merged.activeModalAction = incoming.activeModalAction || base.activeModalAction;
     merged.panelSearchQuery = incoming.panelSearchQuery || base.panelSearchQuery;
     merged.heroSlides = Array.isArray(incoming.heroSlides) && incoming.heroSlides.length ? incoming.heroSlides : base.heroSlides;
     merged.products = Array.isArray(incoming.products) && incoming.products.length ? incoming.products : base.products;
@@ -616,6 +633,7 @@ function renderPanelTableHTML(panel, records) {
                         <td><strong>${slide.order}</strong></td>
                         <td>${escapeHtml(slide.title)}<span class="row-sub">${escapeHtml(slide.badge || "")}</span></td>
                         <td>${escapeHtml(slide.image)}</td>
+                        <td>${slide.imageMobile ? `${escapeHtml(slide.imageMobile)}` : "-"}</td>
                         <td>${slide.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto")}</td>
                         <td>
                             <div class="sql-actions">
@@ -866,6 +884,8 @@ function renderHeroSlides() {
                 <span class="badge">${escapeHtml(slide.badge || "")}</span>
             </td>
             <td>${escapeHtml(slide.image)}</td>
+            <td>${slide.imageMobile ? `<span class="badge">${escapeHtml(slide.imageMobile)}</span>` : '<span class="badge">-</span>'}</td>
+            <td>${slide.homeSpotlight ? '<span class="badge">Sí</span>' : '<span class="badge">-</span>'}</td>
             <td>${slide.active ? "Activo" : "Oculto"}</td>
             <td>
                 <div class="row-actions">
@@ -928,10 +948,22 @@ function renderAdminLock() {
 
 function renderAdminModal() {
     const meta = {
-        products: { title: "Productos", kicker: "ABM" },
-        categories: { title: "Categorias", kicker: "Catalogo" },
-        users: { title: "Usuarios", kicker: "Accesos" },
-        hero: { title: "Hero / Carrusel principal", kicker: "Contenido" },
+        products: {
+            title: state.activeModalAction === "edit" ? "Editar producto" : "Nuevo producto",
+            kicker: "ABM",
+        },
+        categories: {
+            title: state.activeModalAction === "edit" ? "Editar categoria" : "Nueva categoria",
+            kicker: "Catalogo",
+        },
+        users: {
+            title: state.activeModalAction === "edit" ? "Editar usuario" : "Nuevo usuario",
+            kicker: "Accesos",
+        },
+        hero: {
+            title: state.activeModalAction === "edit" ? "Editar slide" : "Nuevo slide",
+            kicker: "Contenido",
+        },
         bulk: { title: "Carga masiva de precios", kicker: "Excel" },
     }[state.activeAdminPanel] || { title: "Panel", kicker: "Admin" };
 
@@ -940,9 +972,6 @@ function renderAdminModal() {
 
     document.querySelectorAll(".modal-panel").forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.panel === state.activeAdminPanel);
-    });
-    document.querySelectorAll(".modal-tab").forEach((tab) => {
-        tab.classList.toggle("active", tab.dataset.openPanel === state.activeAdminPanel);
     });
 }
 
@@ -1038,15 +1067,26 @@ function saveUser(event) {
 function saveHeroSlide(event) {
     event.preventDefault();
     const id = Number(els.heroId.value || 0);
+    const rawLink = els.heroLink.value.trim();
+    const normalizedLink = rawLink.replace(/^https?:\/\/www\.greenco\.com\.ar\/Galeria\//i, "galeria.html?source=/Galeria/")
+        .replace(/^https?:\/\/greenco\.com\.ar\/Galeria\//i, "galeria.html?source=/Galeria/")
+        .replace(/^\/Galeria\//i, "galeria.html?source=/Galeria/")
+        .replace(/^https?:\/\/www\.greenco\.com\.ar\/Seguridad\/Register/i, "login.html?mode=register");
     const payload = {
         title: els.heroTitle.value.trim(),
         subtitle: els.heroSubtitle.value.trim(),
         image: els.heroImage.value.trim(),
-        link: els.heroLink.value.trim(),
+        imageMobile: els.heroImageMobile.value.trim(),
+        link: normalizedLink || "galeria.html",
         badge: els.heroBadge.value.trim(),
         order: Number(els.heroOrder.value),
         active: els.heroActive.checked,
+        homeSpotlight: els.heroHomeSpotlight.checked,
     };
+
+    if (payload.homeSpotlight) {
+        state.heroSlides = state.heroSlides.map((slide) => ({ ...slide, homeSpotlight: false }));
+    }
 
     if (id) {
         state.heroSlides = state.heroSlides.map((slide) => (slide.id === id ? { ...slide, ...payload } : slide));
@@ -1057,6 +1097,7 @@ function saveHeroSlide(event) {
     clearHiddenFormField("heroId");
     els.heroForm.reset();
     els.heroActive.checked = true;
+    els.heroHomeSpotlight.checked = false;
     els.heroOrder.value = nextHeroOrder();
     persistAndRender();
 }
@@ -1106,10 +1147,12 @@ function editHeroSlide(id) {
     els.heroTitle.value = slide.title;
     els.heroSubtitle.value = slide.subtitle;
     els.heroImage.value = slide.image;
+    els.heroImageMobile.value = slide.imageMobile || "";
     els.heroLink.value = slide.link;
     els.heroBadge.value = slide.badge;
     els.heroOrder.value = slide.order;
     els.heroActive.checked = slide.active !== false;
+    els.heroHomeSpotlight.checked = !!slide.homeSpotlight;
     window.location.hash = "#admin";
 }
 
@@ -1150,7 +1193,9 @@ function syncForms() {
     els.userCanSeePrices.checked = true;
     els.userActive.checked = true;
     els.heroActive.checked = true;
+    els.heroHomeSpotlight.checked = false;
     els.heroOrder.value = nextHeroOrder();
+    els.heroImageMobile.value = "";
     populateCategorySelect();
 }
 

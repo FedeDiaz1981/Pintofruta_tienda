@@ -19,7 +19,17 @@
         (function () {
             var path = window.location.pathname || '';
             var query = window.location.search || '';
-            if (path.indexOf('/Galeria/') === 0 || path.indexOf('/Busqueda') === 0 || path.indexOf('/DetalleArticulo/') === 0) {
+            if (path.indexOf('/Galeria/') === 0) {
+                window.location.replace('/galeria.html?source=' + encodeURIComponent(path + query));
+                return;
+            }
+
+            if (path.indexOf('/DetalleArticulo/') === 0) {
+                window.location.replace('/detallearticulo.html?source=' + encodeURIComponent(path + query));
+                return;
+            }
+
+            if (path.indexOf('/Busqueda') === 0) {
                 window.location.replace('/busqueda.html?source=' + encodeURIComponent(path + query));
                 return;
             }

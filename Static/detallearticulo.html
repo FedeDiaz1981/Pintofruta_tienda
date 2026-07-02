@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Detalle estático de producto para la maqueta de Pintofruta." />
+    <title>Pintofruta | Detalle de artículo</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="maqueta-pages.css">
+    <script src="data/site-content-data.js" defer></script>
+    <script defer src="auth.js"></script>
+    <script defer src="site-content.js"></script>
+    <script defer src="maqueta-pages.js"></script>
+</head>
+<body data-page="detail">
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">PF</span>
+                <span class="brand-copy">
+                    <strong>Pintofruta</strong>
+                    <span>Detalle de artículo</span>
+                </span>
+            </a>
+            <nav class="top-links">
+                <a class="chip-link" href="index.html">Home</a>
+                <a class="chip-link" href="galeria.html">Galería</a>
+                <a class="chip-link" href="busqueda.html">Búsqueda</a>
+                <a class="chip-link button-primary" href="admin-demo.html">Admin demo</a>
+                <a class="chip-link" href="login.html">Ingresar</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-panel" id="detailRoot">
+                <span class="eyebrow" data-kicker>Ficha / Producto</span>
+                <h1 class="detail-title" data-detail-hero-title>Producto destacado</h1>
+                <p class="hero-copy" data-detail-description>
+                    Ficha técnica y visual del producto.
+                </p>
+                <div class="detail-meta" id="detailMeta"></div>
+            </div>
+        </section>
+
+        <section class="section detail-grid">
+            <article class="detail-panel detail-gallery">
+                <div class="detail-visual">
+                    <img data-main-image src="assets/images/metaimage.jpg" alt="Producto" />
+                </div>
+                <div class="thumb-row" id="detailThumbs"></div>
+            </article>
+
+            <aside class="detail-panel detail-info">
+                <span class="eyebrow">Ficha / Técnica</span>
+                <h2 data-detail-title>Producto destacado</h2>
+                <p class="detail-copy">
+                    Ficha pensada para mostrar la imagen, el precio y la compra rápida del producto.
+                </p>
+                <div class="detail-price">
+                    <div>
+                        <span data-price-label>Precio</span>
+                        <strong data-price-value>$0</strong>
+                    </div>
+                </div>
+                <div class="detail-buy">
+                    <div class="detail-qty">
+                        <label for="detailQty">Cantidad</label>
+                        <input id="detailQty" type="number" min="1" step="1" value="1" data-detail-qty>
+                    </div>
+                    <button class="button button-primary" type="button" data-demo-cart-add="1" data-detail-add-to-cart data-cart-id="" data-cart-sku="" data-cart-name="" data-cart-brand="" data-cart-href="" data-cart-qty="1">Agregar al carrito</button>
+                </div>
+                <div class="detail-facts">
+                    <div class="fact"><span>Marca</span><strong data-brand>-</strong></div>
+                    <div class="fact"><span>Categoría</span><strong data-category>-</strong></div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section detail-panel">
+            <div class="tabbar">
+                <button class="tab active" type="button" data-tab="overview">Descripción</button>
+                <button class="tab" type="button" data-tab="specs">Ficha técnica</button>
+            </div>
+            <div class="tabs">
+                <div class="tab-panel active" data-tab-panel="overview" id="detailTabOverview"></div>
+                <div class="tab-panel" data-tab-panel="specs" id="detailTabSpecs"></div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

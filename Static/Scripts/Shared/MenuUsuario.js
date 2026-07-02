@@ -24,6 +24,26 @@ var MenuUsuario = {
     },
 
     validarUsuario: function (usuario, pass) {
+        if (window.PFAuth && typeof window.PFAuth.login === "function") {
+            var result = window.PFAuth.login(usuario, pass);
+            if (!result.ok) {
+                this.borrarPassword();
+                this.mostrarError(result.message || "El usuario o la contraseña son incorrectos");
+                return;
+            }
+
+            this.ocultarError();
+            this.cerrarSiExiste();
+            window.location.reload();
+            return;
+        }
+
+        if (window.location.protocol === "file:") {
+            this.borrarPassword();
+            this.mostrarError("El login del backend no está disponible en la maqueta local");
+            return;
+        }
+
         var params = {
             usuario: usuario,
             password: pass
@@ -95,6 +115,13 @@ var MenuUsuario = {
 
     submit: function () {
         $("#frmLoginMenu").submit();
+    },
+
+    cerrarSiExiste: function () {
+        var account = document.getElementById("myAccount");
+        if (account) {
+            account.classList.remove("open-side");
+        }
     },
 
     borrarPassword: function () {

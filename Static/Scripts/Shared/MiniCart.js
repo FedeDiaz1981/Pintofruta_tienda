@@ -36,6 +36,9 @@ var MiniCart = {
     },
 
     getAndUpdate: function () {
+        if (window.location.protocol === "file:") {
+            return;
+        }
         $.ajax({
             type: "POST",
             url: myApp.Urls.ActualizarMiniCart,
@@ -68,6 +71,9 @@ var MiniCart = {
     },
 
     getAndUpdateCantidadArticulos: function () {
+        if (window.location.protocol === "file:") {
+            return;
+        }
         $.ajax({
             type: "POST",
             url: myApp.Urls.GetCantidadArticulosCarrito,
@@ -101,6 +107,9 @@ var MiniCart = {
     },
 
     eliminar: function (articuloId, pedidoArticuloADevolverId) {
+        if (window.location.protocol === "file:") {
+            return;
+        }
         var params = {
             ArticuloId: articuloId,
             PedidoArticuloADevolverId: pedidoArticuloADevolverId
@@ -142,6 +151,9 @@ var MiniCart = {
     },
 
     vaciar: function () {
+        if (window.location.protocol === "file:") {
+            return;
+        }
         $.ajax({
             type: "POST",
             url: myApp.Urls.VaciarCarritoMiniCart,

@@ -554,6 +554,11 @@ select:focus,
 .about-section {
   padding: 5rem 0 4.5rem;
   position: relative;
+  background:
+    radial-gradient(circle at top left, rgba(74, 112, 87, 0.16), transparent 26%),
+    radial-gradient(circle at 85% 20%, rgba(168, 109, 69, 0.08), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.55), transparent 34%),
+    linear-gradient(180deg, #e0e8dc 0%, #d4ddcf 58%, #cfd9c9 100%);
 }
 
 .about-section::before {
@@ -561,8 +566,8 @@ select:focus,
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at top left, rgba(168, 109, 69, 0.14), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(200, 176, 137, 0.22), transparent 30%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 30%),
+    radial-gradient(circle at top right, rgba(74, 112, 87, 0.1), transparent 22%);
   pointer-events: none;
 }
 
@@ -570,9 +575,9 @@ select:focus,
   position: relative;
   padding: 2rem;
   border-radius: 28px;
-  background: rgba(248, 242, 232, 0.92);
-  border: 1px solid rgba(168, 109, 69, 0.16);
-  box-shadow: var(--pf-shadow);
+  background: linear-gradient(180deg, rgba(250, 252, 247, 0.98), rgba(242, 247, 238, 0.95));
+  border: 1px solid rgba(74, 112, 87, 0.12);
+  box-shadow: 0 22px 50px rgba(74, 57, 38, 0.12);
   overflow: hidden;
 }
 
@@ -631,9 +636,9 @@ select:focus,
   position: relative;
   min-height: 100%;
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 242, 232, 0.88));
-  border: 1px solid rgba(168, 109, 69, 0.14);
-  box-shadow: var(--pf-shadow);
+  background: linear-gradient(180deg, rgba(250, 252, 247, 0.98), rgba(237, 243, 232, 0.94));
+  border: 1px solid rgba(74, 112, 87, 0.1);
+  box-shadow: 0 20px 46px rgba(74, 57, 38, 0.10);
   padding: 1.25rem;
 }
 

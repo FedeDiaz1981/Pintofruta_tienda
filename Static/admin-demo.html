@@ -21,13 +21,13 @@
     <main class="shell">
         <section class="panel-app" id="panelApp">
             <aside class="panel-sidebar">
-                <div class="brand-block">
+                <a class="brand-block" href="index.html" aria-label="Volver al inicio">
                     <div class="brand-mark">PF</div>
                     <div>
                         <strong>Pintofruta</strong>
                         <span>Panel de administracion</span>
                     </div>
-                </div>
+                </a>
 
                 <div class="sidebar-accordion is-open" data-accordion="lists">
                     <button class="sidebar-accordion-toggle" type="button" data-accordion-toggle="lists" aria-expanded="true">
@@ -92,6 +92,7 @@
                     </div>
                     <div class="toolbar-actions">
                         <button class="btn btn-primary" type="button" id="panelCreate">Nuevo registro</button>
+                        <a class="btn btn-secondary" href="index.html">Ir a la web</a>
                     </div>
                 </section>
 
@@ -234,14 +235,6 @@
                             <h3 id="adminModalTitle">Titulo</h3>
                         </div>
                         <button class="modal-close" type="button" id="closeAdminModal" aria-label="Cerrar modal">&times;</button>
-                    </div>
-                    <div class="admin-modal-tabs" id="adminModalTabs">
-                        <button class="modal-tab active" type="button" data-open-panel="products">Productos</button>
-                        <button class="modal-tab" type="button" data-open-panel="categories">Categorias</button>
-                        <button class="modal-tab" type="button" data-open-panel="users">Usuarios</button>
-                        <button class="modal-tab" type="button" data-open-panel="hero">Hero</button>
-                        <button class="modal-tab" type="button" data-open-panel="navigation">Navegación</button>
-                        <button class="modal-tab" type="button" data-open-panel="bulk">Excel</button>
                     </div>
                     <div class="admin-modal-body">
                         <section class="modal-panel active" data-panel="products">
@@ -411,8 +404,12 @@
                                         <input type="text" id="heroImage" placeholder="Content/Images/Banners/...jpg" required>
                                     </label>
                                     <label>
+                                        Imagen mobile
+                                        <input type="text" id="heroImageMobile" placeholder="Content/Images/Banners/...-mobile.jpg">
+                                    </label>
+                                    <label>
                                         Link
-                                        <input type="text" id="heroLink" placeholder="/Galeria/123-campania" required>
+                        <input type="text" id="heroLink" placeholder="galeria.html?source=/Galeria/123-campania" required>
                                     </label>
                                     <label>
                                         Badge
@@ -426,6 +423,10 @@
                                         <input type="checkbox" id="heroActive" checked>
                                         Slide activo
                                     </label>
+                                    <label class="checkbox-row">
+                                        <input type="checkbox" id="heroHomeSpotlight">
+                                        Resaltar en bloque medio
+                                    </label>
                                     <div class="form-actions">
                                         <button class="btn btn-primary" type="submit">Guardar slide</button>
                                         <button class="btn btn-ghost" type="button" id="resetHeroForm">Limpiar</button>
@@ -435,14 +436,16 @@
                                 <div class="table-wrap compact">
                                     <table class="table" id="heroTable">
                                         <thead>
-                                            <tr>
-                                                <th>Orden</th>
-                                                <th>Titulo</th>
-                                                <th>Imagen</th>
-                                                <th>Estado</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
+                                        <tr>
+                                            <th>Orden</th>
+                                            <th>Titulo</th>
+                                            <th>Imagen</th>
+                                            <th>Mobile</th>
+                                            <th>Medio</th>
+                                            <th>Estado</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -505,5 +508,6 @@
             </div>
         </section>
     </main>
+    <script type="text/javascript" src="demo-circuit.js"></script>
 </body>
 </html>

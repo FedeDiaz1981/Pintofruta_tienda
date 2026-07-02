@@ -38,6 +38,7 @@
 <link rel="stylesheet" type="text/css" href="Content/Shared/media.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/Shared/lightbox.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/theme/css/modificables.css" media="screen" id="color">
+<script defer src="data/site-content-data.js"></script>
 <script defer src="site-content.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="Content/theme/css/app.css" media="screen" id="color">
@@ -63,6 +64,7 @@
 <!-- #endregion -->
 
 <script type="text/javascript" src="Scripts/ScriptsMaer.js"></script>
+<script type="text/javascript" src="auth.js"></script>
 <script type="text/javascript" src="Scripts/Shared/MiniCart.js"></script>
 <script type="text/javascript" src="Scripts/Shared/MenuUsuario.js"></script>
 <script type="text/javascript" src="Scripts/Shared/GoogleAnalytics.js"></script>
@@ -77,10 +79,11 @@
     myApp.Notificaciones.delay = 400;
     myApp.Notificaciones.delayError = 2000;
     myApp.Notificaciones.Felicitaciones = 'Felicitaciones';
+    myApp.isLocalPreview = window.location.protocol === 'file:';
 
     myApp.Urls = myApp.Urls || {};
 
-    myApp.Urls.baseUrl = '/';
+    myApp.Urls.baseUrl = myApp.isLocalPreview ? '' : '/';
 
     myApp.Urls.MostrarNotificacion = '/Home/MostrarNotificacion';
     myApp.Urls.MostrarPopUp = '/Home/MostrarPopUp';
@@ -161,7 +164,7 @@
                             </span>
                         </div>
                         <div class="logo-block">
-    <a href="#" onclick="if(window.location.protocol !== 'file:'){window.location.href='index.html';}return false;"><img src="assets/images/logo/logo-Pintofruta.png" class="img-fluid-ovr" alt="logo"></a>
+    <a href="index.html"><img src="assets/images/logo/logo-Pintofruta.png" class="img-fluid-ovr" alt="logo"></a>
 </div>
                         <div>
     <div>
@@ -174,7 +177,7 @@
                         <span class="search"><i class="fa fa-search"></i></span>
                     </button>
 
-                    <input type="text" class="form-control form-ovr" placeholder="Buscar" id="valorBusqueda" name="valorBusqueda" value="">
+                    <input type="text" class="form-control form-ovr ml-2" placeholder="Buscar" id="valorBusqueda" name="valorBusqueda" value="">
 
                     
                     <div class="input-group-prepend">
@@ -194,6 +197,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
           $(function () {
+              if (window.location.protocol === 'file:') {
+                  return;
+              }
               $("#valorBusqueda").autocomplete({
                   source: function (request, response) {
                       var data = $("#valorBusqueda").val();
@@ -281,6 +287,12 @@
     </div>
     -->
 </div>
+
+    <div class="d-none d-md-flex align-items-center ml-3">
+        <a href="admin-demo.html" class="btn btn-sm btn-warning">
+            Admin demo
+        </a>
+    </div>
 
 
 </div>
@@ -2004,6 +2016,20 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const allMenus = document.querySelectorAll('.menu-explorar');
+        const openGalleryFromHash = function (href) {
+            const hash = String(href || "").trim();
+            if (!hash || !hash.startsWith("#")) {
+                return false;
+            }
+
+            const slug = hash.slice(1);
+            if (!slug) {
+                return false;
+            }
+
+            window.location.href = `galeria.html?source=/Galeria/${encodeURIComponent(slug)}`;
+            return true;
+        };
 
         allMenus.forEach(menu => {
             let currentContent = null;
@@ -2050,12 +2076,26 @@
 
                 link.addEventListener('click', function (e) {
                     activateLink(link, e);
+                    openGalleryFromHash(link.getAttribute('href'));
                 });
             });
         });
 
         const mainMenu = document.querySelector('#main-menu');
         if (mainMenu) {
+            mainMenu.addEventListener('click', function (event) {
+                const link = event.target.closest('a[href^="#"]:not(.has-submenu)');
+
+                if (!link || !mainMenu.contains(link)) {
+                    return;
+                }
+
+                if (openGalleryFromHash(link.getAttribute('href'))) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+
             const getDirectMegaMenu = function (parent) {
                 if (!parent) {
                     return null;
@@ -2143,7 +2183,7 @@
             </a>
         </li>
         <li class="onhover-dropdown">
-            <a href="#" onclick="if(window.location.protocol !== 'file:'){window.location.href='index.html';}return false;">
+            <a href="index.html">
                 <i class="fas fa-home"></i>
             </a>
         </li>
@@ -2280,7 +2320,7 @@
 
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <div class="logo-block">
-                                            <a href="https://www.greenco.com.ar/Galeria/63-not-co?utm_source=web&amp;utm_medium=popup**junio26&amp;utm_campaign=63-not-co"><img src="Content/Images/Banners/Popup Notco (1).jpg" class="w-100" alt="logo"></a>
+                                            <a href="galeria.html?source=/Galeria/63-not-co"><img src="Content/Images/Banners/Popup Notco (1).jpg" class="w-100" alt="logo"></a>
                                         </div>
 
                                 </div>
@@ -2311,7 +2351,7 @@
     </ol>
     <div class="carousel-inner">
         <div class="bannerCarouselNro-1 bannerCarousel-Banner SM 1.jpg carousel-item active">
-            <a href="https://www.greenco.com.ar/Galeria/1015-sierra-de-los-padres?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=sierra-de-los-padres">
+            <a href="galeria.html?source=/Galeria/1015-sierra-de-los-padres">
                 <img src="Content/Images/Banners/Banner SM 1.jpg" class="d-block w-100" alt="Sierra de los Padres">
             </a>
 
@@ -2320,7 +2360,7 @@
 
         </div>
         <div class="bannerCarouselNro-2 bannerCarousel-Banner Suma 2.jpg carousel-item ">
-            <a href="https://www.greenco.com.ar/Galeria/954-suma?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=suma">
+            <a href="galeria.html?source=/Galeria/954-suma">
                 <img src="Content/Images/Banners/Banner Suma 2.jpg" class="d-block w-100" alt="Suma">
             </a>
 
@@ -2329,7 +2369,7 @@
 
         </div>
         <div class="bannerCarouselNro-3 bannerCarousel-Un Mate Banner 3.jpg carousel-item ">
-            <a href="https://www.greenco.com.ar/Galeria/984-un-mate?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=un-mate">
+            <a href="galeria.html?source=/Galeria/984-un-mate">
                 <img src="Content/Images/Banners/Un Mate Banner 3.jpg" class="d-block w-100" alt="Un Mate">
             </a>
 
@@ -2338,7 +2378,7 @@
 
         </div>
         <div class="bannerCarouselNro-4 bannerCarousel-Banner QU Cocoiogo 4.jpg carousel-item ">
-            <a href="https://www.greenco.com.ar/Galeria/644-qu?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=qu">
+            <a href="galeria.html?source=/Galeria/644-qu">
                 <img src="Content/Images/Banners/Banner QU Cocoiogo 4.jpg" class="d-block w-100" alt="Qu">
             </a>
 
@@ -2347,7 +2387,7 @@
 
         </div>
         <div class="bannerCarouselNro-5 bannerCarousel-Meraki Banner.jpg carousel-item ">
-            <a href="https://www.greenco.com.ar/Galeria/129-meraki?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=meraki">
+            <a href="galeria.html?source=/Galeria/129-meraki">
                 <img src="Content/Images/Banners/Meraki Banner.jpg" class="d-block w-100" alt="Meraki">
             </a>
 
@@ -2356,7 +2396,7 @@
 
         </div>
         <div class="bannerCarouselNro-6 bannerCarousel-Banner VA 6.jpg carousel-item ">
-            <a href="https://www.greenco.com.ar/Galeria/657-veg-abundancia?utm_source=web&amp;utm_medium=banner**junio26&amp;utm_campaign=veg-abundancia">
+            <a href="galeria.html?source=/Galeria/657-veg-abundancia">
                 <img src="Content/Images/Banners/Banner VA 6.jpg" class="d-block w-100" alt="Veg Abundancia">
             </a>
 
@@ -2375,108 +2415,6 @@
     </a>
 </div>
     
-
-<section class="collection-banner mt-5">
-    <div class="container-fluid">
-        <div class="row collection2  justify-content-lg-center"">
-
-                <div class="bannerMiniNro-0 bannerMini-alacena_v2.jpg col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/4-alacena');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/alacena_v2.jpg" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                alacena
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="bannerMiniNro-1 bannerMini-bebidas_v2.jpg col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/5-bebidas');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/bebidas_v2.jpg" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                Bebidas
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="bannerMiniNro-2 bannerMini-refrigerados_v2.png col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/7--refrigerados');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/refrigerados_v2.png" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                refrigerados
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="bannerMiniNro-3 bannerMini-congelados_v2.jpg col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/6--congelados');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/congelados_v2.jpg" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                Congelados
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="bannerMiniNro-5 bannerMini-cosmetica_v2.png col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/8-cosmetica');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/cosmetica_v2.png" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                cosmetica
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="bannerMiniNro-6 bannerMini-promociones.png col-6 col-md-4 col-lg-3 col-xl-2" onclick="location.href=(window.location.protocol === 'file:' ? 'busqueda.html' : '/Galeria/415-promociones');">
-
-                    <div class="collection-banner-main banner-1  p-right">
-                        <div class="collection-img m-0">
-                            <img src="Content/Images/Banners/promociones.png" class="img-fluid bg-img" alt="banner">
-                        </div>
-                        <div class="collection-banner-contain">
-                            <h3 class="mini-baner-titulo">
-                                <i style="color: #FFF"></i>
-                                promociones
-                            </h3>
-                        </div>
-                    </div>
-
-                </div>
-        </div>
-    </div>
-</section>
-
-
-
-
 
     <div class="title1 section-my-space">
         <h4>Productos Destacados</h4>
@@ -3243,16 +3181,7 @@ Medallones de Calabaza y Garbanzos x 460g  - Burganas                </h6>
 
     </script>
 
-    <section class="deal-banner2">
-        
-
-        
-
-<div onclick="window.open('https://www.greenco.com.ar/Galeria/895-burganas?utm_source=web&amp;utm_medium=banner**mayo26&amp;utm_campaign=burganas');">
-    <img src="Content/Images/Banners/Banner Burgana 169.jpg" class="img-fluid" />
-</div>
-
-    </section>
+    <section class="deal-banner2" id="homeSpotlightBanner"></section>
 
 
     
@@ -3295,7 +3224,7 @@ Medallones de Calabaza y Garbanzos x 460g  - Burganas                </h6>
                     <div class="tab-content-cls ">
                             <div id="tab-1" class="tab-content active default product">
 
-                                <div class="product-slide-6 slick-arrow slider-categorias-destacadas">
+                                <div class="slider-categorias-destacadas">
                                         <div class="product addtocart_count articulos_destacados_categorias">
                                             <div class="flex-1">
     
@@ -4035,7 +3964,7 @@ Alfajor Ba&#241;ado Mousse de Limon x 40g - Franks                </h6>
                             </div>
                             <div id="tab-2" class="tab-content ">
 
-                                <div class="product-slide-6 slick-arrow slider-categorias-destacadas">
+                                <div class="slider-categorias-destacadas">
                                         <div class="product addtocart_count articulos_destacados_categorias">
                                             <div class="flex-1">
     
@@ -4781,7 +4710,7 @@ Barrita Proteica sabor Mani y Datiles Sin Azucar x 45g - Nutri Raw              
                             </div>
                             <div id="tab-3" class="tab-content ">
 
-                                <div class="product-slide-6 slick-arrow slider-categorias-destacadas">
+                                <div class="slider-categorias-destacadas">
                                         <div class="product addtocart_count articulos_destacados_categorias">
                                             <div class="flex-1">
     
@@ -5524,7 +5453,7 @@ Aceite de Oliva Virgen Extra Blend Original x 500ml - Zuelo                </h6>
                             </div>
                             <div id="tab-4" class="tab-content ">
 
-                                <div class="product-slide-6 slick-arrow slider-categorias-destacadas">
+                                <div class="slider-categorias-destacadas">
                                         <div class="product addtocart_count articulos_destacados_categorias">
                                             <div class="flex-1">
     
@@ -6062,36 +5991,56 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
         function initSlick() {
             $('.slider-categorias-destacadas').each(function () {
                 var $slider = $(this);
+                var isMobile = window.innerWidth <= 768;
 
                 if ($slider.hasClass('slick-initialized')) {
                     $slider.slick('unslick');
                 }
 
                 $slider.slick({
-                    slidesToShow: 6,
+                    slidesToShow: isMobile ? 3 : 6,
                     slidesToScroll: 1,
                     arrows: true,
                     infinite: true,
-                    responsive: [
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                slidesToShow: 1
-                            }
-                        }
-                    ]
+                    adaptiveHeight: true,
+                    responsive: []
+                });
+            });
+        }
+
+        function forceCatDestacadasMobile() {
+            if (window.innerWidth > 768) {
+                return;
+            }
+
+            $('.cat-destacadas .slider-categorias-destacadas').each(function () {
+                var $slider = $(this);
+                if ($slider.hasClass('slick-initialized')) {
+                    $slider.slick('unslick');
+                }
+
+                $slider.slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    arrows: true,
+                    infinite: true,
+                    adaptiveHeight: true,
+                    mobileFirst: true,
+                    responsive: []
                 });
             });
         }
 
         // Inicializar Slick al cargar la página
         initSlick();
+        forceCatDestacadasMobile();
+        $(window).on('load', function () {
+            forceCatDestacadasMobile();
+        });
+        $(window).on('resize.catDestacadasMobile', function () {
+            initSlick();
+            forceCatDestacadasMobile();
+        });
 
         // Detectar cambio de pestaña y reinicializar Slick
         $('.tabs li a').on('click', function (e) {
@@ -6100,7 +6049,12 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
             $('.tab-content').removeClass('active'); // Remover clase activa de todos los tabs
             $(tabId).addClass('active'); // Activar el tab seleccionado
 
-            setTimeout(initSlick, 200); // Reinicializar Slick con un pequeño delay
+            setTimeout(function () {
+                initSlick(); // Reinicializar Slick con un pequeño delay
+                forceCatDestacadasMobile();
+                $('.slider-categorias-destacadas.slick-initialized').slick('setPosition');
+                $('.product-slide-6.slick-initialized').slick('setPosition');
+            }, 200);
         });
 
         // Google Analytics
@@ -6162,7 +6116,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/73-pura-frutta">
+                    <a href="galeria.html?source=/Galeria/73-pura-frutta">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/PURAFRUTTA.png">
                             <h4 class="logo-marca"></h4>
@@ -6178,7 +6132,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/311-smookies">
+                    <a href="galeria.html?source=/Galeria/311-smookies">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/SMOOKIES.png">
                             <h4 class="logo-marca"></h4>
@@ -6186,7 +6140,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/895-burganas">
+                    <a href="galeria.html?source=/Galeria/895-burganas">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/BURGANAS.png">
                             <h4 class="logo-marca"></h4>
@@ -6202,7 +6156,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/704-crudda">
+                    <a href="galeria.html?source=/Galeria/704-crudda">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/CRUDDA.png">
                             <h4 class="logo-marca"></h4>
@@ -6218,7 +6172,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/24-chia-graal">
+                    <a href="galeria.html?source=/Galeria/24-chia-graal">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/CHIA GRAAL.png">
                             <h4 class="logo-marca"></h4>
@@ -6234,7 +6188,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://greenco.com.ar/Galeria/75-que-kefir">
+                    <a href="galeria.html?source=/Galeria/75-que-kefir">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/quekefir.jpg">
                             <h4 class="logo-marca"></h4>
@@ -6250,7 +6204,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/96-zuelo">
+                    <a href="galeria.html?source=/Galeria/96-zuelo">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/ZUELO.png">
                             <h4 class="logo-marca"></h4>
@@ -6258,7 +6212,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/512-felices-las-vacas">
+                    <a href="galeria.html?source=/Galeria/512-felices-las-vacas">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/FLV.png">
                             <h4 class="logo-marca"></h4>
@@ -6266,7 +6220,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2 mb-3">
-                    <a href="https://www.greenco.com.ar/Galeria/10-amoedo">
+                    <a href="galeria.html?source=/Galeria/10-amoedo">
                         <div class="logo-box">
                             <img class="imagen-logos-lineas" src="Content/Images/Banners/AMOEDO.png">
                             <h4 class="logo-marca"></h4>
@@ -6339,19 +6293,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
     </script>
 
 
-    <section class="mt-5">
-
-
-
-
-<section class="collection-banner hide-mobile " style="min-height: 10px;">
-    <div class="collection-banner-main banner-5 p-center" onclick="window.open('https://www.greenco.com.ar/Seguridad/Register');">
-        <div class="bg-size">
-            <img src="Content/Images/Banners/Banner Footer Web GCO 169.jpg" class="img-fluid " alt="banner">
-        </div>
-    </div>
-</section>
-    </section>
+    <section class="mt-5"></section>
 
 </div>
     </div>
@@ -6477,7 +6419,6 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
     </div>
     <div class="footer-contant">
         <ul class="contact-list">
-            <li><i class="fas fa-thumbtack"></i><span> Villa Maipú, San Martín, Buenos Aires, Argentina.</span></li>
 <!--<li><i class="fas fa-phone"></i><span> +54 9 11 5756-4604 </span></li>-->
 <li><i class="far fa-envelope-open"></i><span><a href="mailto:info@greenco.com.ar"><span class="__cf_email__" data-cfemail="771e19111837100512121914185914181a591605">[email&#160;protected]</span></a></span></li>
         </ul>
@@ -6600,7 +6541,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
 
             <li>
                 <div class="buttons">
-                        <a href="busqueda.html" class="btn btn-rounded btn-xs">Ir a la galería</a>
+                        <a href="carrito.html" class="btn btn-rounded btn-xs">Ver pedido</a>
                 </div>
             </li>
         </ul>
@@ -6713,10 +6654,11 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
     <script src="Scripts/theme/menu.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <script type="text/javascript" src="Scripts/theme/script.js"></script>
-    <script src="Scripts/theme/modal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script type="text/javascript" src="Scripts/theme/script.js"></script>
+<script src="Scripts/theme/modal.js"></script>
+<script type="text/javascript" src="demo-circuit.js"></script>
 
 <script type="text/javascript">
     if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {

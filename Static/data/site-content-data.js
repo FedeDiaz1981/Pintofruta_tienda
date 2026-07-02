@@ -1,210 +1,965 @@
 window.PF_BASE_CONTENT = {
-    sessionRole: "guest",
-    viewMode: "public",
-    headerNavigation: {
-        searchScopes: [
-            { id: "categories", label: "CATEGORIAS", href: "#1-categorias" },
-            { id: "diets", label: "DIETAS", href: "#3-dietas" },
-            { id: "brands", label: "MARCAS", href: "#2-marcas" },
-            { id: "new-arrivals", label: "NUEVOS INGRESOS", href: "#693-nuevos-ingresos" },
-            { id: "promotions", label: "PROMOCIONES", href: "#415-promociones" },
-            { id: "imported", label: "IMPORTADOS", href: "#925-importados" }
-        ],
-        sections: [
-            {
-                id: "categories",
-                label: "CATEGORIAS",
-                icon: "Content/Iconos/CATEGORIAS.png",
-                href: "#1-categorias",
-                groups: [
-                    {
-                        id: "alacena",
-                        label: "ALACENA",
-                        href: "#4-alacena",
-                        items: [
-                            { id: "aceites-y-vinagres", label: "Aceites y Vinagres", href: "#152-aceites-y-vinagres" },
-                            { id: "aderezos", label: "Aderezos", href: "#153-aderezos" },
-                            { id: "arroz-y-legumbres", label: "Arroz y Legumbres", href: "#154-arroz-y-legumbres" },
-                            { id: "conservas-y-encurtidos", label: "Conservas y Encurtidos", href: "#155-conservas-y-encurtidos" },
-                            { id: "harinas", label: "Harinas, rebozadores y premezclas", href: "#159-harinas-rebozadores-y-premezclas" },
-                            { id: "panificados", label: "Panificados", href: "#163-panificados" },
-                            { id: "pastas", label: "Pastas", href: "#158-pastas" }
-                        ]
-                    },
-                    {
-                        id: "bebidas",
-                        label: "BEBIDAS",
-                        href: "#5-bebidas",
-                        items: [
-                            { id: "jugos", label: "Jugos", href: "#170-jugos" },
-                            { id: "aguas", label: "Aguas", href: "#171-aguas" }
-                        ]
-                    },
-                    {
-                        id: "congelados",
-                        label: "CONGELADOS",
-                        href: "#6-congelados",
-                        items: [
-                            { id: "vegetales", label: "Vegetales", href: "#180-vegetales" },
-                            { id: "comidas", label: "Comidas preparadas", href: "#181-comidas-preparadas" }
-                        ]
-                    },
-                    {
-                        id: "cosmetica",
-                        label: "COSMETICA",
-                        href: "#8-cosmetica",
-                        items: [
-                            { id: "cuidado-capilar", label: "Cuidado capilar", href: "#190-cuidado-capilar" },
-                            { id: "cuidado-corporal", label: "Cuidado corporal", href: "#191-cuidado-corporal" }
-                        ]
-                    },
-                    {
-                        id: "refrigerados",
-                        label: "REFRIGERADOS",
-                        href: "#7-refrigerados",
-                        items: [
-                            { id: "lacteos", label: "Lacteos", href: "#200-lacteos" },
-                            { id: "fiambres", label: "Fiambres", href: "#201-fiambres" }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: "diets",
-                label: "DIETAS",
-                icon: "Content/Iconos/DIETAS.png",
-                href: "#3-dietas",
-                groups: [
-                    { id: "agroecologico", label: "AGROECOLOGICO", href: "#104-agroecologico", items: [{ id: "alacena", label: "Alacena", href: "#229-alacena" }] },
-                    { id: "keto", label: "KETO", href: "#694-keto", items: [{ id: "alacena", label: "Alacena", href: "#695-alacena" }, { id: "bebidas", label: "Bebidas", href: "#696-bebidas" }, { id: "congelados", label: "Congelados", href: "#698-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#697-refrigerados" }] },
-                    { id: "kosher", label: "KOSHER", href: "#103-kosher", items: [{ id: "alacena", label: "Alacena", href: "#226-alacena" }, { id: "bebidas", label: "Bebidas", href: "#227-bebidas" }, { id: "refrigerados", label: "Refrigerados", href: "#228-refrigerados" }] },
-                    { id: "libre-de-gluten", label: "LIBRE DE GLUTEN", href: "#98-libre-de-gluten", items: [{ id: "alacena", label: "Alacena", href: "#206-alacena" }, { id: "bebidas", label: "Bebidas", href: "#207-bebidas" }, { id: "congelados", label: "Congelados", href: "#208-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#209-refrigerados" }] },
-                    { id: "organica", label: "ORGANICA", href: "#101-organica", items: [{ id: "alacena", label: "Alacena", href: "#218-alacena" }, { id: "bebidas", label: "Bebidas", href: "#219-bebidas" }, { id: "congelados", label: "Congelados", href: "#220-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#221-refrigerados" }] },
-                    { id: "plant-based", label: "PLANT BASED", href: "#839-plant-based", items: [{ id: "alacena", label: "Alacena", href: "#840-alacena" }, { id: "bebidas", label: "Bebidas", href: "#841-bebidas" }, { id: "congelados", label: "Congelados", href: "#843-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#842-refrigerados" }] },
-                    { id: "proteica", label: "PROTEICA", href: "#105-proteica", items: [{ id: "alacena", label: "Alacena", href: "#230-alacena" }, { id: "bebidas", label: "Bebidas", href: "#287-bebidas" }, { id: "congelados", label: "Congelados", href: "#288-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#231-refrigerados" }] },
-                    { id: "sin-azucar", label: "SIN AZUCAR", href: "#97-sin-azucar", items: [{ id: "alacena", label: "Alacena", href: "#202-alacena" }, { id: "bebidas", label: "Bebidas", href: "#203-bebidas" }, { id: "congelados", label: "Congelados", href: "#204-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#205-refrigerados" }] },
-                    { id: "sin-lactosa", label: "SIN LACTOSA", href: "#102-sin-lactosa", items: [{ id: "alacena", label: "Alacena", href: "#222-alacena" }, { id: "bebidas", label: "Bebidas", href: "#223-bebidas" }, { id: "congelados", label: "Congelados", href: "#224-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#225-refrigerados" }] },
-                    { id: "vegana", label: "VEGANA", href: "#99-vegana", items: [{ id: "alacena", label: "Alacena", href: "#210-alacena" }, { id: "bebidas", label: "Bebidas", href: "#211-bebidas" }, { id: "congelados", label: "Congelados", href: "#212-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#213-refrigerados" }] },
-                    { id: "vegetariana", label: "VEGETARIANA", href: "#100-vegetariana", items: [{ id: "alacena", label: "Alacena", href: "#214-alacena" }, { id: "bebidas", label: "Bebidas", href: "#215-bebidas" }, { id: "congelados", label: "Congelados", href: "#216-congelados" }, { id: "refrigerados", label: "Refrigerados", href: "#217-refrigerados" }] }
-                ]
-            },
-            {
-                id: "brands",
-                label: "MARCAS",
-                icon: "Content/Iconos/MARCAS.png",
-                href: "#2-marcas",
-                groups: [
-                    { id: "ab", label: "A-B", href: "#143-a-b", items: [{ id: "naveia", label: "Naveia", href: "#924-naveia" }] },
-                    { id: "c", label: "C", href: "#144-c", items: [] },
-                    { id: "df", label: "D-F", href: "#145-d-f", items: [] },
-                    { id: "gj", label: "G-J", href: "#146-g-j", items: [] },
-                    { id: "kl", label: "K-L", href: "#147-k-l", items: [] },
-                    { id: "mn", label: "M-N", href: "#148-m-n", items: [] },
-                    { id: "oq", label: "O-Q", href: "#149-o-q", items: [] },
-                    { id: "rt", label: "R-T", href: "#150-r-t", items: [] },
-                    { id: "uz", label: "U-Z", href: "#151-u-z", items: [] }
-                ]
-            },
-            {
-                id: "promotions",
-                label: "PROMOCIONES",
-                icon: "Content/Iconos/PROMOCIONES.png",
-                href: "#415-promociones",
-                groups: [
-                    { id: "bajamos-los-precios", label: "BAJAMOS LOS PRECIOS!", href: "#682-bajamos-los-precios", items: [] }
-                ]
-            },
-            {
-                id: "imported",
-                label: "IMPORTADOS",
-                icon: "Content/Iconos/IMPORTADOS.png",
-                href: "#925-importados",
-                groups: [
-                    { id: "productos-asiaticos", label: "Productos Asiaticos", href: "#971-productos-asiaticos", items: [] }
-                ]
-            }
+  "sessionRole": "guest",
+  "viewMode": "public",
+  "headerNavigation": {
+    "searchScopes": [
+      {
+        "id": "categories",
+        "label": "CATEGORIAS",
+        "href": "#1-categorias"
+      },
+      {
+        "id": "diets",
+        "label": "DIETAS",
+        "href": "#3-dietas"
+      },
+      {
+        "id": "brands",
+        "label": "MARCAS",
+        "href": "#2-marcas"
+      },
+      {
+        "id": "new-arrivals",
+        "label": "NUEVOS INGRESOS",
+        "href": "#693-nuevos-ingresos"
+      },
+      {
+        "id": "promotions",
+        "label": "PROMOCIONES",
+        "href": "#415-promociones"
+      },
+      {
+        "id": "imported",
+        "label": "IMPORTADOS",
+        "href": "#925-importados"
+      }
+    ],
+    "sections": [
+      {
+        "id": "categories",
+        "label": "CATEGORIAS",
+        "icon": "Content/Iconos/CATEGORIAS.png",
+        "href": "#1-categorias",
+        "groups": [
+          {
+            "id": "alacena",
+            "label": "ALACENA",
+            "href": "#4-alacena",
+            "items": [
+              {
+                "id": "aceites-y-vinagres",
+                "label": "Aceites y Vinagres",
+                "href": "#152-aceites-y-vinagres"
+              },
+              {
+                "id": "aderezos",
+                "label": "Aderezos",
+                "href": "#153-aderezos"
+              },
+              {
+                "id": "arroz-y-legumbres",
+                "label": "Arroz y Legumbres",
+                "href": "#154-arroz-y-legumbres"
+              },
+              {
+                "id": "conservas-y-encurtidos",
+                "label": "Conservas y Encurtidos",
+                "href": "#155-conservas-y-encurtidos"
+              },
+              {
+                "id": "harinas",
+                "label": "Harinas, rebozadores y premezclas",
+                "href": "#159-harinas-rebozadores-y-premezclas"
+              },
+              {
+                "id": "panificados",
+                "label": "Panificados",
+                "href": "#163-panificados"
+              },
+              {
+                "id": "pastas",
+                "label": "Pastas",
+                "href": "#158-pastas"
+              }
+            ]
+          },
+          {
+            "id": "bebidas",
+            "label": "BEBIDAS",
+            "href": "#5-bebidas",
+            "items": [
+              {
+                "id": "jugos",
+                "label": "Jugos",
+                "href": "#170-jugos"
+              },
+              {
+                "id": "aguas",
+                "label": "Aguas",
+                "href": "#171-aguas"
+              }
+            ]
+          },
+          {
+            "id": "congelados",
+            "label": "CONGELADOS",
+            "href": "#6-congelados",
+            "items": [
+              {
+                "id": "vegetales",
+                "label": "Vegetales",
+                "href": "#180-vegetales"
+              },
+              {
+                "id": "comidas",
+                "label": "Comidas preparadas",
+                "href": "#181-comidas-preparadas"
+              }
+            ]
+          },
+          {
+            "id": "cosmetica",
+            "label": "COSMETICA",
+            "href": "#8-cosmetica",
+            "items": [
+              {
+                "id": "cuidado-capilar",
+                "label": "Cuidado capilar",
+                "href": "#190-cuidado-capilar"
+              },
+              {
+                "id": "cuidado-corporal",
+                "label": "Cuidado corporal",
+                "href": "#191-cuidado-corporal"
+              }
+            ]
+          },
+          {
+            "id": "refrigerados",
+            "label": "REFRIGERADOS",
+            "href": "#7-refrigerados",
+            "items": [
+              {
+                "id": "lacteos",
+                "label": "Lacteos",
+                "href": "#200-lacteos"
+              },
+              {
+                "id": "fiambres",
+                "label": "Fiambres",
+                "href": "#201-fiambres"
+              }
+            ]
+          }
         ]
+      },
+      {
+        "id": "diets",
+        "label": "DIETAS",
+        "icon": "Content/Iconos/DIETAS.png",
+        "href": "#3-dietas",
+        "groups": [
+          {
+            "id": "agroecologico",
+            "label": "AGROECOLOGICO",
+            "href": "#104-agroecologico",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#229-alacena"
+              }
+            ]
+          },
+          {
+            "id": "keto",
+            "label": "KETO",
+            "href": "#694-keto",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#695-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#696-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#698-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#697-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "kosher",
+            "label": "KOSHER",
+            "href": "#103-kosher",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#226-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#227-bebidas"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#228-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "libre-de-gluten",
+            "label": "LIBRE DE GLUTEN",
+            "href": "#98-libre-de-gluten",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#206-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#207-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#208-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#209-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "organica",
+            "label": "ORGANICA",
+            "href": "#101-organica",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#218-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#219-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#220-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#221-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "plant-based",
+            "label": "PLANT BASED",
+            "href": "#839-plant-based",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#840-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#841-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#843-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#842-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "proteica",
+            "label": "PROTEICA",
+            "href": "#105-proteica",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#230-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#287-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#288-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#231-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "sin-azucar",
+            "label": "SIN AZUCAR",
+            "href": "#97-sin-azucar",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#202-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#203-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#204-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#205-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "sin-lactosa",
+            "label": "SIN LACTOSA",
+            "href": "#102-sin-lactosa",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#222-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#223-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#224-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#225-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "vegana",
+            "label": "VEGANA",
+            "href": "#99-vegana",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#210-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#211-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#212-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#213-refrigerados"
+              }
+            ]
+          },
+          {
+            "id": "vegetariana",
+            "label": "VEGETARIANA",
+            "href": "#100-vegetariana",
+            "items": [
+              {
+                "id": "alacena",
+                "label": "Alacena",
+                "href": "#214-alacena"
+              },
+              {
+                "id": "bebidas",
+                "label": "Bebidas",
+                "href": "#215-bebidas"
+              },
+              {
+                "id": "congelados",
+                "label": "Congelados",
+                "href": "#216-congelados"
+              },
+              {
+                "id": "refrigerados",
+                "label": "Refrigerados",
+                "href": "#217-refrigerados"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "brands",
+        "label": "MARCAS",
+        "icon": "Content/Iconos/MARCAS.png",
+        "href": "#2-marcas",
+        "groups": [
+          {
+            "id": "ab",
+            "label": "A-B",
+            "href": "#143-a-b",
+            "items": [
+              {
+                "id": "naveia",
+                "label": "Naveia",
+                "href": "#924-naveia"
+              }
+            ]
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "href": "#144-c",
+            "items": []
+          },
+          {
+            "id": "df",
+            "label": "D-F",
+            "href": "#145-d-f",
+            "items": []
+          },
+          {
+            "id": "gj",
+            "label": "G-J",
+            "href": "#146-g-j",
+            "items": []
+          },
+          {
+            "id": "kl",
+            "label": "K-L",
+            "href": "#147-k-l",
+            "items": []
+          },
+          {
+            "id": "mn",
+            "label": "M-N",
+            "href": "#148-m-n",
+            "items": []
+          },
+          {
+            "id": "oq",
+            "label": "O-Q",
+            "href": "#149-o-q",
+            "items": []
+          },
+          {
+            "id": "rt",
+            "label": "R-T",
+            "href": "#150-r-t",
+            "items": []
+          },
+          {
+            "id": "uz",
+            "label": "U-Z",
+            "href": "#151-u-z",
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "promotions",
+        "label": "PROMOCIONES",
+        "icon": "Content/Iconos/PROMOCIONES.png",
+        "href": "#415-promociones",
+        "groups": [
+          {
+            "id": "bajamos-los-precios",
+            "label": "BAJAMOS LOS PRECIOS!",
+            "href": "#682-bajamos-los-precios",
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "imported",
+        "label": "IMPORTADOS",
+        "icon": "Content/Iconos/IMPORTADOS.png",
+        "href": "#925-importados",
+        "groups": [
+          {
+            "id": "productos-asiaticos",
+            "label": "Productos Asiaticos",
+            "href": "#971-productos-asiaticos",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  "heroSlides": [
+    {
+      "id": 1,
+      "order": 1,
+      "title": "Temporada fresca",
+      "subtitle": "Una apertura limpia para entrar al catalogo por novedades y categorias.",
+      "badge": "Inicio",
+      "image": "Content/Images/Banners/pf-hero-01.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-01-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/1-categorias",
+      "active": true
     },
-    heroSlides: [
-        {
-            id: 1,
-            order: 1,
-            title: "Sierra de los Padres",
-            subtitle: "Destacados de temporada con visual principal del home.",
-            badge: "Campana activa",
-            image: "Content/Images/Banners/Banner SM 1.jpg",
-            link: "/Galeria/1015-sierra-de-los-padres",
-            active: true
-        },
-        {
-            id: 2,
-            order: 2,
-            title: "Suma",
-            subtitle: "Oferta destacada con acceso directo a la galeria.",
-            badge: "Promo",
-            image: "Content/Images/Banners/Banner Suma 2.jpg",
-            link: "/Galeria/954-suma",
-            active: true
-        },
-        {
-            id: 3,
-            order: 3,
-            title: "Un Mate",
-            subtitle: "Contenido editable para comunicar lanzamientos o marcas.",
-            badge: "Lanzamiento",
-            image: "Content/Images/Banners/Un Mate Banner 3.jpg",
-            link: "/Galeria/984-un-mate",
-            active: true
-        },
-        {
-            id: 4,
-            order: 4,
-            title: "Qu Cocoiogo",
-            subtitle: "Banner de marca con link a categoria especifica.",
-            badge: "Marca",
-            image: "Content/Images/Banners/Banner QU Cocoiogo 4.jpg",
-            link: "/Galeria/644-qu",
-            active: true
-        },
-        {
-            id: 5,
-            order: 5,
-            title: "Meraki",
-            subtitle: "Slide pensado para mostrar una nueva campana visual.",
-            badge: "Nuevo",
-            image: "Content/Images/Banners/Meraki Banner.jpg",
-            link: "/Galeria/129-meraki",
-            active: true
-        },
-        {
-            id: 6,
-            order: 6,
-            title: "Veg Abundancia",
-            subtitle: "Cierre del carrusel con foco en la lista de productos.",
-            badge: "Promo",
-            image: "Content/Images/Banners/Banner VA 6.jpg",
-            link: "/Galeria/657-veg-abundancia",
-            active: true
-        }
-    ],
-    products: [
-        { id: 1, sku: "MERA09", name: "Cepillo Dental de Bambu Media", brand: "Meraki", categoryId: 4, publicPrice: 2490, memberPrice: 2240, stock: 18, status: "published", featured: true },
-        { id: 2, sku: "TALO01", name: "Yogurt Estilo Griego Natural 180g", brand: "Talos", categoryId: 1, publicPrice: 1890, memberPrice: 1690, stock: 42, status: "published", featured: true },
-        { id: 3, sku: "BURG04", name: "Medallones de Cebollas Caramelizadas", brand: "Burganas", categoryId: 2, publicPrice: 3920, memberPrice: 3520, stock: 26, status: "published", featured: false },
-        { id: 4, sku: "ZAFR25", name: "Barra de Cereal Pasta de Mani y Miel", brand: "Zafran", categoryId: 3, publicPrice: 1780, memberPrice: 1590, stock: 58, status: "draft", featured: false },
-        { id: 5, sku: "AIKE06", name: "Tortillas de Quinoa y Kale", brand: "Aiken", categoryId: 1, publicPrice: 4150, memberPrice: 3710, stock: 31, status: "published", featured: false }
-    ],
-    categories: [
-        { id: 1, name: "Almacen saludable", slug: "almacen-saludable", visible: true },
-        { id: 2, name: "Congelados", slug: "congelados", visible: true },
-        { id: 3, name: "Barras y snacks", slug: "snacks", visible: true },
-        { id: 4, name: "Hogar y cuidado", slug: "hogar-cuidado", visible: true }
-    ],
-    users: [
-        { id: 1, name: "Laura Gomez", email: "laura@demo.com", role: "admin", canSeePrices: true, active: true },
-        { id: 2, name: "Sofia Perez", email: "sofia@demo.com", role: "customer", canSeePrices: true, active: true },
-        { id: 3, name: "Martin Ruiz", email: "martin@demo.com", role: "customer", canSeePrices: false, active: true },
-        { id: 4, name: "Muestra Inactiva", email: "inactive@demo.com", role: "customer", canSeePrices: true, active: false }
-    ],
-    nextIds: { product: 6, category: 5, user: 5, heroSlide: 7 }
-};
+    {
+      "id": 2,
+      "order": 2,
+      "title": "Energia para el dia",
+      "subtitle": "Una portada orientada a snacks y opciones listas para rotacion rapida.",
+      "badge": "Snack",
+      "image": "Content/Images/Banners/pf-hero-02.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-02-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/3-dietas",
+      "active": true
+    },
+    {
+      "id": 3,
+      "order": 3,
+      "title": "Marcas destacadas",
+      "subtitle": "Un banner pensado para navegar el catalogo por identidad comercial.",
+      "badge": "Marca",
+      "image": "Content/Images/Banners/pf-hero-03.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-03-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/2-marcas",
+      "active": true
+    },
+    {
+      "id": 4,
+      "order": 4,
+      "title": "Ofertas activas",
+      "subtitle": "Una pieza de promo para destacar productos con mejor salida.",
+      "badge": "Promo",
+      "image": "Content/Images/Banners/pf-hero-04.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-04-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/415-promociones",
+      "active": true
+    },
+    {
+      "id": 5,
+      "order": 5,
+      "title": "Novedades listas",
+      "subtitle": "Este banner queda marcado para la seccion intermedia del home.",
+      "badge": "Spotlight",
+      "image": "Content/Images/Banners/pf-hero-05.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-05-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/925-importados",
+      "homeSpotlight": true,
+      "active": true
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "sku": "PF001",
+      "name": "Yogur Crema Natural 170g",
+      "brand": "Alma",
+      "categoryId": 1,
+      "categoryName": "Almacen saludable",
+      "publicPrice": 1690,
+      "memberPrice": 1510,
+      "stock": 36,
+      "status": "published",
+      "featured": true,
+      "description": "Yogur suave, cremoso y de perfil simple para la compra diaria.",
+      "image": "Content/Images/articulos/pf001.jpg"
+    },
+    {
+      "id": 2,
+      "sku": "PF002",
+      "name": "Granola Cacao Crunch 300g",
+      "brand": "Nativa",
+      "categoryId": 1,
+      "categoryName": "Almacen saludable",
+      "publicPrice": 2890,
+      "memberPrice": 2590,
+      "stock": 28,
+      "status": "published",
+      "featured": true,
+      "description": "Granola crocante con cacao, pensada para bowls, desayunos y meriendas.",
+      "image": "Content/Images/articulos/pf002.jpg"
+    },
+    {
+      "id": 3,
+      "sku": "PF003",
+      "name": "Mermelada Frutos Rojos 280g",
+      "brand": "Cosecha",
+      "categoryId": 1,
+      "categoryName": "Almacen saludable",
+      "publicPrice": 2460,
+      "memberPrice": 2210,
+      "stock": 41,
+      "status": "published",
+      "featured": false,
+      "description": "Mermelada frutal con acabado limpio para sumar color a la despensa.",
+      "image": "Content/Images/articulos/pf003.jpg"
+    },
+    {
+      "id": 4,
+      "sku": "PF004",
+      "name": "Aceite de Oliva Extra Virgen 500ml",
+      "brand": "Bruma",
+      "categoryId": 1,
+      "categoryName": "Almacen saludable",
+      "publicPrice": 5290,
+      "memberPrice": 4790,
+      "stock": 19,
+      "status": "published",
+      "featured": true,
+      "description": "Aceite extra virgen con look premium para cocina y despacho.",
+      "image": "Content/Images/articulos/pf004.jpg"
+    },
+    {
+      "id": 5,
+      "sku": "PF005",
+      "name": "Mix Frutos Secos Premium 200g",
+      "brand": "Terra",
+      "categoryId": 1,
+      "categoryName": "Almacen saludable",
+      "publicPrice": 3120,
+      "memberPrice": 2790,
+      "stock": 33,
+      "status": "published",
+      "featured": false,
+      "description": "Mezcla equilibrada de frutos secos para snacks y rotacion de mostrador.",
+      "image": "Content/Images/articulos/pf005.jpg"
+    },
+    {
+      "id": 6,
+      "sku": "PF006",
+      "name": "Hamburguesas de Lentejas 4u",
+      "brand": "Verdeo",
+      "categoryId": 2,
+      "categoryName": "Congelados",
+      "publicPrice": 4190,
+      "memberPrice": 3790,
+      "stock": 24,
+      "status": "published",
+      "featured": true,
+      "description": "Hamburguesas congeladas de lentejas con formato listo para stockear.",
+      "image": "Content/Images/articulos/pf006.jpg"
+    },
+    {
+      "id": 7,
+      "sku": "PF007",
+      "name": "Medallones de Espinaca y Arroz 360g",
+      "brand": "Campo",
+      "categoryId": 2,
+      "categoryName": "Congelados",
+      "publicPrice": 3650,
+      "memberPrice": 3290,
+      "stock": 17,
+      "status": "published",
+      "featured": false,
+      "description": "Opcion congelada vegetal con presencia simple y clara.",
+      "image": "Content/Images/articulos/pf007.jpg"
+    },
+    {
+      "id": 8,
+      "sku": "PF008",
+      "name": "Nuggets Vegetales 300g",
+      "brand": "Origen",
+      "categoryId": 2,
+      "categoryName": "Congelados",
+      "publicPrice": 3380,
+      "memberPrice": 3040,
+      "stock": 21,
+      "status": "published",
+      "featured": true,
+      "description": "Nuggets vegetales para una propuesta rapida y rendidora.",
+      "image": "Content/Images/articulos/pf008.jpg"
+    },
+    {
+      "id": 9,
+      "sku": "PF009",
+      "name": "Helado Frutilla 450ml",
+      "brand": "Nieve",
+      "categoryId": 2,
+      "categoryName": "Congelados",
+      "publicPrice": 4870,
+      "memberPrice": 4390,
+      "stock": 14,
+      "status": "published",
+      "featured": false,
+      "description": "Helado frutal para sumar color y movimiento en la vitrina.",
+      "image": "Content/Images/articulos/pf009.jpg"
+    },
+    {
+      "id": 10,
+      "sku": "PF010",
+      "name": "Ravioles Vegetales 400g",
+      "brand": "Horno",
+      "categoryId": 2,
+      "categoryName": "Congelados",
+      "publicPrice": 3580,
+      "memberPrice": 3240,
+      "stock": 20,
+      "status": "published",
+      "featured": false,
+      "description": "Pasta congelada para completar una linea de comidas listas.",
+      "image": "Content/Images/articulos/pf010.jpg"
+    },
+    {
+      "id": 11,
+      "sku": "PF011",
+      "name": "Barra Proteica Cacao 60g",
+      "brand": "Pulse",
+      "categoryId": 3,
+      "categoryName": "Barras y snacks",
+      "publicPrice": 1490,
+      "memberPrice": 1340,
+      "stock": 62,
+      "status": "published",
+      "featured": true,
+      "description": "Barra compacta con foco en energia y rotacion por impulso.",
+      "image": "Content/Images/articulos/pf011.jpg"
+    },
+    {
+      "id": 12,
+      "sku": "PF012",
+      "name": "Galletitas Sin Azucar Vainilla 150g",
+      "brand": "Equilibra",
+      "categoryId": 3,
+      "categoryName": "Barras y snacks",
+      "publicPrice": 2240,
+      "memberPrice": 2010,
+      "stock": 47,
+      "status": "published",
+      "featured": false,
+      "description": "Galletitas livianas para una exhibicion mas saludable.",
+      "image": "Content/Images/articulos/pf012.jpg"
+    },
+    {
+      "id": 13,
+      "sku": "PF013",
+      "name": "Mix Trail Frutos y Semillas 180g",
+      "brand": "Ruta",
+      "categoryId": 3,
+      "categoryName": "Barras y snacks",
+      "publicPrice": 2790,
+      "memberPrice": 2520,
+      "stock": 39,
+      "status": "published",
+      "featured": true,
+      "description": "Mix trail para sumar variedad en el universo snack.",
+      "image": "Content/Images/articulos/pf013.jpg"
+    },
+    {
+      "id": 14,
+      "sku": "PF014",
+      "name": "Chips de Lenteja Mar y Sal 100g",
+      "brand": "Bite",
+      "categoryId": 3,
+      "categoryName": "Barras y snacks",
+      "publicPrice": 1810,
+      "memberPrice": 1630,
+      "stock": 54,
+      "status": "published",
+      "featured": false,
+      "description": "Snack crocante para mostrar una linea mas informal y dinamica.",
+      "image": "Content/Images/articulos/pf014.jpg"
+    },
+    {
+      "id": 15,
+      "sku": "PF015",
+      "name": "Crackers Integrales Romero 140g",
+      "brand": "Miga",
+      "categoryId": 3,
+      "categoryName": "Barras y snacks",
+      "publicPrice": 1960,
+      "memberPrice": 1760,
+      "stock": 45,
+      "status": "published",
+      "featured": false,
+      "description": "Crackers integrales de linea simple para acompañar el catalogo snack.",
+      "image": "Content/Images/articulos/pf015.jpg"
+    },
+    {
+      "id": 16,
+      "sku": "PF016",
+      "name": "Shampoo Reparador 300ml",
+      "brand": "Aura",
+      "categoryId": 4,
+      "categoryName": "Hogar y cuidado",
+      "publicPrice": 3890,
+      "memberPrice": 3500,
+      "stock": 23,
+      "status": "published",
+      "featured": true,
+      "description": "Shampoo de cuidado personal con estetica limpia y premium.",
+      "image": "Content/Images/articulos/pf016.jpg"
+    },
+    {
+      "id": 17,
+      "sku": "PF017",
+      "name": "Cepillo Dental Bambu Soft",
+      "brand": "VerdeCuidar",
+      "categoryId": 4,
+      "categoryName": "Hogar y cuidado",
+      "publicPrice": 2590,
+      "memberPrice": 2330,
+      "stock": 52,
+      "status": "published",
+      "featured": false,
+      "description": "Cepillo de bambu para reforzar la linea sustentable del hogar.",
+      "image": "Content/Images/articulos/pf017.jpg"
+    },
+    {
+      "id": 18,
+      "sku": "PF018",
+      "name": "Jabon Liquido Citrus 500ml",
+      "brand": "Pureza",
+      "categoryId": 4,
+      "categoryName": "Hogar y cuidado",
+      "publicPrice": 2760,
+      "memberPrice": 2480,
+      "stock": 30,
+      "status": "published",
+      "featured": true,
+      "description": "Jabon liquido con aroma citrus y presencia de farmacia natural.",
+      "image": "Content/Images/articulos/pf018.jpg"
+    },
+    {
+      "id": 19,
+      "sku": "PF019",
+      "name": "Crema de Manos Aloe 100ml",
+      "brand": "Nube",
+      "categoryId": 4,
+      "categoryName": "Hogar y cuidado",
+      "publicPrice": 2150,
+      "memberPrice": 1930,
+      "stock": 41,
+      "status": "published",
+      "featured": false,
+      "description": "Crema suave para una ficha de cuidado mas delicada y fresca.",
+      "image": "Content/Images/articulos/pf019.jpg"
+    },
+    {
+      "id": 20,
+      "sku": "PF020",
+      "name": "Detergente Eco 900ml",
+      "brand": "Linea",
+      "categoryId": 4,
+      "categoryName": "Hogar y cuidado",
+      "publicPrice": 3270,
+      "memberPrice": 2940,
+      "stock": 18,
+      "status": "published",
+      "featured": false,
+      "description": "Detergente eco para reforzar la familia de hogar con una pieza util.",
+      "image": "Content/Images/articulos/pf020.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Almacen saludable",
+      "slug": "almacen-saludable",
+      "visible": true
+    },
+    {
+      "id": 2,
+      "name": "Congelados",
+      "slug": "congelados",
+      "visible": true
+    },
+    {
+      "id": 3,
+      "name": "Barras y snacks",
+      "slug": "snacks",
+      "visible": true
+    },
+    {
+      "id": 4,
+      "name": "Hogar y cuidado",
+      "slug": "hogar-cuidado",
+      "visible": true
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Laura Gomez",
+      "email": "laura@demo.com",
+      "role": "admin",
+      "canSeePrices": true,
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Sofia Perez",
+      "email": "sofia@demo.com",
+      "role": "customer",
+      "canSeePrices": true,
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Martin Ruiz",
+      "email": "martin@demo.com",
+      "role": "customer",
+      "canSeePrices": false,
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Muestra Inactiva",
+      "email": "inactive@demo.com",
+      "role": "customer",
+      "canSeePrices": true,
+      "active": false
+    }
+  ],
+  "nextIds": {
+    "product": 21,
+    "category": 5,
+    "user": 5,
+    "heroSlide": 6
+  }
+}
