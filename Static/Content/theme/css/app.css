@@ -971,6 +971,13 @@ header {
   .pixelstrap .full-mega-menu .menu-content {
     background: transparent !important;
   }
+  .mega-mobile .menu-content,
+  .mega-mobile .menu-content ul {
+    column-count: 1 !important;
+    column-gap: 0 !important;
+    columns: auto !important;
+    width: 100% !important;
+  }
   .pixelstrap .full-mega-menu .menu-content a {
     display: block;
     width: 100%;
