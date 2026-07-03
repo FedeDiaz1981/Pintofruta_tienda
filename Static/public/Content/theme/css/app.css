@@ -981,9 +981,22 @@ header {
 }
 @media (max-width: 1200px) {
   .nav-nav .pixelstrap.sm-horizontal {
-    display: initial;
-    height: 100vh;
-    overflow: auto;
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: -420px !important;
+    width: 420px !important;
+    max-width: 90vw !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: #fff !important;
+    z-index: 9998 !important;
+    padding: 0 !important;
+    transition: right 220ms ease;
+  }
+  .nav-nav .pixelstrap.sm-horizontal.mobile-menu-open {
+    right: 0 !important;
   }
   .nav-nav .pixelstrap.sm-horizontal li a .sub-arrow {
     right: 10px !important;

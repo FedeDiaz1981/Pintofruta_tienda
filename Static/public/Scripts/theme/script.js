@@ -628,10 +628,10 @@
      05 toggle nav
      ==========================*/
     $('.toggle-nav').on('click', function () {
-        $('.sm-horizontal').css("right", "0px");
+        $('.nav-nav .pixelstrap.sm-horizontal').toggleClass('mobile-menu-open');
     });
     $(".mobile-back").on('click', function () {
-        $('.sm-horizontal').css("right", "-410px");
+        $('.nav-nav .pixelstrap.sm-horizontal').removeClass('mobile-menu-open');
     });
 
     /*=====================

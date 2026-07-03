@@ -1005,6 +1005,9 @@ header {
     padding: 0 !important;
     transition: right 220ms ease;
   }
+  .nav-nav .pixelstrap.sm-horizontal.mobile-menu-open {
+    right: 0 !important;
+  }
   .nav-nav .pixelstrap.sm-horizontal > li {
     width: 100% !important;
   }
