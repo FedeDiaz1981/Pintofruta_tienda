@@ -955,6 +955,9 @@ header {
   .pixelstrap .full-mega-menu .link-section {
     padding: 0 !important;
   }
+  .pixelstrap .full-mega-menu .menu-content {
+    background: transparent !important;
+  }
   .pixelstrap .full-mega-menu .menu-content a {
     display: block;
     width: 100%;
