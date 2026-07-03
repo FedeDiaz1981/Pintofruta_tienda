@@ -2136,12 +2136,6 @@
             const closeAllSubmenus = function () {
                 mainMenu.querySelectorAll('li.mega.menu-open').forEach(item => {
                     item.classList.remove('menu-open');
-                    const submenu = getDirectMegaMenu(item);
-                    if (submenu) {
-                        submenu.style.display = 'none';
-                        submenu.style.visibility = 'hidden';
-                        submenu.style.opacity = '0';
-                    }
                 });
             };
 
@@ -2159,9 +2153,6 @@
 
                 if (shouldOpen) {
                     parent.classList.add('menu-open');
-                    submenu.style.display = 'block';
-                    submenu.style.visibility = 'visible';
-                    submenu.style.opacity = '1';
                 }
 
                 return true;

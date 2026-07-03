@@ -1045,6 +1045,18 @@ header {
   .nav-nav .pixelstrap.sm-horizontal > li {
     width: 100% !important;
   }
+  .nav-nav .pixelstrap.sm-horizontal li.mega > ul.mega-menu {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .nav-nav .pixelstrap.sm-horizontal li.mega.menu-open > ul.mega-menu {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
   .nav-nav .pixelstrap.sm-horizontal li a .sub-arrow {
     right: 10px !important;
     width: 12px !important;
