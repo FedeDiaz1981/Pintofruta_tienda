@@ -2011,6 +2011,7 @@
         allMenus.forEach(menu => {
             let currentContent = null;
             let currentLink = null;
+            const isTouchMenu = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
             const links = menu.closest('.row').querySelectorAll('.menu-title[data-title]');
             const mensajeInicial = menu.querySelector('.mensaje-inicial');
@@ -2066,9 +2067,11 @@
             };
 
             links.forEach(link => {
-                link.addEventListener('mouseover', function (e) {
-                    toggleLink(link, e);
-                });
+                if (!isTouchMenu) {
+                    link.addEventListener('mouseover', function (e) {
+                        toggleLink(link, e);
+                    });
+                }
 
                 link.addEventListener('click', function (e) {
                     toggleLink(link, e);
