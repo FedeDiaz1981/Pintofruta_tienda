@@ -137,14 +137,6 @@ h6 {
   cursor: pointer;
 }
 
-#main-menu > li.mega:hover > ul.mega-menu,
-#main-menu > li.mega.menu-open > ul.mega-menu {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
 #main-menu > li.mega.menu-open > ul.mega-menu {
   display: block !important;
   z-index: 10050 !important;
@@ -156,6 +148,14 @@ h6 {
 }
 
 @media (min-width: 1200px) {
+  #main-menu > li.mega:hover > ul.mega-menu,
+  #main-menu > li.mega.menu-open > ul.mega-menu {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
   #main-menu > li.mega > ul.mega-menu {
     position: absolute !important;
     top: 100% !important;
@@ -169,6 +169,22 @@ h6 {
   #main-menu > li.mega.menu-open,
   #main-menu > li.mega:hover {
     padding-bottom: 0;
+  }
+}
+
+@media (max-width: 1199px), (hover: none), (pointer: coarse) {
+  #main-menu > li.mega:hover > ul.mega-menu {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #main-menu > li.mega.menu-open > ul.mega-menu {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
 }
 
