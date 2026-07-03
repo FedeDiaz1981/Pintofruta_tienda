@@ -1421,6 +1421,12 @@ header {
   font-size: 20px;
   font-weight: 700;
 }
+.pixelstrap.sm-horizontal .mobile-admin {
+  display: none;
+}
+.pixelstrap.sm-horizontal .mobile-admin-link {
+  display: none;
+}
 .pixelstrap.sm-horizontal a {
   margin-bottom: 0;
   padding: 15px;
@@ -1451,6 +1457,27 @@ header {
     margin-right: -25px !important;
     display: flex;
     justify-content: space-between;
+  }
+  .pixelstrap.sm-horizontal .mobile-admin {
+    display: block !important;
+    margin-bottom: 12px !important;
+  }
+  .pixelstrap.sm-horizontal .mobile-admin-link {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #46724E, #3E6645);
+    color: #fff !important;
+    border-radius: 12px !important;
+    border-bottom: none !important;
+    padding: 12px 14px !important;
+    text-align: left !important;
+    font-weight: 600 !important;
+    box-shadow: 0 10px 22px rgba(70, 114, 78, 0.22);
+  }
+  .pixelstrap.sm-horizontal .mobile-admin-link i {
+    font-size: 16px;
+    color: #fff;
   }
   .pixelstrap.sm-horizontal li a {
     border-bottom: none;
