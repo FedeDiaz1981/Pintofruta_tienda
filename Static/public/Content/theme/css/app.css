@@ -940,10 +940,23 @@ header {
     display: none !important;
   }
   .pixelstrap .full-mega-menu .mega-box {
-    padding: 5px 0 !important;
+    padding: 8px 0 !important;
   }
   .pixelstrap .full-mega-menu .link-section {
     padding: 0 !important;
+  }
+  .pixelstrap .full-mega-menu .link-section h5 {
+    margin-bottom: 10px !important;
+  }
+  .pixelstrap .full-mega-menu .link-section h5 a.menu-title {
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.2px !important;
+    padding: 0 18px !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
   }
   .pixelstrap .full-mega-menu .menu-content {
     background: transparent !important;
@@ -951,6 +964,13 @@ header {
   .pixelstrap .full-mega-menu .menu-content a {
     display: block;
     width: 100%;
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    letter-spacing: 0 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+    padding: 6px 18px !important;
   }
   .pixelstrap .full-mega-menu .menu-content a:hover {
     color: black !important;
@@ -960,6 +980,10 @@ header {
   }
   .mega-mobile {
     display: block !important;
+  }
+  .mega-mobile .menu-content ul {
+    margin: 0;
+    padding: 0;
   }
 }
 @media (max-width: 1400px) {
