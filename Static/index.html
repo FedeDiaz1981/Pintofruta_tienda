@@ -2134,6 +2134,13 @@
             };
 
             const closeAllSubmenus = function () {
+                mainMenu.querySelectorAll('li.mega > ul.mega-menu').forEach(function (submenu) {
+                    submenu.style.display = 'none';
+                    submenu.style.visibility = 'hidden';
+                    submenu.style.opacity = '0';
+                    submenu.style.pointerEvents = 'none';
+                });
+
                 mainMenu.querySelectorAll('li.mega.menu-open').forEach(item => {
                     item.classList.remove('menu-open');
                 });
@@ -2153,6 +2160,10 @@
 
                 if (shouldOpen) {
                     parent.classList.add('menu-open');
+                    submenu.style.display = 'block';
+                    submenu.style.visibility = 'visible';
+                    submenu.style.opacity = '1';
+                    submenu.style.pointerEvents = 'auto';
                 }
 
                 return true;

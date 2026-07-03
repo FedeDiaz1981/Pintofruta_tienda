@@ -662,14 +662,18 @@
         document.getElementById("mySidenav").classList.remove('open-side');
     }
     $(function () {
-        $('#main-menu').smartmenus({
-            subMenusSubOffsetX: 1,
-            subMenusSubOffsetY: -8
-        });
-        $('#sub-menu').smartmenus({
-            subMenusSubOffsetX: 1,
-            subMenusSubOffsetY: -8
-        });
+        var isTouchMenu = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+        if (!isTouchMenu) {
+            $('#main-menu').smartmenus({
+                subMenusSubOffsetX: 1,
+                subMenusSubOffsetY: -8
+            });
+            $('#sub-menu').smartmenus({
+                subMenusSubOffsetX: 1,
+                subMenusSubOffsetY: -8
+            });
+        }
     });
 
     /*=====================
