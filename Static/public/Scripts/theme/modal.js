@@ -1,7 +1,13 @@
 (function($) {
     "use strict";
+
+    function shouldShowPromoModal() {
+        var host = window.location.hostname;
+        return host === "localhost" || host === "127.0.0.1" || host === "::1";
+    }
+
     $(window).on('load', function() {
-        if (window.location.protocol !== 'file:') {
+        if (shouldShowPromoModal()) {
             $('#exampleModal').modal('show');
         }
     });
