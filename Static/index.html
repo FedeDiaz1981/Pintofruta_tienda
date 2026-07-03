@@ -6023,10 +6023,14 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
 
 <script type="text/javascript">
     $(document).ready(function () {
+        function isMobileTrendView() {
+            return window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+        }
+
         function initSlick() {
             $('.slider-categorias-destacadas').each(function () {
                 var $slider = $(this);
-                var isMobile = window.innerWidth <= 768;
+                var isMobile = isMobileTrendView();
 
                 if ($slider.hasClass('slick-initialized')) {
                     $slider.slick('unslick');
@@ -6044,7 +6048,7 @@ Alfajor de Pistacho x 60g - Laddubar                </h6>
         }
 
         function forceCatDestacadasMobile() {
-            if (window.innerWidth > 768) {
+            if (!isMobileTrendView()) {
                 return;
             }
 

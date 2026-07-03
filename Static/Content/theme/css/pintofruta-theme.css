@@ -188,6 +188,14 @@ h6 {
   }
 }
 
+@media (max-width: 768px), (pointer: coarse) {
+  .cat-destacadas .container-destacados .slider-categorias-destacadas .slick-slide {
+    width: calc(33.333% - 8px) !important;
+    max-width: calc(33.333% - 8px) !important;
+    float: left !important;
+  }
+}
+
 .main-header-menu .logo-block {
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
