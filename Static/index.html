@@ -2042,6 +2042,25 @@
                 const menuTitle = link.getAttribute('data-title');
                 const newContent = menu.querySelector('#content-' + menuTitle);
 
+                if (currentLink === link && currentContent === newContent) {
+                    currentContent.style.display = 'none';
+                    currentContent.classList.remove('active');
+                    currentContent = null;
+                    currentLink = null;
+
+                    link.classList.remove('active');
+
+                    if (mensajeInicial) {
+                        mensajeInicial.style.display = 'block';
+                    }
+
+                    if (event) {
+                        event.preventDefault();
+                    }
+
+                    return false;
+                }
+
                 if (currentContent && currentContent !== newContent) {
                     currentContent.style.display = 'none';
                     currentContent.classList.remove('active');
@@ -2067,6 +2086,8 @@
                 if (event) {
                     event.preventDefault();
                 }
+
+                return true;
             };
 
             links.forEach(link => {
@@ -2075,8 +2096,11 @@
                 });
 
                 link.addEventListener('click', function (e) {
-                    activateLink(link, e);
-                    openGalleryFromHash(link.getAttribute('href'));
+                    const opened = activateLink(link, e);
+
+                    if (opened) {
+                        openGalleryFromHash(link.getAttribute('href'));
+                    }
                 });
             });
         });

@@ -2015,32 +2015,63 @@
             const links = menu.closest('.row').querySelectorAll('.menu-title[data-title]');
             const mensajeInicial = menu.querySelector('.mensaje-inicial');
 
-            links.forEach(link => {
-                link.addEventListener('mouseover', function (e) {
-                    const menuTitle = link.getAttribute('data-title');
-                    const newContent = menu.querySelector('#content-' + menuTitle);
+            const toggleLink = function (link, event) {
+                const menuTitle = link.getAttribute('data-title');
+                const newContent = menu.querySelector('#content-' + menuTitle);
 
-                    if (currentContent && currentContent !== newContent) {
-                        currentContent.style.display = 'none';
-                        currentContent.classList.remove('active');
-                    }
+                if (currentLink === link && currentContent === newContent) {
+                    currentContent.style.display = 'none';
+                    currentContent.classList.remove('active');
+                    currentContent = null;
+                    currentLink = null;
 
-                    if (currentLink && currentLink !== link) {
-                        currentLink.classList.remove('active');
-                    }
-
-                    if (newContent) {
-                        newContent.style.display = 'block';
-                        newContent.classList.add('active');
-                        currentContent = newContent;
-                    }
-
-                    link.classList.add('active');
-                    currentLink = link;
+                    link.classList.remove('active');
 
                     if (mensajeInicial) {
-                        mensajeInicial.style.display = 'none';
+                        mensajeInicial.style.display = 'block';
                     }
+
+                    if (event) {
+                        event.preventDefault();
+                    }
+
+                    return;
+                }
+
+                if (currentContent && currentContent !== newContent) {
+                    currentContent.style.display = 'none';
+                    currentContent.classList.remove('active');
+                }
+
+                if (currentLink && currentLink !== link) {
+                    currentLink.classList.remove('active');
+                }
+
+                if (newContent) {
+                    newContent.style.display = 'block';
+                    newContent.classList.add('active');
+                    currentContent = newContent;
+                }
+
+                link.classList.add('active');
+                currentLink = link;
+
+                if (mensajeInicial) {
+                    mensajeInicial.style.display = 'none';
+                }
+
+                if (event) {
+                    event.preventDefault();
+                }
+            };
+
+            links.forEach(link => {
+                link.addEventListener('mouseover', function (e) {
+                    toggleLink(link, e);
+                });
+
+                link.addEventListener('click', function (e) {
+                    toggleLink(link, e);
                 });
             });
         });
