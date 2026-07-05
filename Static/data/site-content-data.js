@@ -9,11 +9,6 @@ window.PF_BASE_CONTENT = {
         "href": "#1-categorias"
       },
       {
-        "id": "diets",
-        "label": "DIETAS",
-        "href": "#3-dietas"
-      },
-      {
         "id": "brands",
         "label": "MARCAS",
         "href": "#2-marcas"
@@ -22,16 +17,6 @@ window.PF_BASE_CONTENT = {
         "id": "new-arrivals",
         "label": "NUEVOS INGRESOS",
         "href": "#693-nuevos-ingresos"
-      },
-      {
-        "id": "promotions",
-        "label": "PROMOCIONES",
-        "href": "#415-promociones"
-      },
-      {
-        "id": "imported",
-        "label": "IMPORTADOS",
-        "href": "#925-importados"
       }
     ],
     "sections": [
@@ -154,291 +139,6 @@ window.PF_BASE_CONTENT = {
         ]
       },
       {
-        "id": "diets",
-        "label": "DIETAS",
-        "icon": "Content/Iconos/DIETAS.png",
-        "href": "#3-dietas",
-        "groups": [
-          {
-            "id": "agroecologico",
-            "label": "AGROECOLOGICO",
-            "href": "#104-agroecologico",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#229-alacena"
-              }
-            ]
-          },
-          {
-            "id": "keto",
-            "label": "KETO",
-            "href": "#694-keto",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#695-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#696-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#698-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#697-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "kosher",
-            "label": "KOSHER",
-            "href": "#103-kosher",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#226-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#227-bebidas"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#228-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "libre-de-gluten",
-            "label": "LIBRE DE GLUTEN",
-            "href": "#98-libre-de-gluten",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#206-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#207-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#208-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#209-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "organica",
-            "label": "ORGANICA",
-            "href": "#101-organica",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#218-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#219-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#220-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#221-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "plant-based",
-            "label": "PLANT BASED",
-            "href": "#839-plant-based",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#840-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#841-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#843-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#842-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "proteica",
-            "label": "PROTEICA",
-            "href": "#105-proteica",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#230-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#287-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#288-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#231-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "sin-azucar",
-            "label": "SIN AZUCAR",
-            "href": "#97-sin-azucar",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#202-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#203-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#204-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#205-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "sin-lactosa",
-            "label": "SIN LACTOSA",
-            "href": "#102-sin-lactosa",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#222-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#223-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#224-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#225-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "vegana",
-            "label": "VEGANA",
-            "href": "#99-vegana",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#210-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#211-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#212-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#213-refrigerados"
-              }
-            ]
-          },
-          {
-            "id": "vegetariana",
-            "label": "VEGETARIANA",
-            "href": "#100-vegetariana",
-            "items": [
-              {
-                "id": "alacena",
-                "label": "Alacena",
-                "href": "#214-alacena"
-              },
-              {
-                "id": "bebidas",
-                "label": "Bebidas",
-                "href": "#215-bebidas"
-              },
-              {
-                "id": "congelados",
-                "label": "Congelados",
-                "href": "#216-congelados"
-              },
-              {
-                "id": "refrigerados",
-                "label": "Refrigerados",
-                "href": "#217-refrigerados"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "id": "brands",
         "label": "MARCAS",
         "icon": "Content/Iconos/MARCAS.png",
@@ -505,34 +205,6 @@ window.PF_BASE_CONTENT = {
             "items": []
           }
         ]
-      },
-      {
-        "id": "promotions",
-        "label": "PROMOCIONES",
-        "icon": "Content/Iconos/PROMOCIONES.png",
-        "href": "#415-promociones",
-        "groups": [
-          {
-            "id": "bajamos-los-precios",
-            "label": "BAJAMOS LOS PRECIOS!",
-            "href": "#682-bajamos-los-precios",
-            "items": []
-          }
-        ]
-      },
-      {
-        "id": "imported",
-        "label": "IMPORTADOS",
-        "icon": "Content/Iconos/IMPORTADOS.png",
-        "href": "#925-importados",
-        "groups": [
-          {
-            "id": "productos-asiaticos",
-            "label": "Productos Asiaticos",
-            "href": "#971-productos-asiaticos",
-            "items": []
-          }
-        ]
       }
     ]
   },
@@ -578,7 +250,7 @@ window.PF_BASE_CONTENT = {
       "badge": "Promo",
       "image": "Content/Images/Banners/pf-hero-04.jpg",
       "imageMobile": "Content/Images/Banners/pf-hero-04-mobile.jpg",
-      "link": "galeria.html?source=/Galeria/415-promociones",
+      "link": "galeria.html?source=/Galeria/693-nuevos-ingresos",
       "active": true
     },
     {
@@ -589,7 +261,7 @@ window.PF_BASE_CONTENT = {
       "badge": "Spotlight",
       "image": "Content/Images/Banners/pf-hero-05.jpg",
       "imageMobile": "Content/Images/Banners/pf-hero-05-mobile.jpg",
-      "link": "galeria.html?source=/Galeria/925-importados",
+      "link": "galeria.html?source=/Galeria/2-marcas",
       "homeSpotlight": true,
       "active": true
     }
@@ -962,4 +634,4 @@ window.PF_BASE_CONTENT = {
     "user": 5,
     "heroSlide": 6
   }
-}
+};

@@ -1,4 +1,6 @@
-const STORAGE_KEY = "pintofruta-static-site-content-v1";
+const STORAGE_KEY = "pintofruta-static-site-content-v2";
+const LEGACY_STORAGE_KEY = "pintofruta-static-site-content-v1";
+const BLOCKED_NAV_IDS = new Set(["diets", "promotions", "imported"]);
 
 const defaultState = {
     sessionRole: "admin",
@@ -127,7 +129,9 @@ function bindElements() {
         "categoryForm", "categoryId", "categoryName", "categorySlug", "categoryVisible", "categoryList", "resetCategoryForm",
         "userForm", "userId", "userName", "userEmail", "userRole", "userCanSeePrices", "userActive", "userTable", "resetUserForm",
         "heroForm", "heroId", "heroTitle", "heroSubtitle", "heroImage", "heroImageMobile", "heroLink", "heroBadge", "heroOrder", "heroActive", "heroHomeSpotlight",
-        "heroTable", "resetHeroForm", "navScopesList", "navSectionsList", "downloadTemplate", "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson"
+        "heroTable", "resetHeroForm", "navForm", "navRecordId", "navRecordType", "navParentSectionField", "navParentSection",
+        "navRecordLabel", "navRecordHref", "saveNavRecord", "resetNavForm", "navScopesList", "navSectionsList", "downloadTemplate",
+        "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson"
     ];
     ids.forEach((id) => {
         els[id] = document.getElementById(id);
@@ -154,6 +158,7 @@ function bindEvents() {
     els.categoryForm.addEventListener("submit", saveCategory);
     els.userForm.addEventListener("submit", saveUser);
     els.heroForm.addEventListener("submit", saveHeroSlide);
+    els.navForm.addEventListener("submit", saveNavigationRecord);
 
     els.resetProductForm.addEventListener("click", () => {
         els.productForm.reset();
@@ -178,6 +183,10 @@ function bindEvents() {
         els.heroActive.checked = true;
         els.heroOrder.value = nextHeroOrder();
     });
+    els.resetNavForm.addEventListener("click", () => {
+        resetNavigationForm();
+    });
+    els.navRecordType.addEventListener("change", syncNavigationFormState);
 
     els.downloadTemplate.addEventListener("click", downloadTemplate);
     els.downloadCatalog.addEventListener("click", downloadCatalog);
@@ -226,10 +235,23 @@ function handlePanelCreate() {
         openAdminModal("bulk", "view");
         return;
     }
+    if (state.activeAdminPanel === "navigation") {
+        resetNavigationForm();
+        openAdminModal("navigation", "create");
+        return;
+    }
     openAdminModal(state.activeAdminPanel);
 }
 
 function openEditor(type, id) {
+    if (type === "navigation-scope") {
+        editNavigationScope(id);
+        return;
+    }
+    if (type === "navigation-group") {
+        editNavigationGroup(id.sectionId, id.groupId);
+        return;
+    }
     if (type === "product") editProduct(id);
     if (type === "category") editCategory(id);
     if (type === "user") editUser(id);
@@ -239,6 +261,14 @@ function openEditor(type, id) {
 }
 
 function removeRecord(type, id) {
+    if (type === "navigation-scope") {
+        removeNavigationScope(id);
+        return;
+    }
+    if (type === "navigation-group") {
+        removeNavigationGroup(id.sectionId, id.groupId);
+        return;
+    }
     if (type === "product") removeProduct(id);
     if (type === "category") removeCategory(id);
     if (type === "user") removeUser(id);
@@ -253,6 +283,17 @@ function handlePanelTableClick(event) {
 
     if (editButton) {
         const type = editButton.dataset.editType;
+        if (type === "navigation-scope") {
+            openEditor(type, editButton.dataset.scopeId || editButton.dataset.id);
+            return;
+        }
+        if (type === "navigation-group") {
+            openEditor(type, {
+                sectionId: editButton.dataset.sectionId,
+                groupId: editButton.dataset.groupId || editButton.dataset.id,
+            });
+            return;
+        }
         const id = Number(editButton.dataset.id);
         openEditor(type, id);
         return;
@@ -260,6 +301,17 @@ function handlePanelTableClick(event) {
 
     if (deleteButton) {
         const type = deleteButton.dataset.deleteType;
+        if (type === "navigation-scope") {
+            removeRecord(type, deleteButton.dataset.scopeId || deleteButton.dataset.id);
+            return;
+        }
+        if (type === "navigation-group") {
+            removeRecord(type, {
+                sectionId: deleteButton.dataset.sectionId,
+                groupId: deleteButton.dataset.groupId || deleteButton.dataset.id,
+            });
+            return;
+        }
         const id = Number(deleteButton.dataset.id);
         removeRecord(type, id);
         return;
@@ -306,15 +358,29 @@ function closeAdminModal() {
 }
 
 function saveState() {
+    state.headerNavigation = sanitizeNavigation(state.headerNavigation);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.removeItem(LEGACY_STORAGE_KEY);
     if (window.PFContent && typeof window.PFContent.save === "function") {
         window.PFContent.save(state);
     }
 }
 
+function sanitizeNavigation(navigation) {
+    const safe = navigation || { searchScopes: [], sections: [] };
+    const searchScopes = Array.isArray(safe.searchScopes) ? safe.searchScopes : [];
+    const sections = Array.isArray(safe.sections) ? safe.sections : [];
+
+    return {
+        ...safe,
+        searchScopes: searchScopes.filter((scope) => !BLOCKED_NAV_IDS.has(String(scope.id || "").toLowerCase())),
+        sections: sections.filter((section) => !BLOCKED_NAV_IDS.has(String(section.id || "").toLowerCase())),
+    };
+}
+
 function loadState() {
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
         if (!raw) return structuredClone(defaultState);
         const parsed = JSON.parse(raw);
         return {
@@ -328,6 +394,7 @@ function loadState() {
             products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : structuredClone(defaultState.products),
             categories: Array.isArray(parsed.categories) && parsed.categories.length ? parsed.categories : structuredClone(defaultState.categories),
             users: Array.isArray(parsed.users) && parsed.users.length ? parsed.users : structuredClone(defaultState.users),
+            headerNavigation: sanitizeNavigation(parsed.headerNavigation || defaultState.headerNavigation),
         };
     } catch {
         return structuredClone(defaultState);
@@ -361,6 +428,7 @@ function mergeState(base, incoming) {
     merged.products = Array.isArray(incoming.products) && incoming.products.length ? incoming.products : base.products;
     merged.categories = Array.isArray(incoming.categories) && incoming.categories.length ? incoming.categories : base.categories;
     merged.users = Array.isArray(incoming.users) && incoming.users.length ? incoming.users : base.users;
+    merged.headerNavigation = sanitizeNavigation(incoming.headerNavigation || base.headerNavigation);
     return merged;
 }
 
@@ -379,6 +447,8 @@ function renderAll() {
     syncViewButtons();
     syncRoleButtons();
     populateCategorySelect();
+    populateNavigationParentSelect();
+    syncNavigationFormState();
 }
 
 function renderMainPanel() {
@@ -387,6 +457,7 @@ function renderMainPanel() {
     const filtered = filterPanelRecords(records, state.activeAdminPanel, state.panelSearchQuery || "");
 
     els.panelSearch.value = state.panelSearchQuery || "";
+    els.panelCreate.textContent = meta.createLabel || "Nuevo registro";
     els.panelTitle.textContent = meta.title;
     els.topbarProducts.textContent = String(state.products.length);
     els.topbarCategories.textContent = String(state.categories.length);
@@ -418,6 +489,7 @@ function getPanelMeta(panel) {
             kicker: "ABM / Productos",
             tableTitle: "Listado de productos",
             viewLabel: "SQL / Productos",
+            createLabel: "Nuevo producto",
             kpis: [
                 { label: "Publicados", value: (filtered) => filtered.filter((item) => item.status === "published").length },
                 { label: "Destacados", value: (filtered) => filtered.filter((item) => item.featured).length },
@@ -430,6 +502,7 @@ function getPanelMeta(panel) {
             kicker: "Catalogo / Categorias",
             tableTitle: "Listado de categorias",
             viewLabel: "SQL / Categorias",
+            createLabel: "Nueva categoria",
             kpis: [
                 { label: "Visibles", value: (filtered) => filtered.filter((item) => item.visible).length },
                 { label: "Ocultas", value: (filtered) => filtered.filter((item) => !item.visible).length },
@@ -442,6 +515,7 @@ function getPanelMeta(panel) {
             kicker: "Accesos / Usuarios",
             tableTitle: "Listado de usuarios",
             viewLabel: "SQL / Usuarios",
+            createLabel: "Nuevo usuario",
             kpis: [
                 { label: "Activos", value: (filtered) => filtered.filter((item) => item.active).length },
                 { label: "Con precios", value: (filtered) => filtered.filter((item) => item.canSeePrices).length },
@@ -454,6 +528,7 @@ function getPanelMeta(panel) {
             kicker: "Contenido / Hero",
             tableTitle: "Listado de slides",
             viewLabel: "SQL / Hero",
+            createLabel: "Nuevo slide",
             kpis: [
                 { label: "Activos", value: (filtered) => filtered.filter((item) => item.active).length },
                 { label: "Orden max", value: (filtered) => (filtered.length ? Math.max(...filtered.map((item) => Number(item.order || 0))) : 0) },
@@ -466,6 +541,7 @@ function getPanelMeta(panel) {
             kicker: "Header / Navegación",
             tableTitle: "Contenido de navegación",
             viewLabel: "SQL / Header",
+            createLabel: "Nuevo registro",
             kpis: [
                 { label: "Scopes", value: () => state.headerNavigation?.searchScopes?.length || 0 },
                 { label: "Secciones", value: () => state.headerNavigation?.sections?.length || 0 },
@@ -478,6 +554,7 @@ function getPanelMeta(panel) {
             kicker: "Excel / Importacion",
             tableTitle: "Herramientas de carga",
             viewLabel: "SQL / Bulk",
+            createLabel: "Abrir carga",
             kpis: [
                 { label: "Acciones", value: (filtered) => filtered.length || 3 },
                 { label: "Plantilla", value: () => 1 },
@@ -499,7 +576,7 @@ function getPanelRecords(panel) {
         case "hero":
             return state.heroSlides;
         case "navigation":
-            return [state.headerNavigation || { searchScopes: [], sections: [] }];
+            return buildNavigationRows();
         case "bulk":
             return [
                 { id: 1, name: "Descargar plantilla", status: "ok", description: "Genera un Excel base con sku, publicPrice y memberPrice." },
@@ -520,6 +597,307 @@ function filterPanelRecords(records, panel, query) {
             : Object.values(item).join(" ");
         return String(haystack).toLowerCase().includes(normalized);
     });
+}
+
+function getNavigationState() {
+    state.headerNavigation = state.headerNavigation || { searchScopes: [], sections: [] };
+    state.headerNavigation.searchScopes = Array.isArray(state.headerNavigation.searchScopes) ? state.headerNavigation.searchScopes : [];
+    state.headerNavigation.sections = Array.isArray(state.headerNavigation.sections) ? state.headerNavigation.sections : [];
+    return state.headerNavigation;
+}
+
+function buildNavigationRows() {
+    const navigation = getNavigationState();
+    const rows = [];
+
+    (navigation.searchScopes || []).forEach((scope) => {
+        rows.push({
+            rowType: "scope",
+            scopeId: scope.id,
+            item: scope.label || scope.id || "",
+            detail: scope.href || "",
+            status: scope.id || "ok",
+        });
+    });
+
+    (navigation.sections || []).forEach((section) => {
+        (section.groups || []).forEach((group) => {
+            rows.push({
+                rowType: "group",
+                sectionId: section.id,
+                groupId: group.id,
+                item: `${section.label || ""} / ${group.label || ""}`.replace(/^\s*\/\s*|\s*\/\s*$/g, ""),
+                detail: group.href || "",
+                status: `${(group.items || []).length} items`,
+            });
+        });
+    });
+
+    return rows;
+}
+
+function renderNavigationPanelTable(records) {
+    return {
+        head: `
+            <tr>
+                <th>Tipo</th>
+                <th>Item</th>
+                <th>Detalle</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        `,
+        body: records.map((row) => {
+            if (row.rowType === "group") {
+                return `
+                    <tr>
+                        <td><strong>Sección</strong></td>
+                        <td>${escapeHtml(row.item || "")}</td>
+                        <td>${escapeHtml(row.detail || "")}</td>
+                        <td>${badgeHtml("amber", row.status || "items")}</td>
+                        <td>
+                            <div class="sql-actions">
+                                <button class="sql-action primary" type="button" data-edit-type="navigation-group" data-section-id="${escapeHtml(row.sectionId || "")}" data-group-id="${escapeHtml(row.groupId || "")}">Editar</button>
+                                <button class="sql-action danger" type="button" data-delete-type="navigation-group" data-section-id="${escapeHtml(row.sectionId || "")}" data-group-id="${escapeHtml(row.groupId || "")}">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            return `
+                <tr>
+                    <td><strong>Scope</strong></td>
+                    <td>${escapeHtml(row.item || "")}</td>
+                    <td>${escapeHtml(row.detail || "")}</td>
+                    <td>${badgeHtml("green", row.status || "ok")}</td>
+                    <td>
+                        <div class="sql-actions">
+                            <button class="sql-action primary" type="button" data-edit-type="navigation-scope" data-scope-id="${escapeHtml(row.scopeId || "")}">Editar</button>
+                            <button class="sql-action danger" type="button" data-delete-type="navigation-scope" data-scope-id="${escapeHtml(row.scopeId || "")}">Borrar</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join(""),
+    };
+}
+
+function populateNavigationParentSelect(selectedId = "") {
+    if (!els.navParentSection) {
+        return;
+    }
+
+    const navigation = getNavigationState();
+    els.navParentSection.innerHTML = `
+        <option value="">Selecciona una sección</option>
+        ${(navigation.sections || []).map((section) => `<option value="${escapeHtml(section.id || "")}">${escapeHtml(section.label || section.id || "")}</option>`).join("")}
+    `;
+
+    if (selectedId) {
+        els.navParentSection.value = selectedId;
+    }
+}
+
+function syncNavigationFormState() {
+    if (!els.navRecordType || !els.navParentSectionField || !els.navParentSection || !els.navRecordHref) {
+        return;
+    }
+
+    const isGroup = els.navRecordType.value === "group";
+    els.navParentSectionField.style.display = isGroup ? "" : "none";
+    els.navParentSection.required = isGroup;
+    els.navRecordHref.placeholder = "#4-alacena";
+}
+
+function resetNavigationForm(defaultType = "scope") {
+    if (!els.navForm) {
+        return;
+    }
+
+    els.navForm.reset();
+    clearHiddenFormField("navRecordId");
+    els.navRecordType.value = defaultType;
+    populateNavigationParentSelect();
+    syncNavigationFormState();
+    els.navRecordLabel.value = "";
+    els.navRecordHref.value = "";
+}
+
+function buildUniqueNavigationId(label, ignoreId = "", ignoreGroupId = "", ignoreSectionId = "") {
+    const navigation = getNavigationState();
+    const used = new Set();
+
+    (navigation.searchScopes || []).forEach((scope) => {
+        if (scope.id && scope.id !== ignoreId) {
+            used.add(String(scope.id));
+        }
+    });
+
+    (navigation.sections || []).forEach((section) => {
+        (section.groups || []).forEach((group) => {
+            if (group.id && !(section.id === ignoreSectionId && group.id === ignoreGroupId)) {
+                used.add(String(group.id));
+            }
+        });
+    });
+
+    const base = slugify(label) || "item";
+    let candidate = base;
+    let counter = 2;
+    while (used.has(candidate)) {
+        candidate = `${base}-${counter++}`;
+    }
+    return candidate;
+}
+
+function findNavigationScope(scopeId) {
+    const navigation = getNavigationState();
+    return (navigation.searchScopes || []).find((scope) => String(scope.id) === String(scopeId));
+}
+
+function findNavigationGroup(sectionId, groupId) {
+    const navigation = getNavigationState();
+    for (const section of navigation.sections || []) {
+        if (String(section.id) !== String(sectionId)) {
+            continue;
+        }
+        const group = (section.groups || []).find((item) => String(item.id) === String(groupId));
+        if (group) {
+            return { section, group };
+        }
+    }
+    return null;
+}
+
+function findNavigationGroupById(groupId) {
+    const navigation = getNavigationState();
+    for (const section of navigation.sections || []) {
+        const group = (section.groups || []).find((item) => String(item.id) === String(groupId));
+        if (group) {
+            return { section, group };
+        }
+    }
+    return null;
+}
+
+function saveNavigationRecord(event) {
+    event.preventDefault();
+
+    const navigation = getNavigationState();
+    const type = els.navRecordType.value === "group" ? "group" : "scope";
+    const recordId = String(els.navRecordId.value || "").trim();
+    const label = String(els.navRecordLabel.value || "").trim();
+    const href = String(els.navRecordHref.value || "").trim();
+
+    if (!label || !href) {
+        alert("Completa la etiqueta y el href.");
+        return;
+    }
+
+    if (type === "scope") {
+        const nextId = recordId || buildUniqueNavigationId(label, recordId);
+        const payload = { id: nextId, label, href };
+        const hasRecord = navigation.searchScopes.some((scope) => String(scope.id) === String(recordId));
+        navigation.searchScopes = hasRecord
+            ? navigation.searchScopes.map((scope) => (String(scope.id) === String(recordId) ? payload : scope))
+            : [...navigation.searchScopes, payload];
+        els.navRecordId.value = nextId;
+    } else {
+        const parentSectionId = String(els.navParentSection.value || "").trim();
+        if (!parentSectionId) {
+            alert("Selecciona una sección padre.");
+            return;
+        }
+
+        const section = navigation.sections.find((item) => String(item.id) === parentSectionId);
+        if (!section) {
+            alert("La sección padre no existe.");
+            return;
+        }
+
+        const existingGroup = recordId ? findNavigationGroupById(recordId) : null;
+        const currentGroup = existingGroup ? existingGroup.group : null;
+        const previousSectionId = existingGroup ? String(existingGroup.section.id || "") : "";
+        const previousIndex = existingGroup ? (existingGroup.section.groups || []).findIndex((group) => String(group.id) === String(recordId)) : -1;
+        const nextId = recordId || buildUniqueNavigationId(label, recordId, "", parentSectionId);
+        const payload = {
+            id: nextId,
+            label,
+            href,
+            items: currentGroup && Array.isArray(currentGroup.items) ? currentGroup.items : [],
+        };
+
+        navigation.sections.forEach((candidateSection) => {
+            candidateSection.groups = (candidateSection.groups || []).filter((group) => String(group.id) !== String(recordId));
+        });
+
+        section.groups = Array.isArray(section.groups) ? section.groups : [];
+        if (previousSectionId === parentSectionId && previousIndex >= 0) {
+            section.groups.splice(Math.min(previousIndex, section.groups.length), 0, payload);
+        } else {
+            section.groups.push(payload);
+        }
+        els.navRecordId.value = nextId;
+    }
+
+    state.headerNavigation = navigation;
+    state.activeAdminPanel = "navigation";
+    state.activeModalAction = "create";
+    persistAndRender();
+    resetNavigationForm(type);
+}
+
+function editNavigationScope(scopeId) {
+    const scope = findNavigationScope(scopeId);
+    if (!scope) {
+        return;
+    }
+
+    resetNavigationForm("scope");
+    state.activeAdminPanel = "navigation";
+    state.activeModalAction = "edit";
+    openAdminModal("navigation", "edit");
+    els.navRecordType.value = "scope";
+    els.navRecordId.value = String(scope.id || "");
+    els.navRecordLabel.value = scope.label || "";
+    els.navRecordHref.value = scope.href || "";
+    syncNavigationFormState();
+}
+
+function editNavigationGroup(sectionId, groupId) {
+    const found = findNavigationGroup(sectionId, groupId);
+    if (!found) {
+        return;
+    }
+
+    resetNavigationForm("group");
+    state.activeAdminPanel = "navigation";
+    state.activeModalAction = "edit";
+    openAdminModal("navigation", "edit");
+    els.navRecordType.value = "group";
+    els.navRecordId.value = String(found.group.id || "");
+    els.navRecordLabel.value = found.group.label || "";
+    els.navRecordHref.value = found.group.href || "";
+    populateNavigationParentSelect(String(found.section.id || ""));
+    syncNavigationFormState();
+}
+
+function removeNavigationScope(scopeId) {
+    const navigation = getNavigationState();
+    navigation.searchScopes = (navigation.searchScopes || []).filter((scope) => String(scope.id) !== String(scopeId));
+    state.headerNavigation = navigation;
+    persistAndRender();
+}
+
+function removeNavigationGroup(sectionId, groupId) {
+    const navigation = getNavigationState();
+    navigation.sections = (navigation.sections || []).map((section) => ({
+        ...section,
+        groups: (section.groups || []).filter((group) => !(String(section.id) === String(sectionId) && String(group.id) === String(groupId))),
+    }));
+    state.headerNavigation = navigation;
+    persistAndRender();
 }
 
 function renderPanelTableHTML(panel, records) {
@@ -647,6 +1025,7 @@ function renderPanelTableHTML(panel, records) {
     }
 
     if (panel === "navigation") {
+        return renderNavigationPanelTable(records);
         const navigation = records[0] || { searchScopes: [], sections: [] };
         return {
             head: `
@@ -963,6 +1342,10 @@ function renderAdminModal() {
         hero: {
             title: state.activeModalAction === "edit" ? "Editar slide" : "Nuevo slide",
             kicker: "Contenido",
+        },
+        navigation: {
+            title: state.activeModalAction === "edit" ? "Editar registro" : "Nuevo registro",
+            kicker: "Header",
         },
         bulk: { title: "Carga masiva de precios", kicker: "Excel" },
     }[state.activeAdminPanel] || { title: "Panel", kicker: "Admin" };

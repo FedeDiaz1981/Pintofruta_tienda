@@ -460,17 +460,43 @@
                             <div class="admin-grid nav-grid">
                                 <div class="panel">
                                     <div class="panel-head">
-                                        <h3>Accesos rápidos</h3>
-                                        <span class="panel-badge soft">Scopes</span>
+                                        <h3>Editor de registros</h3>
+                                        <span class="panel-badge soft">ABM</span>
                                     </div>
-                                    <div class="list-stack" id="navScopesList"></div>
+                                    <form id="navForm" class="mini-form">
+                                        <input type="hidden" id="navRecordId">
+                                        <label>
+                                            Tipo
+                                            <select id="navRecordType">
+                                                <option value="scope">Scope</option>
+                                                <option value="group">Sección / grupo</option>
+                                            </select>
+                                        </label>
+                                        <label id="navParentSectionField">
+                                            Sección padre
+                                            <select id="navParentSection"></select>
+                                        </label>
+                                        <label>
+                                            Etiqueta
+                                            <input type="text" id="navRecordLabel" placeholder="Ej: ALACENA" required>
+                                        </label>
+                                        <label>
+                                            Href
+                                            <input type="text" id="navRecordHref" placeholder="#4-alacena" required>
+                                        </label>
+                                        <div class="form-actions">
+                                            <button class="btn btn-primary" type="submit" id="saveNavRecord">Guardar registro</button>
+                                            <button class="btn btn-ghost" type="button" id="resetNavForm">Limpiar</button>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="panel wide">
                                     <div class="panel-head">
-                                        <h3>Secciones y grupos</h3>
+                                        <h3>Registros actuales</h3>
                                         <span class="panel-badge warning">Mega menú</span>
                                     </div>
                                     <div class="list-stack" id="navSectionsList"></div>
+                                    <div class="list-stack" id="navScopesList" style="margin-top:16px;"></div>
                                 </div>
                             </div>
                         </section>
