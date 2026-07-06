@@ -83,13 +83,7 @@ const defaultState = {
             homeSpotlight: false
         }
     ],
-    products: [
-        { id: 1, sku: "MERA09", name: "Cepillo Dental de Bambu Media", brand: "Meraki", categoryId: 4, publicPrice: 2490, memberPrice: 2240, stock: 18, status: "published", featured: true },
-        { id: 2, sku: "TALO01", name: "Yogurt Estilo Griego Natural 180g", brand: "Talos", categoryId: 1, publicPrice: 1890, memberPrice: 1690, stock: 42, status: "published", featured: true },
-        { id: 3, sku: "BURG04", name: "Medallones de Cebollas Caramelizadas", brand: "Burganas", categoryId: 2, publicPrice: 3920, memberPrice: 3520, stock: 26, status: "published", featured: false },
-        { id: 4, sku: "ZAFR25", name: "Barra de Cereal Pasta de Mani y Miel", brand: "Zafran", categoryId: 3, publicPrice: 1780, memberPrice: 1590, stock: 58, status: "draft", featured: false },
-        { id: 5, sku: "AIKE06", name: "Tortillas de Quinoa y Kale", brand: "Aiken", categoryId: 1, publicPrice: 4150, memberPrice: 3710, stock: 31, status: "published", featured: false },
-    ],
+    products: [],
     categories: [
         { id: 1, name: "Almacen saludable", slug: "almacen-saludable", visible: true },
         { id: 2, name: "Congelados", slug: "congelados", visible: true },
@@ -102,7 +96,7 @@ const defaultState = {
         { id: 3, name: "Martin Ruiz", email: "martin@demo.com", role: "customer", canSeePrices: false, active: true },
         { id: 4, name: "Muestra Inactiva", email: "inactive@demo.com", role: "customer", canSeePrices: true, active: false },
     ],
-    nextIds: { product: 6, category: 5, user: 5, heroSlide: 7 },
+    nextIds: { product: 1, category: 5, user: 5, heroSlide: 7 },
 };
 
 let state = loadState();
