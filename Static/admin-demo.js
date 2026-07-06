@@ -85,10 +85,7 @@ const defaultState = {
     ],
     products: [],
     categories: [
-        { id: 1, name: "Almacen saludable", slug: "almacen-saludable", visible: true },
-        { id: 2, name: "Congelados", slug: "congelados", visible: true },
-        { id: 3, name: "Barras y snacks", slug: "snacks", visible: true },
-        { id: 4, name: "Hogar y cuidado", slug: "hogar-cuidado", visible: true },
+        { id: 1, name: "Catalogo importado", slug: "catalogo-importado", visible: true },
     ],
     users: [
         { id: 1, name: "Laura Gomez", email: "laura@demo.com", role: "admin", canSeePrices: true, active: true },
@@ -96,7 +93,7 @@ const defaultState = {
         { id: 3, name: "Martin Ruiz", email: "martin@demo.com", role: "customer", canSeePrices: false, active: true },
         { id: 4, name: "Muestra Inactiva", email: "inactive@demo.com", role: "customer", canSeePrices: true, active: false },
     ],
-    nextIds: { product: 1, category: 5, user: 5, heroSlide: 7 },
+    nextIds: { product: 1, category: 2, user: 5, heroSlide: 7 },
 };
 
 let state = loadState();
@@ -1578,24 +1575,30 @@ function syncForms() {
 
 function downloadTemplate() {
     const rows = [
-        ["sku", "publicPrice", "memberPrice"],
-        ["MERA09", 2490, 2240],
-        ["TALO01", 1890, 1690],
-        ["BURG04", 3920, 3520],
+        ["brand", "detail", "presentation", "publicPrice", "memberPrice", "kosher", "sinTacc", "sinAditivos", "noTesteadoEnAnimales", "image"],
+        ["AL NATURAL", "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc", "500 cc", 13000, 10600, "NO", "SI", "NO", "NO", "assets/images/metaimage.jpg"],
+        ["BAMBOO", "BAMBOO POCHOCLOS ORGANICOS AZUCAR", "80 gr", 2200, 2100, "NO", "SI", "SI", "NO", "assets/images/metaimage.jpg"],
     ];
-    downloadWorkbook(rows, "plantilla_precios_pintofruta.xlsx");
+    downloadWorkbook(rows, "plantilla_productos_pintofruta.xlsx");
 }
 
 function downloadCatalog() {
     const rows = [
-        ["sku", "name", "category", "brand", "publicPrice", "memberPrice", "stock", "status"],
+        ["sku", "name", "category", "brand", "detail", "presentation", "publicPrice", "memberPrice", "kosher", "sinTacc", "sinAditivos", "noTesteadoEnAnimales", "image", "stock", "status"],
         ...state.products.map((product) => [
             product.sku,
             product.name,
             state.categories.find((category) => category.id === product.categoryId)?.name || "",
             product.brand,
+            product.detail || "",
+            product.presentation || "",
             product.publicPrice,
             product.memberPrice,
+            product.kosher ? "SI" : "NO",
+            product.sinTacc ? "SI" : "NO",
+            product.sinAditivos ? "SI" : "NO",
+            product.noTesteadoEnAnimales ? "SI" : "NO",
+            product.image || "",
             product.stock,
             product.status,
         ]),
