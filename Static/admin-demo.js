@@ -84,6 +84,7 @@ const defaultState = {
         }
     ],
     products: [],
+    brands: [],
     categories: [
         { id: 1, name: "Catalogo importado", slug: "catalogo-importado", visible: true },
     ],
@@ -99,10 +100,14 @@ const defaultState = {
 let state = loadState();
 
 const els = {};
+let productImageDirectoryHandle = null;
+let brandImageDirectoryHandle = null;
+const LOCAL_SAVE_SERVER = "http://127.0.0.1:8787";
 
 document.addEventListener("DOMContentLoaded", async () => {
     bindElements();
     state = await loadInitialState();
+    state.brands = Array.isArray(state.brands) && state.brands.length ? state.brands : deriveBrandsFromProducts();
     bindEvents();
     syncForms();
     renderAll();
@@ -111,18 +116,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 function bindElements() {
     const ids = [
         "panelApp", "panelSidebar", "panelTitle", "topbarProducts", "topbarCategories", "topbarUsers", "topbarCount", "panelKicker",
-        "panelTableTitle", "panelKpis", "panelSearch", "panelCreate", "panelTable", "panelTableHead", "panelTableBody",
+        "panelTableTitle", "panelKpis", "panelSearch", "panelCreate", "panelEditorSlot", "panelTable", "panelTableHead", "panelTableBody",
         "featuredPublic", "featuredMember", "featuredDiff", "storefrontGrid", "adminLock",
         "adminLauncher", "adminModalBackdrop", "adminModalTitle", "adminModalKicker", "closeAdminModal",
         "downloadJsonCard",
-        "productForm", "productId", "productSku", "productName", "productCategory", "productBrand", "productPublicPrice",
-        "productMemberPrice", "productStock", "productStatus", "productFeatured", "productTable", "resetProductForm",
+        "productForm", "productId", "productSku", "productDetail", "productPresentation", "productCategory", "productBrand", "productImage", "productImageFile", "productImageCurrent", "productFeatured", "productTrending", "productVegano", "productKosher", "productTesteadoEnAnimales", "productPublicPrice",
+        "productMemberPrice", "productTable", "resetProductForm",
         "categoryForm", "categoryId", "categoryName", "categorySlug", "categoryVisible", "categoryList", "resetCategoryForm",
         "userForm", "userId", "userName", "userEmail", "userRole", "userCanSeePrices", "userActive", "userTable", "resetUserForm",
         "heroForm", "heroId", "heroTitle", "heroSubtitle", "heroImage", "heroImageMobile", "heroLink", "heroBadge", "heroOrder", "heroActive", "heroHomeSpotlight",
         "heroTable", "resetHeroForm", "navForm", "navRecordId", "navRecordType", "navParentSectionField", "navParentSection",
         "navRecordLabel", "navRecordHref", "saveNavRecord", "resetNavForm", "navScopesList", "navSectionsList", "downloadTemplate",
-        "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson"
+        "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson", "topbarBrands", "brandForm", "brandId", "brandCode", "brandName", "brandImage", "brandImageFile", "brandImageCurrent", "brandFeatured", "resetBrandForm", "brandTable",
+        "brandPanelForm", "brandPanelId", "brandPanelCode", "brandPanelName", "resetBrandPanelForm"
     ];
     ids.forEach((id) => {
         els[id] = document.getElementById(id);
@@ -146,6 +152,10 @@ function bindEvents() {
     });
 
     els.productForm.addEventListener("submit", saveProduct);
+    els.brandForm.addEventListener("submit", saveBrand);
+    if (els.brandPanelForm) {
+        els.brandPanelForm.addEventListener("submit", saveBrandPanel);
+    }
     els.categoryForm.addEventListener("submit", saveCategory);
     els.userForm.addEventListener("submit", saveUser);
     els.heroForm.addEventListener("submit", saveHeroSlide);
@@ -154,8 +164,38 @@ function bindEvents() {
     els.resetProductForm.addEventListener("click", () => {
         els.productForm.reset();
         clearHiddenFormField("productId");
-        els.productStatus.value = "published";
+        clearHiddenFormField("productImage");
+        els.productFeatured.checked = false;
+        if (els.productTrending) {
+            els.productTrending.checked = false;
+        }
+        if (els.productImageFile) {
+            els.productImageFile.value = "";
+        }
+        if (els.productImage) {
+            els.productImage.value = "";
+        }
+        updateProductImageStatus("");
+        els.productVegano.value = "false";
+        els.productKosher.value = "false";
+        els.productTesteadoEnAnimales.value = "false";
+        populateBrandSelect();
+        els.productBrand.value = "";
     });
+    els.resetBrandForm.addEventListener("click", () => {
+        resetBrandForm();
+    });
+    if (els.brandImageFile) {
+        els.brandImageFile.addEventListener("change", () => {
+            const file = els.brandImageFile.files && els.brandImageFile.files[0];
+            updateBrandImageStatus(file ? file.name : els.brandImage.value || "");
+        });
+    }
+    if (els.resetBrandPanelForm) {
+        els.resetBrandPanelForm.addEventListener("click", () => {
+            resetBrandPanelForm();
+        });
+    }
     els.resetCategoryForm.addEventListener("click", () => {
         els.categoryForm.reset();
         clearHiddenFormField("categoryId");
@@ -178,6 +218,12 @@ function bindEvents() {
         resetNavigationForm();
     });
     els.navRecordType.addEventListener("change", syncNavigationFormState);
+    if (els.productImageFile) {
+        els.productImageFile.addEventListener("change", () => {
+            const file = els.productImageFile.files && els.productImageFile.files[0];
+            updateProductImageStatus(file ? file.name : els.productImage.value || "");
+        });
+    }
 
     els.downloadTemplate.addEventListener("click", downloadTemplate);
     els.downloadCatalog.addEventListener("click", downloadCatalog);
@@ -226,6 +272,11 @@ function handlePanelCreate() {
         openAdminModal("bulk", "view");
         return;
     }
+    if (state.activeAdminPanel === "brands") {
+        resetBrandForm();
+        openAdminModal("brands", "create");
+        return;
+    }
     if (state.activeAdminPanel === "navigation") {
         resetNavigationForm();
         openAdminModal("navigation", "create");
@@ -235,6 +286,10 @@ function handlePanelCreate() {
 }
 
 function openEditor(type, id) {
+    if (type === "brand") {
+        editBrand(id);
+        return;
+    }
     if (type === "navigation-scope") {
         editNavigationScope(id);
         return;
@@ -247,11 +302,22 @@ function openEditor(type, id) {
     if (type === "category") editCategory(id);
     if (type === "user") editUser(id);
     if (type === "hero") editHeroSlide(id);
+    const panelMap = {
+        product: "products",
+        category: "categories",
+        user: "users",
+        hero: "hero",
+    };
+    const panel = panelMap[type] || type;
     state.activeModalAction = "edit";
-    openAdminModal(type);
+    openAdminModal(panel, "edit");
 }
 
 function removeRecord(type, id) {
+    if (type === "brand") {
+        removeBrand(id);
+        return;
+    }
     if (type === "navigation-scope") {
         removeNavigationScope(id);
         return;
@@ -285,7 +351,7 @@ function handlePanelTableClick(event) {
             });
             return;
         }
-        const id = Number(editButton.dataset.id);
+        const id = type === "brand" ? String(editButton.dataset.id || "") : Number(editButton.dataset.id);
         openEditor(type, id);
         return;
     }
@@ -303,7 +369,7 @@ function handlePanelTableClick(event) {
             });
             return;
         }
-        const id = Number(deleteButton.dataset.id);
+        const id = type === "brand" ? String(deleteButton.dataset.id || "") : Number(deleteButton.dataset.id);
         removeRecord(type, id);
         return;
     }
@@ -383,6 +449,7 @@ function loadState() {
             sessionRole: "admin",
             heroSlides: Array.isArray(parsed.heroSlides) && parsed.heroSlides.length ? parsed.heroSlides : structuredClone(defaultState.heroSlides),
             products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : structuredClone(defaultState.products),
+            brands: Array.isArray(parsed.brands) && parsed.brands.length ? normalizeBrandCollection(parsed.brands) : structuredClone(defaultState.brands),
             categories: Array.isArray(parsed.categories) && parsed.categories.length ? parsed.categories : structuredClone(defaultState.categories),
             users: Array.isArray(parsed.users) && parsed.users.length ? parsed.users : structuredClone(defaultState.users),
             headerNavigation: sanitizeNavigation(parsed.headerNavigation || defaultState.headerNavigation),
@@ -417,6 +484,7 @@ function mergeState(base, incoming) {
     merged.panelSearchQuery = incoming.panelSearchQuery || base.panelSearchQuery;
     merged.heroSlides = Array.isArray(incoming.heroSlides) && incoming.heroSlides.length ? incoming.heroSlides : base.heroSlides;
     merged.products = Array.isArray(incoming.products) && incoming.products.length ? incoming.products : base.products;
+    merged.brands = Array.isArray(incoming.brands) && incoming.brands.length ? normalizeBrandCollection(incoming.brands) : base.brands;
     merged.categories = Array.isArray(incoming.categories) && incoming.categories.length ? incoming.categories : base.categories;
     merged.users = Array.isArray(incoming.users) && incoming.users.length ? incoming.users : base.users;
     merged.headerNavigation = sanitizeNavigation(incoming.headerNavigation || base.headerNavigation);
@@ -427,6 +495,7 @@ function renderAll() {
     renderMetrics();
     renderPriceStrip();
     renderStorefront();
+    renderBrands();
     renderProductsTable();
     renderCategories();
     renderUsers();
@@ -438,6 +507,7 @@ function renderAll() {
     syncViewButtons();
     syncRoleButtons();
     populateCategorySelect();
+    populateBrandSelect();
     populateNavigationParentSelect();
     syncNavigationFormState();
 }
@@ -472,19 +542,77 @@ function renderMainPanel() {
     });
 }
 
+function renderPanelEditor() {
+    if (!els.panelEditorSlot) {
+        return;
+    }
+    els.panelEditorSlot.innerHTML = renderPanelEditorHTML(state.activeAdminPanel);
+    els.brandPanelForm = document.getElementById("brandPanelForm");
+    els.brandPanelId = document.getElementById("brandPanelId");
+    els.brandPanelCode = document.getElementById("brandPanelCode");
+    els.brandPanelName = document.getElementById("brandPanelName");
+    els.resetBrandPanelForm = document.getElementById("resetBrandPanelForm");
+
+    if (els.brandPanelForm) {
+        els.brandPanelForm.addEventListener("submit", saveBrandPanel);
+    }
+    if (els.resetBrandPanelForm) {
+        els.resetBrandPanelForm.addEventListener("click", () => {
+            resetBrandPanelForm();
+        });
+    }
+}
+
+function renderPanelEditorHTML(panel) {
+    if (panel !== "brands") {
+        return "";
+    }
+
+    return `
+        <form id="brandPanelForm" class="mini-form panel-inline-form">
+            <input type="hidden" id="brandPanelId">
+            <label>
+                Código
+                <input type="text" id="brandPanelCode" placeholder="ALMA" required>
+            </label>
+            <label>
+                Marca
+                <input type="text" id="brandPanelName" placeholder="Alma" required>
+            </label>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Guardar marca</button>
+                <button class="btn btn-ghost" type="button" id="resetBrandPanelForm">Limpiar</button>
+            </div>
+        </form>
+    `;
+}
+
 function getPanelMeta(panel) {
     const labels = {
         products: {
             title: "Productos",
-            subtitle: "Alta, edicion, stock y precios en dos listas para la cliente.",
+            subtitle: "Alta, detalle, presentacion, caracteristicas y precios.",
             kicker: "ABM / Productos",
             tableTitle: "Listado de productos",
             viewLabel: "SQL / Productos",
             createLabel: "Nuevo producto",
             kpis: [
-                { label: "Publicados", value: (filtered) => filtered.filter((item) => item.status === "published").length },
-                { label: "Destacados", value: (filtered) => filtered.filter((item) => item.featured).length },
-                { label: "Stock total", value: (filtered) => filtered.reduce((sum, item) => sum + Number(item.stock || 0), 0) },
+                { label: "Productos", value: (filtered) => filtered.length },
+                { label: "Veganos", value: (filtered) => filtered.filter((item) => item.vegano).length },
+                { label: "Kosher", value: (filtered) => filtered.filter((item) => item.kosher).length },
+            ],
+        },
+        brands: {
+            title: "Marcas",
+            subtitle: "Listado y edicion de marcas importadas desde el Excel.",
+            kicker: "Catalogo / Marcas",
+            tableTitle: "Listado de marcas",
+            viewLabel: "SQL / Marcas",
+            createLabel: "Nueva marca",
+            kpis: [
+                { label: "Marcas", value: (filtered) => filtered.length },
+                { label: "Con codigo", value: (filtered) => filtered.filter((item) => Boolean(item.code)).length },
+                { label: "Sin codigo", value: (filtered) => filtered.filter((item) => !item.code).length },
             ],
         },
         categories: {
@@ -560,6 +688,8 @@ function getPanelRecords(panel) {
     switch (panel) {
         case "products":
             return state.products;
+        case "brands":
+            return getBrandRows();
         case "categories":
             return state.categories;
         case "users":
@@ -588,6 +718,183 @@ function filterPanelRecords(records, panel, query) {
             : Object.values(item).join(" ");
         return String(haystack).toLowerCase().includes(normalized);
     });
+}
+
+function buildBrandRows() {
+    return getBrandRows();
+}
+
+function getBrandRows() {
+    const source = Array.isArray(state.brands) && state.brands.length ? state.brands : deriveBrandsFromProducts();
+    return source
+        .map((item, index) => {
+            const name = String(item?.name || item?.brand || "").trim();
+            if (!name) {
+                return null;
+            }
+            const code = String(item?.code || item?.id || normalizeBrandCode(name, index)).trim();
+            return {
+                id: item?.id || code,
+                code,
+                name,
+                image: String(item?.image || "").trim(),
+                featured: Boolean(item?.featured),
+            };
+        })
+        .filter(Boolean);
+}
+
+function normalizeBrandCollection(brands) {
+    return (Array.isArray(brands) ? brands : [])
+        .map((brand) => {
+            const code = String(brand?.code || brand?.id || "").trim();
+            const name = String(brand?.name || "").trim();
+            if (!name && !code) {
+                return null;
+            }
+            return {
+                ...brand,
+                id: brand?.id || code || name,
+                code: code || normalizeBrandCode(name || brand?.id || ""),
+                name: name || code || String(brand?.id || ""),
+                image: String(brand?.image || "").trim(),
+                featured: Boolean(brand?.featured),
+            };
+        })
+        .filter(Boolean);
+}
+
+function rebuildBrandCatalog() {
+    state.brands = deriveBrandsFromProducts();
+    persistAndRender();
+}
+
+function deriveBrandsFromProducts() {
+    const usedCodes = new Set();
+    const seenNames = new Set();
+    const brands = [];
+
+    state.products.forEach((product) => {
+        const name = String(product.brand || "").trim();
+        if (!name) {
+            return;
+        }
+
+        const normalizedName = normalizeKey(name);
+        if (!normalizedName || seenNames.has(normalizedName)) {
+            return;
+        }
+        seenNames.add(normalizedName);
+
+        const baseCode = normalizeBrandCode(name, brands.length);
+        let code = baseCode;
+        let suffix = 2;
+        while (usedCodes.has(code)) {
+            code = `${baseCode}-${suffix++}`;
+        }
+        usedCodes.add(code);
+        brands.push({
+            id: code,
+            code,
+            name,
+            image: "",
+            featured: false,
+        });
+    });
+
+    return brands;
+}
+
+function normalizeBrandCode(value, index = 0) {
+    const code = slugify(value).toUpperCase();
+    if (code) {
+        return code;
+    }
+    return `MARCA-${String(index + 1).padStart(3, "0")}`;
+}
+
+function normalizeKey(value) {
+    return slugify(value);
+}
+
+function shortFileName(value) {
+    const raw = String(value || "").trim();
+    if (!raw) {
+        return "";
+    }
+    return raw.split(/[\\/]/).pop() || raw;
+}
+
+function updateProductImageStatus(value) {
+    if (!els.productImageCurrent) {
+        return;
+    }
+    const fileName = shortFileName(value);
+    els.productImageCurrent.textContent = fileName ? `Imagen actual: ${fileName}` : "No hay imagen cargada.";
+}
+
+function updateBrandImageStatus(value) {
+    if (!els.brandImageCurrent) {
+        return;
+    }
+    const fileName = shortFileName(value);
+    els.brandImageCurrent.textContent = fileName ? `Imagen actual: ${fileName}` : "No hay imagen cargada.";
+}
+
+function buildImagePath(fileName) {
+    return `Content/Images/Products/${fileName}`;
+}
+
+async function saveFileToProject(pathSegments, file) {
+    const segments = Array.isArray(pathSegments) ? pathSegments.filter(Boolean) : [];
+    if (!segments.length) {
+        throw new Error("Ruta invalida para guardar el archivo.");
+    }
+    const buffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    const chunkSize = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+    const dataBase64 = btoa(binary);
+    const response = await fetch(`${LOCAL_SAVE_SERVER}/api/file`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            path: segments.join("/"),
+            name: file.name || segments[segments.length - 1],
+            mimeType: file.type || "application/octet-stream",
+            dataBase64,
+        }),
+    });
+    if (!response.ok) {
+        throw new Error("No se pudo guardar el archivo en el proyecto.");
+    }
+    return segments.join("/");
+}
+
+function normalizeImageFileName(name) {
+    const raw = String(name || "").trim();
+    if (!raw) {
+        return "producto.jpg";
+    }
+    const extMatch = raw.match(/(\.[a-z0-9]+)$/i);
+    const extension = extMatch ? extMatch[1].toLowerCase() : ".jpg";
+    const base = slugify(raw.replace(/\.[a-z0-9]+$/i, "")) || "producto";
+    return `${base}${extension}`;
+}
+
+async function copyProductImageFile(file) {
+    const safeName = normalizeImageFileName(file.name);
+    await saveFileToProject(["Content", "Images", "Products", safeName], file);
+    return buildImagePath(safeName);
+}
+
+async function copyBrandImageFile(file) {
+    const safeName = normalizeImageFileName(file.name);
+    await saveFileToProject(["Content", "Images", "Brands", safeName], file);
+    return `Content/Images/Brands/${safeName}`;
 }
 
 function getNavigationState() {
@@ -671,6 +978,32 @@ function renderNavigationPanelTable(records) {
                 </tr>
             `;
         }).join(""),
+    };
+}
+
+function renderBrandsPanelTable(records) {
+    return {
+        head: `
+            <tr>
+                <th>Código</th>
+                <th>Imagen</th>
+                <th>Destacado</th>
+                <th>Acciones</th>
+            </tr>
+        `,
+        body: records.map((row) => `
+            <tr>
+                <td><strong>${escapeHtml(row.code || "")}</strong></td>
+                <td>${row.image ? badgeHtml("amber", shortFileName(row.image)) : "-"}</td>
+                <td>${row.featured ? badgeHtml("green", "Sí") : badgeHtml("red", "No")}</td>
+                <td>
+                    <div class="sql-actions">
+                        <button class="sql-action primary" type="button" data-edit-type="brand" data-id="${escapeHtml(row.id || "")}">Editar</button>
+                        <button class="sql-action danger" type="button" data-delete-type="brand" data-id="${escapeHtml(row.id || "")}">Borrar</button>
+                    </div>
+                </td>
+            </tr>
+        `).join(""),
     };
 }
 
@@ -893,17 +1226,15 @@ function removeNavigationGroup(sectionId, groupId) {
 
 function renderPanelTableHTML(panel, records) {
     if (panel === "products") {
-        return {
-            head: `
-                <tr>
-                    <th>SKU</th>
-                    <th>Nombre</th>
-                    <th>Categoria</th>
-                    <th>Marca</th>
-                    <th>Precios</th>
-                    <th>Stock</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+    return {
+        head: `
+            <tr>
+                <th>SKU</th>
+                <th>Detalle</th>
+                <th>Presentación</th>
+                <th>Categoría</th>
+                <th>Marca</th>
+                <th>Acciones</th>
                 </tr>
             `,
             body: records.map((product) => {
@@ -911,15 +1242,10 @@ function renderPanelTableHTML(panel, records) {
                     return `
                         <tr>
                             <td><strong>${escapeHtml(product.sku)}</strong></td>
-                            <td>${escapeHtml(product.name)}</td>
+                            <td>${escapeHtml(product.detail || product.name || "")}</td>
+                            <td>${escapeHtml(product.presentation || "")}</td>
                             <td>${category ? escapeHtml(category.name) : "Sin categoria"}</td>
-                            <td>${escapeHtml(product.brand)}</td>
-                            <td>
-                                <strong>${money(product.publicPrice)}</strong>
-                                <span class="row-sub">${money(product.memberPrice)}</span>
-                            </td>
-                            <td>${product.stock}</td>
-                            <td>${statusBadge(product.status)}${product.featured ? `<span class="row-sub">Destacado</span>` : ""}</td>
+                            <td>${escapeHtml(product.brand || "")}</td>
                             <td>
                                 <div class="sql-actions">
                                     <button class="sql-action primary" type="button" data-edit-type="product" data-id="${product.id}">Editar</button>
@@ -1015,6 +1341,10 @@ function renderPanelTableHTML(panel, records) {
         };
     }
 
+    if (panel === "brands") {
+        return renderBrandsPanelTable(records);
+    }
+
     if (panel === "navigation") {
         return renderNavigationPanelTable(records);
         const navigation = records[0] || { searchScopes: [], sections: [] };
@@ -1093,9 +1423,16 @@ function statusBadge(status) {
     return badgeHtml(map[0], map[1]);
 }
 
+function yesNoLabel(value) {
+    return value ? "Sí" : "No";
+}
+
 function renderMetrics() {
     els.topbarProducts.textContent = String(state.products.length);
     els.topbarCategories.textContent = String(state.categories.length);
+    if (els.topbarBrands) {
+        els.topbarBrands.textContent = String(getBrandRows().length);
+    }
     els.topbarUsers.textContent = String(state.users.length);
 }
 
@@ -1110,8 +1447,19 @@ function renderPriceStrip() {
 }
 
 function renderStorefront() {
-    const visibleProducts = state.products.filter((product) => product.status !== "hidden");
-    els.storefrontGrid.innerHTML = visibleProducts.map((product) => {
+    const featuredProducts = state.products.filter((product) => product.status !== "hidden" && product.featured);
+
+    if (!featuredProducts.length) {
+        els.storefrontGrid.innerHTML = `
+            <div class="empty-state">
+                <strong>No hay productos destacados</strong>
+                <p>Marcá productos como destacados desde el panel de productos para que aparezcan acá.</p>
+            </div>
+        `;
+        return;
+    }
+
+    els.storefrontGrid.innerHTML = featuredProducts.map((product) => {
         const category = state.categories.find((item) => item.id === product.categoryId);
         const publicPrice = money(product.publicPrice);
         const memberPrice = money(product.memberPrice);
@@ -1120,10 +1468,15 @@ function renderStorefront() {
         const canSeeMember = state.sessionRole !== "guest";
         return `
             <article class="product-card">
+                ${product.image ? `
+                    <div class="product-image">
+                        <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto")}">
+                    </div>
+                ` : ""}
                 <div class="product-top">
                     <div>
                         <div class="product-sku">${product.sku}</div>
-                        <h3 class="product-name">${escapeHtml(product.name)}</h3>
+                        <h3 class="product-name">${escapeHtml(product.detail || product.name || "")}</h3>
                         <div class="product-brand">${escapeHtml(product.brand)} · ${category ? escapeHtml(category.name) : "Sin categoria"}</div>
                     </div>
                     <span class="tag ${product.status === "published" ? "ok" : "warn"}">${statusLabel(product.status)}</span>
@@ -1140,11 +1493,44 @@ function renderStorefront() {
                 </div>
                 <div class="product-footer">
                     <span>${priceLabel}: <strong>${currentPrice}</strong></span>
-                    <span class="badge">Stock ${product.stock}</span>
+                    <span class="badge">Vegano ${yesNoLabel(product.vegano)} · Kosher ${yesNoLabel(product.kosher)}</span>
                 </div>
             </article>
         `;
     }).join("");
+}
+
+function renderBrands() {
+    if (!els.brandTable) {
+        return;
+    }
+
+    const rows = getBrandRows();
+    els.brandTable.querySelector("tbody").innerHTML = rows.map((row) => `
+        <tr>
+            <td><strong>${escapeHtml(row.code || "")}</strong></td>
+                <td>${row.image ? badgeHtml("amber", shortFileName(row.image)) : "-"}</td>
+            <td>${row.featured ? badgeHtml("green", "Sí") : badgeHtml("red", "No")}</td>
+            <td>
+                <div class="sql-actions">
+                    <button class="sql-action primary" type="button" data-action="edit-brand" data-id="${escapeHtml(row.id || "")}">Editar</button>
+                    <button class="sql-action danger" type="button" data-action="delete-brand" data-id="${escapeHtml(row.id || "")}">Borrar</button>
+                </div>
+            </td>
+        </tr>
+    `).join("");
+
+    els.brandTable.querySelector("tbody").onclick = (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const id = button.dataset.id;
+        if (button.dataset.action === "edit-brand") {
+            editBrand(id);
+        }
+        if (button.dataset.action === "delete-brand") {
+            removeBrand(id);
+        }
+    };
 }
 
 function renderProductsTable() {
@@ -1154,15 +1540,12 @@ function renderProductsTable() {
             <tr>
                 <td><strong>${escapeHtml(product.sku)}</strong></td>
                 <td>
-                    <strong>${escapeHtml(product.name)}</strong><br>
-                    <span class="badge">${escapeHtml(product.brand)}</span>
+                    <strong>${escapeHtml(product.detail || product.name || "")}</strong><br>
+                    <span class="badge">${escapeHtml(product.brand || "")}</span>
                 </td>
+                <td>${escapeHtml(product.presentation || "")}</td>
                 <td>${category ? escapeHtml(category.name) : "Sin categoria"}</td>
-                <td>
-                    ${money(product.publicPrice)}<br>
-                    <span class="badge">${money(product.memberPrice)}</span>
-                </td>
-                <td>${statusLabel(product.status)}${product.featured ? "<br><span class='badge'>Destacado</span>" : ""}</td>
+                <td>${escapeHtml(product.brand || "")}</td>
                 <td>
                     <div class="row-actions">
                         <button class="icon-btn" type="button" data-action="edit-product" data-id="${product.id}">Editar</button>
@@ -1322,6 +1705,10 @@ function renderAdminModal() {
             title: state.activeModalAction === "edit" ? "Editar producto" : "Nuevo producto",
             kicker: "ABM",
         },
+        brands: {
+            title: state.activeModalAction === "edit" ? "Editar marca" : "Nueva marca",
+            kicker: "Catalogo",
+        },
         categories: {
             title: state.activeModalAction === "edit" ? "Editar categoria" : "Nueva categoria",
             kicker: "Catalogo",
@@ -1365,19 +1752,194 @@ function populateCategorySelect() {
     if (selected) els.productCategory.value = String(selected);
 }
 
-function saveProduct(event) {
+function populateBrandSelect() {
+    if (!els.productBrand) {
+        return;
+    }
+    const selected = String(els.productBrand.value || "");
+    const source = Array.isArray(state.brands) && state.brands.length ? state.brands : deriveBrandsFromProducts();
+    els.productBrand.innerHTML = [
+        `<option value="">Selecciona una marca</option>`,
+        ...source.map((brand) => {
+            const value = brand.name || brand.code || "";
+            const label = brand.code ? `${brand.code} - ${brand.name}` : (brand.name || value);
+            return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+        })
+    ].join("");
+    if (selected) {
+        els.productBrand.value = selected;
+    }
+}
+
+function resetBrandForm() {
+    if (!els.brandForm) {
+        return;
+    }
+    els.brandForm.reset();
+    clearHiddenFormField("brandId");
+    clearHiddenFormField("brandImage");
+    if (els.brandFeatured) {
+        els.brandFeatured.checked = false;
+    }
+    if (els.brandImageFile) {
+        els.brandImageFile.value = "";
+    }
+    if (els.brandImage) {
+        els.brandImage.value = "";
+    }
+    updateBrandImageStatus("");
+}
+
+async function saveBrand(event) {
+    event.preventDefault();
+    const id = String(els.brandId.value || "").trim();
+    const code = normalizeBrandCode(els.brandCode.value, state.brands.length).toUpperCase();
+    const name = String(els.brandName.value || "").trim();
+    const selectedFile = els.brandImageFile?.files?.[0] || null;
+    let imagePath = String(els.brandImage.value || "").trim();
+    if (selectedFile) {
+        try {
+            imagePath = await copyBrandImageFile(selectedFile);
+            els.brandImage.value = imagePath;
+            updateBrandImageStatus(imagePath);
+        } catch (error) {
+            alert(error.message || "No se pudo guardar la imagen de la marca.");
+            return;
+        }
+    }
+    const featured = !!els.brandFeatured?.checked;
+    if (!name) {
+        return;
+    }
+
+    const payload = { id: code, code, name, image: imagePath, featured };
+    if (id) {
+        state.brands = state.brands.map((brand) => (String(brand.id) === id ? { ...brand, ...payload } : brand));
+    } else {
+        const exists = state.brands.some((brand) => String(brand.code || "").toUpperCase() === code);
+        const nextPayload = exists ? { ...payload, id: `${code}-${state.brands.length + 1}` } : payload;
+        state.brands.unshift(nextPayload);
+    }
+
+    clearHiddenFormField("brandId");
+    els.brandForm.reset();
+    clearHiddenFormField("brandImage");
+    if (els.brandFeatured) {
+        els.brandFeatured.checked = false;
+    }
+    if (els.brandImageFile) {
+        els.brandImageFile.value = "";
+    }
+    if (els.brandImage) {
+        els.brandImage.value = "";
+    }
+    updateBrandImageStatus("");
+    persistAndRender();
+    closeAdminModal();
+}
+
+function resetBrandPanelForm() {
+    if (els.brandPanelForm) {
+        els.brandPanelForm.reset();
+    }
+    clearHiddenFormField("brandPanelId");
+}
+
+function saveBrandPanel(event) {
+    event.preventDefault();
+    const id = String(els.brandPanelId?.value || "").trim();
+    const code = normalizeBrandCode(els.brandPanelCode?.value || "", state.brands.length).toUpperCase();
+    const name = String(els.brandPanelName?.value || "").trim();
+    if (!name) {
+        return;
+    }
+
+    const payload = { id: code, code, name };
+    if (id) {
+        state.brands = state.brands.map((brand) => (String(brand.id) === id ? { ...brand, ...payload } : brand));
+    } else {
+        const exists = state.brands.some((brand) => String(brand.code || "").toUpperCase() === code);
+        const nextPayload = exists ? { ...payload, id: `${code}-${state.brands.length + 1}` } : payload;
+        state.brands.unshift(nextPayload);
+    }
+
+    resetBrandPanelForm();
+    persistAndRender();
+}
+
+function editBrandPanel(id) {
+    const brand = getBrandRows().find((item) => String(item.id) === String(id));
+    if (!brand) {
+        return;
+    }
+    if (els.brandPanelId) els.brandPanelId.value = String(brand.id);
+    if (els.brandPanelCode) els.brandPanelCode.value = brand.code || "";
+    if (els.brandPanelName) els.brandPanelName.value = brand.name || "";
+    state.activeModalAction = "edit";
+    renderPanelEditor();
+    if (els.panelEditorSlot) {
+        els.panelEditorSlot.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+function editBrand(id) {
+    const brand = getBrandRows().find((item) => String(item.id) === String(id));
+    if (!brand) {
+        return;
+    }
+    els.brandId.value = String(brand.id);
+    els.brandCode.value = brand.code || "";
+    els.brandName.value = brand.name || "";
+    if (els.brandImage) {
+        els.brandImage.value = brand.image || "";
+    }
+    if (els.brandImageFile) {
+        els.brandImageFile.value = "";
+    }
+    updateBrandImageStatus(brand.image || "");
+    if (els.brandFeatured) {
+        els.brandFeatured.checked = !!brand.featured;
+    }
+    openAdminModal("brands", "edit");
+}
+
+function removeBrand(id) {
+    state.brands = state.brands.filter((brand) => String(brand.id) !== String(id));
+    persistAndRender();
+}
+
+async function saveProduct(event) {
     event.preventDefault();
     const id = Number(els.productId.value || 0);
+    const selectedFile = els.productImageFile?.files?.[0] || null;
+    let imagePath = String(els.productImage.value || "").trim();
+    if (selectedFile) {
+        try {
+            imagePath = await copyProductImageFile(selectedFile);
+            els.productImage.value = imagePath;
+            updateProductImageStatus(imagePath);
+        } catch (error) {
+            alert(error.message || "No se pudo guardar la imagen en la carpeta del proyecto.");
+            return;
+        }
+    }
+
     const payload = {
         sku: els.productSku.value.trim().toUpperCase(),
-        name: els.productName.value.trim(),
+        name: els.productDetail.value.trim(),
+        detail: els.productDetail.value.trim(),
+        presentation: els.productPresentation.value.trim(),
         categoryId: Number(els.productCategory.value),
         brand: els.productBrand.value.trim(),
+        image: imagePath,
+        featured: els.productFeatured.checked,
+        trending: !!els.productTrending?.checked,
+        vegano: els.productVegano.value === "true",
+        kosher: els.productKosher.value === "true",
+        testeadoEnAnimales: els.productTesteadoEnAnimales.value === "true",
         publicPrice: Number(els.productPublicPrice.value),
         memberPrice: Number(els.productMemberPrice.value),
-        stock: Number(els.productStock.value),
-        status: els.productStatus.value,
-        featured: els.productFeatured.checked,
+        status: "published",
     };
 
     if (id) {
@@ -1388,8 +1950,19 @@ function saveProduct(event) {
 
     clearHiddenFormField("productId");
     els.productForm.reset();
-    els.productStatus.value = "published";
+    clearHiddenFormField("productImage");
+    els.productVegano.value = "false";
+    els.productKosher.value = "false";
+    els.productTesteadoEnAnimales.value = "false";
+    if (els.productTrending) {
+        els.productTrending.checked = false;
+    }
+    if (els.productImageFile) {
+        els.productImageFile.value = "";
+    }
+    updateProductImageStatus("");
     persistAndRender();
+    closeAdminModal();
 }
 
 function saveCategory(event) {
@@ -1481,15 +2054,27 @@ function editProduct(id) {
     if (!product) return;
     els.productId.value = String(product.id);
     els.productSku.value = product.sku;
-    els.productName.value = product.name;
+    els.productDetail.value = product.detail || product.name || "";
+    els.productPresentation.value = product.presentation || "";
     els.productCategory.value = String(product.categoryId);
+    populateBrandSelect();
     els.productBrand.value = product.brand;
+    if (els.productImage) {
+        els.productImage.value = product.image || "";
+    }
+    if (els.productImageFile) {
+        els.productImageFile.value = "";
+    }
+    updateProductImageStatus(product.image || "");
+    els.productFeatured.checked = !!product.featured;
+    if (els.productTrending) {
+        els.productTrending.checked = !!product.trending;
+    }
+    els.productVegano.value = product.vegano ? "true" : "false";
+    els.productKosher.value = product.kosher ? "true" : "false";
+    els.productTesteadoEnAnimales.value = product.testeadoEnAnimales ? "true" : "false";
     els.productPublicPrice.value = product.publicPrice;
     els.productMemberPrice.value = product.memberPrice;
-    els.productStock.value = product.stock;
-    els.productStatus.value = product.status;
-    els.productFeatured.checked = product.featured;
-    window.location.hash = "#admin";
 }
 
 function editCategory(id) {
@@ -1499,7 +2084,6 @@ function editCategory(id) {
     els.categoryName.value = category.name;
     els.categorySlug.value = category.slug;
     els.categoryVisible.checked = category.visible;
-    window.location.hash = "#admin";
 }
 
 function editUser(id) {
@@ -1511,7 +2095,6 @@ function editUser(id) {
     els.userRole.value = user.role;
     els.userCanSeePrices.checked = user.canSeePrices;
     els.userActive.checked = user.active;
-    window.location.hash = "#admin";
 }
 
 function editHeroSlide(id) {
@@ -1527,11 +2110,11 @@ function editHeroSlide(id) {
     els.heroOrder.value = slide.order;
     els.heroActive.checked = slide.active !== false;
     els.heroHomeSpotlight.checked = !!slide.homeSpotlight;
-    window.location.hash = "#admin";
 }
 
 function removeProduct(id) {
     state.products = state.products.filter((product) => product.id !== id);
+    state.brands = deriveBrandsFromProducts();
     persistAndRender();
 }
 
@@ -1561,7 +2144,9 @@ function nextHeroOrder() {
 }
 
 function syncForms() {
-    els.productStatus.value = "published";
+    els.productVegano.value = "false";
+    els.productKosher.value = "false";
+    els.productTesteadoEnAnimales.value = "false";
     els.categoryVisible.checked = true;
     els.userRole.value = "customer";
     els.userCanSeePrices.checked = true;
@@ -1575,32 +2160,27 @@ function syncForms() {
 
 function downloadTemplate() {
     const rows = [
-        ["brand", "detail", "presentation", "publicPrice", "memberPrice", "kosher", "sinTacc", "sinAditivos", "noTesteadoEnAnimales", "image"],
-        ["AL NATURAL", "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc", "500 cc", 13000, 10600, "NO", "SI", "NO", "NO", "assets/images/metaimage.jpg"],
-        ["BAMBOO", "BAMBOO POCHOCLOS ORGANICOS AZUCAR", "80 gr", 2200, 2100, "NO", "SI", "SI", "NO", "assets/images/metaimage.jpg"],
+        ["brand", "detail", "presentation", "category", "vegano", "kosher", "testeadoEnAnimales", "publicPrice", "memberPrice"],
+        ["AL NATURAL", "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc", "500 cc", "Catalogo importado", "No", "Si", "No", 13000, 10600],
+        ["BAMBOO", "BAMBOO POCHOCLOS ORGANICOS AZUCAR", "80 gr", "Catalogo importado", "Si", "Si", "No", 2200, 2100],
     ];
     downloadWorkbook(rows, "plantilla_productos_pintofruta.xlsx");
 }
 
 function downloadCatalog() {
     const rows = [
-        ["sku", "name", "category", "brand", "detail", "presentation", "publicPrice", "memberPrice", "kosher", "sinTacc", "sinAditivos", "noTesteadoEnAnimales", "image", "stock", "status"],
+        ["sku", "detail", "presentation", "category", "brand", "vegano", "kosher", "testeadoEnAnimales", "publicPrice", "memberPrice"],
         ...state.products.map((product) => [
             product.sku,
-            product.name,
-            state.categories.find((category) => category.id === product.categoryId)?.name || "",
-            product.brand,
             product.detail || "",
             product.presentation || "",
+            state.categories.find((category) => category.id === product.categoryId)?.name || "",
+            product.brand,
+            product.vegano ? "Si" : "No",
+            product.kosher ? "Si" : "No",
+            product.testeadoEnAnimales ? "Si" : "No",
             product.publicPrice,
             product.memberPrice,
-            product.kosher ? "SI" : "NO",
-            product.sinTacc ? "SI" : "NO",
-            product.sinAditivos ? "SI" : "NO",
-            product.noTesteadoEnAnimales ? "SI" : "NO",
-            product.image || "",
-            product.stock,
-            product.status,
         ]),
     ];
     downloadWorkbook(rows, "catalogo_pintofruta.xlsx");
@@ -1763,3 +2343,4 @@ function escapeHtml(value) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
 }
+

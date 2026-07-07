@@ -1,6 +1,10 @@
 (function () {
     const STORAGE_KEY = "pintofruta-static-site-content-v2";
     const DATA_URL = "data/site-content.json";
+    const PROJECT_DB_NAME = "pintofruta-static-project";
+    const PROJECT_DB_VERSION = 1;
+    const PROJECT_STORE_NAME = "handles";
+    const PROJECT_HANDLE_KEY = "root";
     const fallbackContent = {
         heroSlides: [
             {
@@ -20,6 +24,153 @@
 
     let cachedPromise = null;
     let cachedContent = null;
+    let cachedProjectRootHandle = null;
+
+    const SERVER_BASE_URL = "http://127.0.0.1:8787";
+
+    function arrayBufferToBase64(buffer) {
+        const bytes = new Uint8Array(buffer);
+        let binary = "";
+        const chunkSize = 0x8000;
+        for (let index = 0; index < bytes.length; index += chunkSize) {
+            binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+        }
+        return btoa(binary);
+    }
+
+    async function serverFetch(path, options = {}) {
+        const response = await fetch(`${SERVER_BASE_URL}${path}`, {
+            mode: "cors",
+            cache: "no-store",
+            ...options,
+        });
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+        }
+        return response;
+    }
+
+    function openProjectDb() {
+        return new Promise((resolve, reject) => {
+            if (!window.indexedDB) {
+                reject(new Error("IndexedDB no disponible"));
+                return;
+            }
+
+            const request = indexedDB.open(PROJECT_DB_NAME, PROJECT_DB_VERSION);
+            request.onupgradeneeded = () => {
+                const db = request.result;
+                if (!db.objectStoreNames.contains(PROJECT_STORE_NAME)) {
+                    db.createObjectStore(PROJECT_STORE_NAME);
+                }
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error || new Error("No se pudo abrir IndexedDB"));
+        });
+    }
+
+    async function getStoredProjectRootHandle() {
+        if (cachedProjectRootHandle) {
+            return cachedProjectRootHandle;
+        }
+        try {
+            const db = await openProjectDb();
+            const handle = await new Promise((resolve, reject) => {
+                const transaction = db.transaction(PROJECT_STORE_NAME, "readonly");
+                const store = transaction.objectStore(PROJECT_STORE_NAME);
+                const request = store.get(PROJECT_HANDLE_KEY);
+                request.onsuccess = () => resolve(request.result || null);
+                request.onerror = () => reject(request.error || new Error("No se pudo leer el handle"));
+            });
+            db.close();
+            if (!handle) {
+                return null;
+            }
+            const permission = await handle.queryPermission({ mode: "readwrite" });
+            if (permission === "granted") {
+                cachedProjectRootHandle = handle;
+                return handle;
+            }
+            const requested = await handle.requestPermission({ mode: "readwrite" });
+            if (requested === "granted") {
+                cachedProjectRootHandle = handle;
+                return handle;
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    }
+
+    async function storeProjectRootHandle(handle) {
+        if (!handle || !window.indexedDB) {
+            return;
+        }
+        try {
+            const db = await openProjectDb();
+            await new Promise((resolve, reject) => {
+                const transaction = db.transaction(PROJECT_STORE_NAME, "readwrite");
+                const store = transaction.objectStore(PROJECT_STORE_NAME);
+                const request = store.put(handle, PROJECT_HANDLE_KEY);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error || new Error("No se pudo guardar el handle"));
+            });
+            db.close();
+            cachedProjectRootHandle = handle;
+        } catch {
+            /* ignore */
+        }
+    }
+
+    async function ensureProjectRootHandle(promptForSelection = false) {
+        return null;
+    }
+
+    async function getProjectFileHandle(pathSegments, create = false) {
+        const rootHandle = await ensureProjectRootHandle(false);
+        if (!rootHandle) {
+            return null;
+        }
+        const segments = Array.isArray(pathSegments) ? pathSegments.filter(Boolean) : [];
+        let currentHandle = rootHandle;
+        for (let index = 0; index < segments.length - 1; index += 1) {
+            currentHandle = await currentHandle.getDirectoryHandle(segments[index], { create });
+        }
+        const fileName = segments[segments.length - 1];
+        if (!fileName) {
+            return null;
+        }
+        return currentHandle.getFileHandle(fileName, { create });
+    }
+
+    async function writeProjectFile(pathSegments, file) {
+        const segments = Array.isArray(pathSegments) ? pathSegments.filter(Boolean) : [];
+        if (!segments.length) {
+            throw new Error("Ruta invalida para guardar el archivo.");
+        }
+        const buffer = await file.arrayBuffer();
+        const dataBase64 = arrayBufferToBase64(buffer);
+        await serverFetch("/api/file", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                path: segments.join("/"),
+                name: file.name || segments[segments.length - 1],
+                mimeType: file.type || "application/octet-stream",
+                dataBase64,
+            }),
+        });
+        return segments.join("/");
+    }
+
+    async function readProjectContent() {
+        try {
+            const response = await serverFetch("/api/content");
+            return await response.json();
+        } catch {
+            return null;
+        }
+    }
 
     function deepMerge(base, overlay) {
         if (Array.isArray(base) || Array.isArray(overlay)) {
@@ -109,10 +260,24 @@
         cachedPromise = (async () => {
             const remote = (await fetchJson()) || {};
             const local = readStoredContent() || {};
+            const project = await readProjectContent();
             cachedContent = deepMerge(deepMerge(baseContent, remote), local);
+            if (project) {
+                cachedContent = deepMerge(cachedContent, project);
+            }
+            cachedContent.products = [project?.products, local.products, remote.products, baseContent.products]
+                .find((list) => Array.isArray(list) && list.length)
+                || [];
+            cachedContent.brands = [project?.brands, local.brands, remote.brands, baseContent.brands]
+                .find((list) => Array.isArray(list) && list.length)
+                || [];
+            cachedContent.categories = [project?.categories, local.categories, remote.categories, baseContent.categories]
+                .find((list) => Array.isArray(list) && list.length)
+                || [];
+            cachedContent.headerNavigation = createHeaderNavigation(cachedContent);
             cachedContent.heroSlides = mergeRecordsById(
                 baseContent.heroSlides,
-                mergeRecordsById(remote.heroSlides, local.heroSlides)
+                mergeRecordsById(remote.heroSlides, mergeRecordsById(local.heroSlides, project?.heroSlides))
             );
             return cachedContent;
         })();
@@ -122,7 +287,23 @@
 
     function save(content) {
         cachedContent = content;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+        const persistedContent = { ...(content || {}) };
+        if (persistedContent.headerNavigation) {
+            persistedContent.headerNavigation = {
+                searchScopes: Array.isArray(persistedContent.headerNavigation.searchScopes) ? persistedContent.headerNavigation.searchScopes : [],
+                sections: Array.isArray(persistedContent.headerNavigation.sections) ? persistedContent.headerNavigation.sections : [],
+            };
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(persistedContent));
+        writeProjectContent(persistedContent).catch(() => {});
+    }
+
+    async function writeProjectContent(content) {
+        await serverFetch("/api/content", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+        });
     }
 
     function get() {
@@ -163,6 +344,143 @@
             return slide.imageMobile;
         }
         return slide.image || "assets/images/metaimage.jpg";
+    }
+
+    function cleanBrandName(value) {
+        const text = String(value || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, " ")
+            .replace(/\bSIN STOCK\b/ig, "")
+            .trim();
+        const tokens = text.split(" ").filter(Boolean);
+        if (!tokens.length) {
+            return "";
+        }
+        const kept = [];
+        for (const token of tokens) {
+            if (/^[a-z]/.test(token)) {
+                break;
+            }
+            kept.push(token);
+        }
+        return (kept.length ? kept : tokens.slice(0, 1)).join(" ").trim();
+    }
+
+    function cleanDisplayName(value) {
+        return String(value || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, " ")
+            .replace(/\bSIN STOCK\b/ig, "")
+            .trim();
+    }
+
+    function letterBucket(value) {
+        const first = cleanBrandName(value).charAt(0).toUpperCase();
+        const groups = [
+            ["A", "B"],
+            ["C", "D"],
+            ["E", "F"],
+            ["G", "H"],
+            ["I", "J"],
+            ["K", "L"],
+            ["M", "N"],
+            ["O", "P"],
+            ["Q", "R"],
+            ["S", "T"],
+            ["U", "V"],
+            ["W", "X"],
+            ["Y", "Z"]
+        ];
+        const found = groups.find((group) => group.includes(first));
+        return found ? `${found[0]}-${found[1]}` : "Y-Z";
+    }
+
+    function buildBucketedGroups(values) {
+        const groupOrder = [
+            "A-B", "C-D", "E-F", "G-H", "I-J", "K-L", "M-N", "O-P", "Q-R", "S-T", "U-V", "W-X", "Y-Z"
+        ];
+        return groupOrder.map((bucket) => ({
+            id: bucket.toLowerCase(),
+            label: bucket,
+            href: "#",
+            items: values
+                .filter((value) => letterBucket(value) === bucket)
+                .map((value) => {
+                    const slug = String(value || "")
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[^a-zA-Z0-9]+/g, "-")
+                        .replace(/^-+|-+$/g, "")
+                        .toLowerCase();
+                    return {
+                        id: slug,
+                        label: value,
+                        href: `#${slug}`,
+                    };
+                }),
+        }));
+    }
+
+    function buildNavigationSection(sectionId, label, values, icon, cleaner = cleanBrandName) {
+        const cleanedValues = [];
+        const seen = new Set();
+        values.forEach((value) => {
+            const cleaned = cleaner(value);
+            if (!cleaned || seen.has(cleaned)) {
+                return;
+            }
+            seen.add(cleaned);
+            cleanedValues.push(cleaned);
+        });
+        cleanedValues.sort((a, b) => cleanBrandName(a).localeCompare(cleanBrandName(b), "es", { sensitivity: "base" }));
+
+        return {
+            id: sectionId,
+            label,
+            icon,
+            href: `#${sectionId === "products" ? "1-productos" : "2-marcas"}`,
+            groups: buildBucketedGroups(cleanedValues),
+        };
+    }
+
+    function createHeaderNavigation(content) {
+        const products = Array.isArray(content && content.products) ? content.products : [];
+        const productNames = [];
+        const brands = [];
+        const seenProducts = new Set();
+        const seenBrands = new Set();
+
+        products.forEach((product) => {
+            const productLabel = cleanBrandName(product && (product.detail || product.name || ""));
+            if (productLabel && !seenProducts.has(productLabel)) {
+                seenProducts.add(productLabel);
+                productNames.push(productLabel);
+            }
+
+            const brand = cleanBrandName(product && product.brand);
+            if (!brand || seenBrands.has(brand)) {
+                return;
+            }
+            seenBrands.add(brand);
+            brands.push(brand);
+        });
+
+        const sections = [
+            buildNavigationSection("products", "PRODUCTOS", productNames, "Content/Iconos/CATEGORIAS.png", cleanDisplayName),
+            buildNavigationSection("brands", "MARCAS", brands, "Content/Iconos/MARCAS.png")
+        ].filter((section) => section.groups.length);
+
+        return {
+            searchScopes: sections.map((section) => ({
+                id: section.id,
+                label: section.label,
+                href: section.href
+            })),
+            sections,
+            sectionsById: new Map(sections.map((section) => [String(section.id), section]))
+        };
     }
 
     function renderHeroCarousel(content) {
@@ -237,13 +555,121 @@
         `;
     }
 
+    function renderFeaturedProducts(content) {
+        const root = document.querySelector(".product-slide-6");
+        if (!root || !content || !Array.isArray(content.products)) {
+            return;
+        }
+
+        const products = content.products
+            .filter((product) => product && product.featured && product.status !== "hidden")
+            .slice();
+        const host = root.parentElement;
+        if (!host) {
+            return;
+        }
+
+        let liveGrid = document.getElementById("featuredProductsLive");
+        if (!liveGrid) {
+            liveGrid = document.createElement("div");
+            liveGrid.id = "featuredProductsLive";
+            liveGrid.style.display = "grid";
+            liveGrid.style.gridTemplateColumns = "repeat(auto-fit, minmax(140px, 1fr))";
+            liveGrid.style.gap = "12px";
+            liveGrid.style.margin = "10px 0 4px";
+            liveGrid.style.alignItems = "stretch";
+            host.insertBefore(liveGrid, root);
+        }
+
+        if (!products.length) {
+            liveGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <strong>No hay productos destacados</strong>
+                    <p>Marcá productos como destacados desde el panel de productos para que aparezcan acá.</p>
+                </div>
+            `;
+            root.style.display = "none";
+            return;
+        }
+
+        liveGrid.style.display = "grid";
+        liveGrid.innerHTML = products.map((product) => {
+            const category = (content.categories || []).find((item) => Number(item.id) === Number(product.categoryId));
+            const detailLink = normalizeLink(`detallearticulo.html?sku=${encodeURIComponent(String(product.sku || "").toUpperCase())}`);
+            const image = product.image || "assets/images/metaimage.jpg";
+            const publicPrice = Number(product.publicPrice || 0);
+            const memberPrice = Number(product.memberPrice || publicPrice);
+            const priceText = new Intl.NumberFormat("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                maximumFractionDigits: 0,
+            }).format(publicPrice);
+            const memberText = new Intl.NumberFormat("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                maximumFractionDigits: 0,
+            }).format(memberPrice);
+
+            return `
+                <article class="product-card" style="border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 8px 18px rgba(31,42,68,.08); border: 1px solid rgba(31,42,68,.08); max-width: 190px;">
+                    <section data-ga-id="${escapeHtml(product.sku || product.id || "")}" data-ga-name="${escapeHtml(product.detail || product.name || "")}" data-ga-brand="${escapeHtml(product.brand || "")}">
+                        <a href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}" style="display:block; background:#fff;">
+                            <img src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" style="width:100%; height:130px; object-fit: contain; display:block; background:#fff; padding:8px;">
+                        </a>
+                        <div style="padding: 10px 11px 12px;">
+                            <div style="font-size: 10px; letter-spacing: .10em; text-transform: uppercase; color: #7a6a56; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(product.brand || "")}</div>
+                            <h3 style="margin: 0 0 4px; font-size: 13px; line-height: 1.2; color: #1f2a44; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHtml(product.detail || product.name || "")}</h3>
+                            <div style="font-size: 11px; color: #6d7380; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(category ? category.name : "Sin categoria")}</div>
+                            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+                                <strong style="font-size: 13px; color: #1f2a44;">${escapeHtml(priceText)}</strong>
+                                <span style="font-size: 10px; color: #7c8596;">${escapeHtml(memberText)}</span>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            `;
+        }).join("");
+
+        root.style.display = "none";
+    }
+
+    function renderFeaturedBrands(content) {
+        const root = document.getElementById("featuredBrandsGrid");
+        const empty = document.getElementById("featuredBrandsEmpty");
+        if (!root || !empty || !content || !Array.isArray(content.brands)) {
+            return;
+        }
+
+        const brands = content.brands
+            .filter((brand) => brand && brand.featured && String(brand.image || "").trim())
+            .slice();
+
+        if (!brands.length) {
+            root.innerHTML = "";
+            empty.style.display = "block";
+            empty.textContent = "No hay marcas destacadas cargadas.";
+            return;
+        }
+
+        empty.style.display = "none";
+        root.innerHTML = brands.map((brand) => `
+            <article class="brand-logo-card">
+                <div class="brand-logo-card__media">
+                    <img src="${escapeHtml(brand.image)}" alt="${escapeHtml(brand.name || brand.code || "Marca destacada")}">
+                </div>
+            </article>
+        `).join("");
+    }
+
     function normalizeNavigation(content) {
+        const generatedNavigation = createHeaderNavigation(content);
+        if (generatedNavigation.sections.length) {
+            return generatedNavigation;
+        }
+
         const navigation = content && content.headerNavigation ? content.headerNavigation : {};
-        const blockedIds = new Set(["diets", "promotions", "imported"]);
-        const searchScopes = (Array.isArray(navigation.searchScopes) ? navigation.searchScopes : [])
-            .filter((scope) => !blockedIds.has(String(scope.id || "").toLowerCase()));
-        const sections = (Array.isArray(navigation.sections) ? navigation.sections : [])
-            .filter((section) => !blockedIds.has(String(section.id || "").toLowerCase()));
+        const searchScopes = Array.isArray(navigation.searchScopes) ? navigation.searchScopes : [];
+        const sections = Array.isArray(navigation.sections) ? navigation.sections : [];
         const sectionsById = new Map(sections.filter((section) => section && section.id !== undefined && section.id !== null).map((section) => [String(section.id), section]));
 
         return { searchScopes, sections, sectionsById };
@@ -505,12 +931,40 @@
         bindHeaderNavigationInteractions(root);
     }
 
+    function hideExtraPublicProducts(limit = 15) {
+        const selectors = [
+            ".articulos_destacados",
+            ".articulos_destacados_categorias",
+            ".search_result"
+        ];
+        const nodes = Array.from(document.querySelectorAll(selectors.join(",")));
+        if (!nodes.length) {
+            return;
+        }
+
+        nodes.forEach((node, index) => {
+            if (index < limit) {
+                return;
+            }
+
+            const target = node.classList.contains("search_result")
+                ? (node.closest(".col-grid-box") || node)
+                : node;
+
+            target.style.display = "none";
+            target.setAttribute("aria-hidden", "true");
+        });
+    }
+
     async function initHeroCarousel() {
         const content = await load();
         renderHeroCarousel(content);
         renderHomeSpotlightBanner(content);
+        renderFeaturedProducts(content);
+        renderFeaturedBrands(content);
         renderHeaderSearchScopes(content);
         renderHeaderNavigation(content);
+        hideExtraPublicProducts(15);
 
         let lastMobileState = isMobileHeroViewport();
         window.addEventListener("resize", () => {
@@ -521,7 +975,10 @@
             lastMobileState = mobileState;
             renderHeroCarousel(content);
             renderHomeSpotlightBanner(content);
+            renderFeaturedProducts(content);
+            renderFeaturedBrands(content);
             renderHeaderNavigation(content);
+            hideExtraPublicProducts(15);
         });
     }
 
@@ -530,7 +987,9 @@
         save,
         get,
         renderHeroCarousel,
-        renderHomeSpotlightBanner
+        renderHomeSpotlightBanner,
+        ensureProjectRootHandle,
+        writeProjectFile,
     };
 
     document.addEventListener("DOMContentLoaded", initHeroCarousel);
@@ -541,8 +1000,11 @@
         load(true).then((content) => {
             renderHeroCarousel(content);
             renderHomeSpotlightBanner(content);
+            renderFeaturedProducts(content);
+            renderFeaturedBrands(content);
             renderHeaderSearchScopes(content);
             renderHeaderNavigation(content);
+            hideExtraPublicProducts(15);
         });
     });
 })();
