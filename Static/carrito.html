@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Pedido local de la maqueta Pintofruta, listo para descargar en PDF." />
+    <title>Pintofruta | Pedido</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="maqueta-pages.css">
+    <script src="data/site-content-data.js" defer></script>
+    <script defer src="auth.js"></script>
+    <script defer src="site-content.js"></script>
+    <script defer src="demo-circuit.js"></script>
+</head>
+<body data-page="cart">
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">PF</span>
+                <span class="brand-copy">
+                    <strong>Pintofruta</strong>
+                    <span>Pedido demo</span>
+                </span>
+            </a>
+            <nav class="top-links">
+                <a class="chip-link" href="index.html">Home</a>
+                <a class="chip-link" href="busqueda.html">Busqueda</a>
+                <a class="chip-link" href="galeria.html">Galeria</a>
+                <a class="chip-link button-primary" href="login.html">Ingresar</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-panel">
+                <span class="eyebrow">Pedido / Local</span>
+                <h1 id="cartTitle">Pedido listo para descargar</h1>
+                <p class="hero-copy" id="cartSubtitle">
+                    El carrito arma un pedido local para la demo, sin checkout ni pasarela de pago.
+                </p>
+                <div class="detail-meta" id="cartMeta"></div>
+                <div class="hero-actions" id="cartActions">
+                    <button class="button button-primary" type="button" data-demo-cart-download>Descargar PDF</button>
+                    <button class="button button-secondary" type="button" data-demo-cart-clear>Vaciar pedido</button>
+                </div>
+            </div>
+
+            <aside class="hero-art">
+                <div class="hero-art-card">
+                    <strong>Flujo sin pago</strong>
+                    <p>La demo no lleva a un checkout paralelo. El objetivo es preparar el pedido y bajarlo como PDF.</p>
+                </div>
+                <div class="hero-art-card">
+                    <strong>Cliente</strong>
+                    <p id="cartUser">Invitado</p>
+                </div>
+                <div class="hero-art-card">
+                    <strong>Ruta</strong>
+                    <p>Podras volver a Home o BÃºsqueda para seguir agregando articulos.</p>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section detail-grid">
+            <article class="detail-panel" id="cartItems">
+                <div class="hero-art-card">
+                    <strong>Pedido vacio</strong>
+                    <p>AgregÃ¡ productos desde Home, BÃºsqueda o Detalle para generar el PDF.</p>
+                </div>
+            </article>
+
+            <aside class="detail-panel" id="cartSummary">
+                <span class="eyebrow">Resumen</span>
+                <h2>Pedido local</h2>
+                <div class="faq-list">
+                    <div class="faq-item"><strong>Articulos</strong>0</div>
+                    <div class="faq-item"><strong>Lineas</strong>0</div>
+                    <div class="faq-item"><strong>Total estimado</strong>Sin calcular</div>
+                    <div class="faq-item"><strong>Usuario</strong>Invitado</div>
+                </div>
+            </aside>
+        </section>
+    </main>
+</body>
+</html>

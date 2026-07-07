@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Login estático de Pintofruta con credenciales demo." />
+    <title>Pintofruta | Login</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="maqueta-pages.css">
+    <script defer src="auth.js"></script>
+    <script defer src="login.js"></script>
+</head>
+<body>
+    <main class="auth-shell">
+        <section class="auth-card">
+            <div class="auth-hero">
+                <a class="brand" href="index.html">
+                    <span class="brand-mark">PF</span>
+                    <span class="brand-copy">
+                        <strong>Pintofruta</strong>
+                        <span>Acceso demo</span>
+                    </span>
+                </a>
+                <span class="eyebrow" style="margin-top:18px;display:inline-flex;">Login fijo</span>
+                <h1>Entrá con la cuenta demo para ver los precios con descuento.</h1>
+                <p>
+                    Esta pantalla reemplaza el flujo de login real por una entrada estática controlada. Si usás
+                    <strong>demo@gmail.com</strong> y la clave <strong>demo</strong>, la maqueta guarda una sesión local
+                    y muestra los precios con descuento en toda la navegación.
+                </p>
+                <div class="auth-note">
+                    <strong>Credenciales de prueba</strong>
+                    <p style="margin:8px 0 0;color:var(--ink-soft);line-height:1.7;">
+                        Usuario: <code>demo@gmail.com</code><br>
+                        Clave: <code>demo</code>
+                    </p>
+                </div>
+                <div class="section-actions">
+                    <a class="button button-secondary" href="index.html">Volver al home</a>
+                    <a class="button button-secondary" href="galeria.html">Ir a galería</a>
+                </div>
+            </div>
+
+            <aside class="auth-panel">
+                <div class="eyebrow">Inicio de sesión</div>
+                <h2>Accedé a la cuenta demo</h2>
+                <form id="loginForm" class="auth-form">
+                    <label>
+                        Email
+                        <input type="email" id="loginEmail" value="demo@gmail.com" autocomplete="username" required>
+                    </label>
+                    <label>
+                        Clave
+                        <input type="password" id="loginPassword" value="demo" autocomplete="current-password" required>
+                    </label>
+                    <button class="button button-primary" type="submit">Ingresar</button>
+                </form>
+                <div class="auth-status" id="authStatus">
+                    <strong>Sesión actual</strong>
+                    <span>No hay una sesión iniciada.</span>
+                </div>
+                <div class="auth-help">
+                    Si la sesión ya está iniciada, podés salir desde esta misma pantalla y volver a entrar cuando quieras.
+                </div>
+                <div class="section-actions">
+                    <button class="button button-secondary" type="button" id="logoutButton">Cerrar sesión</button>
+                </div>
+            </aside>
+        </section>
+    </main>
+    <script type="text/javascript" src="demo-circuit.js"></script>
+</body>
+</html>

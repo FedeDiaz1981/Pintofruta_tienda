@@ -1,0 +1,1167 @@
+{
+  "sessionRole": "admin",
+  "viewMode": "public",
+  "activeAdminPanel": "brands",
+  "panelSearchQuery": "",
+  "activeModalAction": "edit",
+  "headerNavigation": {
+    "searchScopes": [
+      {
+        "id": "products",
+        "label": "PRODUCTOS",
+        "href": "#1-productos"
+      },
+      {
+        "id": "brands",
+        "label": "MARCAS",
+        "href": "#2-marcas"
+      }
+    ],
+    "sections": [
+      {
+        "id": "products",
+        "label": "PRODUCTOS",
+        "icon": "Content/Iconos/CATEGORIAS.png",
+        "href": "#1-productos",
+        "groups": [
+          {
+            "id": "a-b",
+            "label": "A-B",
+            "href": "#",
+            "items": [
+              {
+                "id": "al-natural-extracto-jugo-graviola-500cc",
+                "label": "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc",
+                "href": "#al-natural-extracto-jugo-graviola-500cc"
+              },
+              {
+                "id": "bamboo-pochoclos-organicos-azucar",
+                "label": "BAMBOO POCHOCLOS ORGANICOS AZUCAR",
+                "href": "#bamboo-pochoclos-organicos-azucar"
+              }
+            ]
+          },
+          {
+            "id": "c-d",
+            "label": "C-D",
+            "href": "#",
+            "items": [
+              {
+                "id": "casa-irwo-bocaditos",
+                "label": "CASA IRWO BOCADITOS",
+                "href": "#casa-irwo-bocaditos"
+              },
+              {
+                "id": "datilicius-clasico",
+                "label": "DATILICIUS CLASICO",
+                "href": "#datilicius-clasico"
+              }
+            ]
+          },
+          {
+            "id": "e-f",
+            "label": "E-F",
+            "href": "#",
+            "items": [
+              {
+                "id": "epuyen-alfajor-banado",
+                "label": "EPUYEN ALFAJOR BANADO",
+                "href": "#epuyen-alfajor-banado"
+              },
+              {
+                "id": "familia-vegana-aceite",
+                "label": "FAMILIA VEGANA ACEITE",
+                "href": "#familia-vegana-aceite"
+              }
+            ]
+          },
+          {
+            "id": "g-h",
+            "label": "G-H",
+            "href": "#",
+            "items": [
+              {
+                "id": "gavia",
+                "label": "GAVIA",
+                "href": "#gavia"
+              }
+            ]
+          },
+          {
+            "id": "i-j",
+            "label": "I-J",
+            "href": "#",
+            "items": [
+              {
+                "id": "iron-bar-banana-caja-20",
+                "label": "IRON BAR BANANA CAJA 20",
+                "href": "#iron-bar-banana-caja-20"
+              },
+              {
+                "id": "jual-stevia-polvo-110g",
+                "label": "JUAL STEVIA POLVO 110g",
+                "href": "#jual-stevia-polvo-110g"
+              }
+            ]
+          },
+          {
+            "id": "k-l",
+            "label": "K-L",
+            "href": "#",
+            "items": [
+              {
+                "id": "kalpa-maca-rubia-100g",
+                "label": "KALPA MACA RUBIA 100g",
+                "href": "#kalpa-maca-rubia-100g"
+              },
+              {
+                "id": "low-carb-brownie-caja-10",
+                "label": "LOW CARB BROWNIE CAJA 10",
+                "href": "#low-carb-brownie-caja-10"
+              }
+            ]
+          },
+          {
+            "id": "m-n",
+            "label": "M-N",
+            "href": "#",
+            "items": [
+              {
+                "id": "machu-pichu-herbal-maca-andina-negra-60",
+                "label": "MACHU PICHU HERBAL MACA ANDINA NEGRA 60",
+                "href": "#machu-pichu-herbal-maca-andina-negra-60"
+              },
+              {
+                "id": "natier-aceite",
+                "label": "NATIER ACEITE",
+                "href": "#natier-aceite"
+              }
+            ]
+          },
+          {
+            "id": "o-p",
+            "label": "O-P",
+            "href": "#",
+            "items": [
+              {
+                "id": "orann-barritas-de-granola-mix-energetico-1k",
+                "label": "ORANN BARRITAS DE GRANOLA MIX ENERGETICO 1k",
+                "href": "#orann-barritas-de-granola-mix-energetico-1k"
+              },
+              {
+                "id": "pont-barritas-energeticas-caja-12",
+                "label": "PONT BARRITAS ENERGETICAS CAJA 12",
+                "href": "#pont-barritas-energeticas-caja-12"
+              }
+            ]
+          },
+          {
+            "id": "q-r",
+            "label": "Q-R",
+            "href": "#",
+            "items": []
+          },
+          {
+            "id": "s-t",
+            "label": "S-T",
+            "href": "#",
+            "items": [
+              {
+                "id": "sentida-botanica-aceite-esencial-eucalipto-15",
+                "label": "SENTIDA BOTANICA ACEITE ESENCIAL EUCALIPTO 15",
+                "href": "#sentida-botanica-aceite-esencial-eucalipto-15"
+              },
+              {
+                "id": "thaina-al-kanater",
+                "label": "THAINA AL KANATER",
+                "href": "#thaina-al-kanater"
+              }
+            ]
+          },
+          {
+            "id": "u-v",
+            "label": "U-V",
+            "href": "#",
+            "items": [
+              {
+                "id": "ultra-tech-barra",
+                "label": "ULTRA TECH BARRA",
+                "href": "#ultra-tech-barra"
+              },
+              {
+                "id": "valle-organico-aceite",
+                "label": "VALLE ORGANICO ACEITE",
+                "href": "#valle-organico-aceite"
+              }
+            ]
+          },
+          {
+            "id": "w-x",
+            "label": "W-X",
+            "href": "#",
+            "items": [
+              {
+                "id": "wik-barra-tradicional",
+                "label": "WIK BARRA TRADICIONAL",
+                "href": "#wik-barra-tradicional"
+              }
+            ]
+          },
+          {
+            "id": "y-z",
+            "label": "Y-Z",
+            "href": "#",
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "brands",
+        "label": "MARCAS",
+        "icon": "Content/Iconos/MARCAS.png",
+        "href": "#2-marcas",
+        "groups": [
+          {
+            "id": "a-b",
+            "label": "A-B",
+            "href": "#",
+            "items": [
+              {
+                "id": "al-natural",
+                "label": "AL NATURAL",
+                "href": "#al-natural"
+              },
+              {
+                "id": "bamboo",
+                "label": "BAMBOO",
+                "href": "#bamboo"
+              }
+            ]
+          },
+          {
+            "id": "c-d",
+            "label": "C-D",
+            "href": "#",
+            "items": [
+              {
+                "id": "casa-irwo",
+                "label": "CASA IRWO",
+                "href": "#casa-irwo"
+              },
+              {
+                "id": "datilicius",
+                "label": "DATILICIUS",
+                "href": "#datilicius"
+              }
+            ]
+          },
+          {
+            "id": "e-f",
+            "label": "E-F",
+            "href": "#",
+            "items": [
+              {
+                "id": "epuyen",
+                "label": "EPUYEN",
+                "href": "#epuyen"
+              },
+              {
+                "id": "familia-vegana",
+                "label": "FAMILIA VEGANA",
+                "href": "#familia-vegana"
+              }
+            ]
+          },
+          {
+            "id": "g-h",
+            "label": "G-H",
+            "href": "#",
+            "items": [
+              {
+                "id": "gavia",
+                "label": "GAVIA",
+                "href": "#gavia"
+              },
+              {
+                "id": "gentech-iron-bar",
+                "label": "GENTECH IRON BAR",
+                "href": "#gentech-iron-bar"
+              },
+              {
+                "id": "gentech-low-carb",
+                "label": "GENTECH LOW CARB",
+                "href": "#gentech-low-carb"
+              }
+            ]
+          },
+          {
+            "id": "i-j",
+            "label": "I-J",
+            "href": "#",
+            "items": [
+              {
+                "id": "jual",
+                "label": "JUAL",
+                "href": "#jual"
+              }
+            ]
+          },
+          {
+            "id": "k-l",
+            "label": "K-L",
+            "href": "#",
+            "items": [
+              {
+                "id": "kalpa",
+                "label": "KALPA",
+                "href": "#kalpa"
+              }
+            ]
+          },
+          {
+            "id": "m-n",
+            "label": "M-N",
+            "href": "#",
+            "items": [
+              {
+                "id": "machu-pichu",
+                "label": "MACHU PICHU",
+                "href": "#machu-pichu"
+              },
+              {
+                "id": "natier",
+                "label": "NATIER",
+                "href": "#natier"
+              }
+            ]
+          },
+          {
+            "id": "o-p",
+            "label": "O-P",
+            "href": "#",
+            "items": [
+              {
+                "id": "orann",
+                "label": "ORANN",
+                "href": "#orann"
+              },
+              {
+                "id": "pont",
+                "label": "PONT",
+                "href": "#pont"
+              }
+            ]
+          },
+          {
+            "id": "q-r",
+            "label": "Q-R",
+            "href": "#",
+            "items": []
+          },
+          {
+            "id": "s-t",
+            "label": "S-T",
+            "href": "#",
+            "items": [
+              {
+                "id": "sentida-botanica-cosmetica",
+                "label": "SENTIDA BOTANICA COSMETICA",
+                "href": "#sentida-botanica-cosmetica"
+              },
+              {
+                "id": "thaina-al-kanater",
+                "label": "THAINA AL KANATER",
+                "href": "#thaina-al-kanater"
+              }
+            ]
+          },
+          {
+            "id": "u-v",
+            "label": "U-V",
+            "href": "#",
+            "items": [
+              {
+                "id": "ultra-tech",
+                "label": "ULTRA TECH",
+                "href": "#ultra-tech"
+              },
+              {
+                "id": "valle-organico",
+                "label": "VALLE ORGANICO",
+                "href": "#valle-organico"
+              }
+            ]
+          },
+          {
+            "id": "w-x",
+            "label": "W-X",
+            "href": "#",
+            "items": [
+              {
+                "id": "wik",
+                "label": "WIK",
+                "href": "#wik"
+              }
+            ]
+          },
+          {
+            "id": "y-z",
+            "label": "Y-Z",
+            "href": "#",
+            "items": []
+          }
+        ]
+      }
+    ]
+  },
+  "heroSlides": [
+    {
+      "id": 1,
+      "order": 1,
+      "title": "Temporada fresca",
+      "subtitle": "Una apertura limpia para entrar al catalogo por novedades y categorias.",
+      "badge": "Inicio",
+      "image": "Content/Images/Banners/pf-hero-01.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-01-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/1-categorias",
+      "active": true,
+      "homeSpotlight": false
+    },
+    {
+      "id": 2,
+      "order": 2,
+      "title": "Energia para el dia",
+      "subtitle": "Una portada orientada a snacks y opciones listas para rotacion rapida.",
+      "badge": "Snack",
+      "image": "Content/Images/Banners/pf-hero-02.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-02-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/3-dietas",
+      "active": true,
+      "homeSpotlight": false
+    },
+    {
+      "id": 3,
+      "order": 3,
+      "title": "Marcas destacadas",
+      "subtitle": "Un banner pensado para navegar el catalogo por identidad comercial.",
+      "badge": "Marca",
+      "image": "Content/Images/Banners/pf-hero-03.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-03-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/2-marcas",
+      "active": true,
+      "homeSpotlight": true
+    },
+    {
+      "id": 4,
+      "order": 4,
+      "title": "Ofertas activas",
+      "subtitle": "Una pieza de promo para destacar productos con mejor salida.",
+      "badge": "Promo",
+      "image": "Content/Images/Banners/pf-hero-04.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-04-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/693-nuevos-ingresos",
+      "active": true,
+      "homeSpotlight": false
+    },
+    {
+      "id": 5,
+      "order": 5,
+      "title": "Novedades listas",
+      "subtitle": "Este banner queda marcado para la seccion intermedia del home.",
+      "badge": "Spotlight",
+      "image": "Content/Images/Banners/pf-hero-05.jpg",
+      "imageMobile": "Content/Images/Banners/pf-hero-05-mobile.jpg",
+      "link": "galeria.html?source=/Galeria/2-marcas",
+      "homeSpotlight": true,
+      "active": true
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "sku": "IMP0001",
+      "name": "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc",
+      "detail": "AL NATURAL EXTRACTO JUGO GRAVIOLA 500cc",
+      "presentation": "500 cc",
+      "categoryId": 1,
+      "categoryName": "AL NATURAL EXTRACTOS",
+      "brand": "AL NATURAL",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 13000,
+      "memberPrice": 10600,
+      "image": "Content/Images/Products/al-natural-extracto-jugo-graviola-500cc.jpg",
+      "status": "published",
+      "featured": true,
+      "sourceSection": "R AL NATURAL EXTRACTOS sin tacc sin azucar VEGANO",
+      "trending": true
+    },
+    {
+      "id": 4,
+      "sku": "IMP0004",
+      "name": "BAMBOO POCHOCLOS ORGANICOS AZUCAR maiz pisingallo organico, aceite de coco, azucar organica",
+      "detail": "BAMBOO POCHOCLOS ORGANICOS AZUCAR maiz pisingallo organico, aceite de coco, azucar organica",
+      "presentation": "80 gr",
+      "categoryId": 2,
+      "categoryName": "BAMBOO POCHOCLOS ORGANICOS",
+      "brand": "BAMBOO",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 2200,
+      "memberPrice": 2100,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T BAMBOO POCHOCLOS ORGANICOS sin tacc, conservantes ni lactosa VEGANO"
+    },
+    {
+      "id": 60,
+      "sku": "IMP0060",
+      "name": "CASA IRWO BOCADITOS de CIRUELA, MIEL y NUEZ CAJA 36 u 35 gr",
+      "detail": "CASA IRWO BOCADITOS de CIRUELA, MIEL y NUEZ CAJA 36 u 35 gr",
+      "presentation": "caja 36 u 35 gr",
+      "categoryId": 3,
+      "categoryName": "CASA IRWO",
+      "brand": "CASA IRWO",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 37000,
+      "memberPrice": 30500,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R CASA IRWO"
+    },
+    {
+      "id": 96,
+      "sku": "IMP0096",
+      "name": "DATILICIUS CLASICO caja 12 u 80 gr datiles rellenos con almendras o dulce de leche o manteca de mani cubierto chocolate 60% cacao",
+      "detail": "DATILICIUS CLASICO caja 12 u 80 gr datiles rellenos con almendras o dulce de leche o manteca de mani cubierto chocolate 60% cacao",
+      "presentation": "caja 12 u 80 gr",
+      "categoryId": 4,
+      "categoryName": "DATILICIOUS",
+      "brand": "DATILICIUS",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 40900,
+      "memberPrice": 33600,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R DATILICIOUS"
+    },
+    {
+      "id": 128,
+      "sku": "IMP0128",
+      "name": "EPUYEN ALFAJOR BANADO con CHOCOLATE SIN AZUCAR CAJA 12u",
+      "detail": "EPUYEN ALFAJOR BANADO con CHOCOLATE SIN AZUCAR CAJA 12u",
+      "presentation": "12 u x 40 gr",
+      "categoryId": 5,
+      "categoryName": "EPUYEN",
+      "brand": "EPUYEN",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 24300,
+      "memberPrice": 19900,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R EPUYEN sin conservantes"
+    },
+    {
+      "id": 138,
+      "sku": "IMP0138",
+      "name": "FAMILIA VEGANA ACEITE de ALMENDRAS 100 cc envase de vidrio VEGANO",
+      "detail": "FAMILIA VEGANA ACEITE de ALMENDRAS 100 cc envase de vidrio VEGANO",
+      "presentation": "100 cc",
+      "categoryId": 6,
+      "categoryName": "FAMILIA VEGANA VEGANO",
+      "brand": "FAMILIA VEGANA",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 5900,
+      "memberPrice": 4900,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R FAMILIA VEGANA VEGANO"
+    },
+    {
+      "id": 149,
+      "sku": "IMP0149",
+      "name": "GAVIA sirope de agave 330 ml",
+      "detail": "GAVIA sirope de agave 330 ml",
+      "presentation": "330 ml",
+      "categoryId": 7,
+      "categoryName": "GAVIA",
+      "brand": "GAVIA",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 8500,
+      "memberPrice": 8500,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T GAVIA sirope de agave sin tacc"
+    },
+    {
+      "id": 150,
+      "sku": "IMP0150",
+      "name": "IRON BAR BANANA CAJA 20 u 46 gr proteina de suero lacteo sin aspartame 15 gr de proteina 18 gr carb",
+      "detail": "IRON BAR BANANA CAJA 20 u 46 gr proteina de suero lacteo sin aspartame 15 gr de proteina 18 gr carb",
+      "presentation": "20 u x 45 gr",
+      "categoryId": 8,
+      "categoryName": "IRON BAR",
+      "brand": "GENTECH IRON BAR",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 36900,
+      "memberPrice": 36900,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "IRON BAR"
+    },
+    {
+      "id": 245,
+      "sku": "IMP0245",
+      "name": "JUAL STEVIA POLVO 110g",
+      "detail": "JUAL STEVIA POLVO 110g",
+      "presentation": "110 gr",
+      "categoryId": 9,
+      "categoryName": "JUAL",
+      "brand": "JUAL",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 4800,
+      "memberPrice": 4400,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "M JUAL sin tacc ni azucar VEGANO"
+    },
+    {
+      "id": 253,
+      "sku": "IMP0253",
+      "name": "KALPA MACA RUBIA 100g",
+      "detail": "KALPA MACA RUBIA 100g",
+      "presentation": "100 gr",
+      "categoryId": 10,
+      "categoryName": "KALPA HARINAS VEGETALES",
+      "brand": "KALPA",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 1000,
+      "memberPrice": 800,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R KALPA HARINAS VEGETALES sin tacc ni azucar VEGANO"
+    },
+    {
+      "id": 156,
+      "sku": "IMP0156",
+      "name": "LOW CARB BROWNIE CAJA 10 u 45 gr 15 gr protein 6 gr carb",
+      "detail": "LOW CARB BROWNIE CAJA 10 u 45 gr 15 gr protein 6 gr carb",
+      "presentation": "10 u x 45 gr",
+      "categoryId": 11,
+      "categoryName": "LOW CARB",
+      "brand": "GENTECH LOW CARB",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 25800,
+      "memberPrice": 25800,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "LOW CARB"
+    },
+    {
+      "id": 273,
+      "sku": "IMP0273",
+      "name": "MACHU PICHU HERBAL MACA ANDINA NEGRA 60 capsulas 500mg energetico",
+      "detail": "MACHU PICHU HERBAL MACA ANDINA NEGRA 60 capsulas 500mg energetico",
+      "presentation": "60u 500mg",
+      "categoryId": 12,
+      "categoryName": "MACHU PICHU HERBAL",
+      "brand": "MACHU PICHU",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 8300,
+      "memberPrice": 6800,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R MACHU PICHU HERBAL sin tacc ni azucar VEGANO"
+    },
+    {
+      "id": 300,
+      "sku": "IMP0300",
+      "name": "NATIER ACEITE de OREGANO 30 ml aceite de oliva (vitamina E) 70% carvacrol antibacteriano, antiseptico y antifungico",
+      "detail": "NATIER ACEITE de OREGANO 30 ml aceite de oliva (vitamina E) 70% carvacrol antibacteriano, antiseptico y antifungico",
+      "presentation": "30 ml",
+      "categoryId": 13,
+      "categoryName": "NATIER",
+      "brand": "NATIER",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 17200,
+      "memberPrice": 14100,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R NATIER sin tacc VEGANO"
+    },
+    {
+      "id": 395,
+      "sku": "IMP0395",
+      "name": "ORANN BARRITAS DE GRANOLA MIX ENERGETICO 1k",
+      "detail": "ORANN BARRITAS DE GRANOLA MIX ENERGETICO 1k",
+      "presentation": "1 kgr",
+      "categoryId": 14,
+      "categoryName": "ORANN",
+      "brand": "ORANN",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 10300,
+      "memberPrice": 9500,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "M ORANN sin conservantes ni colorantes VEGANO SIN STOCK"
+    },
+    {
+      "id": 434,
+      "sku": "IMP0434",
+      "name": "PONT BARRITAS ENERGETICAS CAJA 12 u 40 gr chocolate semi, mani mosto uva, proteina de soja, vegetal text.crispin arroz curcuma sal",
+      "detail": "PONT BARRITAS ENERGETICAS CAJA 12 u 40 gr chocolate semi, mani mosto uva, proteina de soja, vegetal text.crispin arroz curcuma sal",
+      "presentation": "12 x 40 gr",
+      "categoryId": 15,
+      "categoryName": "PONT",
+      "brand": "PONT",
+      "vegano": true,
+      "kosher": true,
+      "testeadoEnAnimales": true,
+      "publicPrice": 17500,
+      "memberPrice": 17200,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T PONT barritas PROTEICAS SIN AZUCAR KOSHER VEGANO"
+    },
+    {
+      "id": 451,
+      "sku": "IMP0451",
+      "name": "SENTIDA BOTANICA ACEITE ESENCIAL EUCALIPTO 15 ml refrescante e hidratante",
+      "detail": "SENTIDA BOTANICA ACEITE ESENCIAL EUCALIPTO 15 ml refrescante e hidratante",
+      "presentation": "15 ml",
+      "categoryId": 16,
+      "categoryName": "SENTIDA BOTANICA COSMETICA NATURAL",
+      "brand": "SENTIDA BOTANICA COSMETICA",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 11100,
+      "memberPrice": 11100,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T SENTIDA BOTANICA COSMETICA NATURAL sin tacc VEGANO"
+    },
+    {
+      "id": 489,
+      "sku": "IMP0489",
+      "name": "THAINA AL KANATER pote 400 gr 100% pasta de semillas de sesamo premium importada de El Libano",
+      "detail": "THAINA AL KANATER pote 400 gr 100% pasta de semillas de sesamo premium importada de El Libano",
+      "presentation": "400 gr",
+      "categoryId": 17,
+      "categoryName": "THAINA AL KANATER",
+      "brand": "THAINA AL KANATER",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 9000,
+      "memberPrice": 9000,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T THAINA AL KANATER sin tacc VEGANO"
+    },
+    {
+      "id": 492,
+      "sku": "IMP0492",
+      "name": "ULTRA TECH BARRA de PROTEINA CHOCOLATE DUBAI CAJA 12 u 46 gr",
+      "detail": "ULTRA TECH BARRA de PROTEINA CHOCOLATE DUBAI CAJA 12 u 46 gr",
+      "presentation": "12 u 46 gr",
+      "categoryId": 18,
+      "categoryName": "ULTRA TECH",
+      "brand": "ULTRA TECH",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 29600,
+      "memberPrice": 26500,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "M ULTRA TECH"
+    },
+    {
+      "id": 498,
+      "sku": "IMP0498",
+      "name": "VALLE ORGANICO ACEITE de COCO NEUTRO 250cc",
+      "detail": "VALLE ORGANICO ACEITE de COCO NEUTRO 250cc",
+      "presentation": "250 cc",
+      "categoryId": 19,
+      "categoryName": "VALLE ORGANICO ACEITE DE COCO NEUTRO",
+      "brand": "VALLE ORGANICO",
+      "vegano": false,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 5800,
+      "memberPrice": 4700,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "R VALLE ORGANICO ACEITE DE COCO NEUTRO"
+    },
+    {
+      "id": 509,
+      "sku": "IMP0509",
+      "name": "WIK BARRA TRADICIONAL de QUINOA INFLADA con CHOCOLATE CAJA 20u 20 g",
+      "detail": "WIK BARRA TRADICIONAL de QUINOA INFLADA con CHOCOLATE CAJA 20u 20 g",
+      "presentation": "1 caja",
+      "categoryId": 20,
+      "categoryName": "WIK",
+      "brand": "WIK",
+      "vegano": true,
+      "kosher": false,
+      "testeadoEnAnimales": true,
+      "publicPrice": 15400,
+      "memberPrice": 15400,
+      "image": "assets/images/metaimage.jpg",
+      "status": "published",
+      "featured": false,
+      "sourceSection": "T WIK sin tacc ni azucar VEGANO"
+    }
+  ],
+  "brands": [
+    {
+      "id": "AL-NATURAL",
+      "code": "AL-NATURAL",
+      "name": "AL NATURAL",
+      "image": "Content/Images/Brands/alnatural.svg",
+      "featured": true
+    },
+    {
+      "id": "BAMBOO",
+      "code": "BAMBOO",
+      "name": "BAMBOO",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "CASA-IRWO",
+      "code": "CASA-IRWO",
+      "name": "CASA IRWO",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "DATILICIUS",
+      "code": "DATILICIUS",
+      "name": "DATILICIUS",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "EPUYEN",
+      "code": "EPUYEN",
+      "name": "EPUYEN",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "FAMILIA-VEGANA",
+      "code": "FAMILIA-VEGANA",
+      "name": "FAMILIA VEGANA",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "GAVIA",
+      "code": "GAVIA",
+      "name": "GAVIA",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "GENTECH-IRON-BAR",
+      "code": "GENTECH-IRON-BAR",
+      "name": "GENTECH IRON BAR",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "JUAL",
+      "code": "JUAL",
+      "name": "JUAL",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "KALPA",
+      "code": "KALPA",
+      "name": "KALPA",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "GENTECH-LOW-CARB",
+      "code": "GENTECH-LOW-CARB",
+      "name": "GENTECH LOW CARB",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "MACHU-PICHU",
+      "code": "MACHU-PICHU",
+      "name": "MACHU PICHU",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "NATIER",
+      "code": "NATIER",
+      "name": "NATIER",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "ORANN",
+      "code": "ORANN",
+      "name": "ORANN",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "PONT",
+      "code": "PONT",
+      "name": "PONT",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "SENTIDA-BOTANICA-COSMETICA",
+      "code": "SENTIDA-BOTANICA-COSMETICA",
+      "name": "SENTIDA BOTANICA COSMETICA",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "THAINA-AL-KANATER",
+      "code": "THAINA-AL-KANATER",
+      "name": "THAINA AL KANATER",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "ULTRA-TECH",
+      "code": "ULTRA-TECH",
+      "name": "ULTRA TECH",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "VALLE-ORGANICO",
+      "code": "VALLE-ORGANICO",
+      "name": "VALLE ORGANICO",
+      "image": "",
+      "featured": false
+    },
+    {
+      "id": "WIK",
+      "code": "WIK",
+      "name": "WIK",
+      "image": "",
+      "featured": false
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "AL NATURAL EXTRACTOS",
+      "slug": "al-natural-extractos",
+      "visible": true
+    },
+    {
+      "id": 2,
+      "name": "BAMBOO POCHOCLOS ORGANICOS",
+      "slug": "bamboo-pochoclos-organicos",
+      "visible": true
+    },
+    {
+      "id": 3,
+      "name": "CASA IRWO",
+      "slug": "casa-irwo",
+      "visible": true
+    },
+    {
+      "id": 4,
+      "name": "DATILICIOUS",
+      "slug": "datilicious",
+      "visible": true
+    },
+    {
+      "id": 5,
+      "name": "EPUYEN",
+      "slug": "epuyen",
+      "visible": true
+    },
+    {
+      "id": 6,
+      "name": "FAMILIA VEGANA VEGANO",
+      "slug": "familia-vegana-vegano",
+      "visible": true
+    },
+    {
+      "id": 7,
+      "name": "GAVIA",
+      "slug": "gavia",
+      "visible": true
+    },
+    {
+      "id": 8,
+      "name": "IRON BAR",
+      "slug": "iron-bar",
+      "visible": true
+    },
+    {
+      "id": 9,
+      "name": "JUAL",
+      "slug": "jual",
+      "visible": true
+    },
+    {
+      "id": 10,
+      "name": "KALPA HARINAS VEGETALES",
+      "slug": "kalpa-harinas-vegetales",
+      "visible": true
+    },
+    {
+      "id": 11,
+      "name": "LOW CARB",
+      "slug": "low-carb",
+      "visible": true
+    },
+    {
+      "id": 12,
+      "name": "MACHU PICHU HERBAL",
+      "slug": "machu-pichu-herbal",
+      "visible": true
+    },
+    {
+      "id": 13,
+      "name": "NATIER",
+      "slug": "natier",
+      "visible": true
+    },
+    {
+      "id": 14,
+      "name": "ORANN",
+      "slug": "orann",
+      "visible": true
+    },
+    {
+      "id": 15,
+      "name": "PONT",
+      "slug": "pont",
+      "visible": true
+    },
+    {
+      "id": 16,
+      "name": "SENTIDA BOTANICA COSMETICA NATURAL",
+      "slug": "sentida-botanica-cosmetica-natural",
+      "visible": true
+    },
+    {
+      "id": 17,
+      "name": "THAINA AL KANATER",
+      "slug": "thaina-al-kanater",
+      "visible": true
+    },
+    {
+      "id": 18,
+      "name": "ULTRA TECH",
+      "slug": "ultra-tech",
+      "visible": true
+    },
+    {
+      "id": 19,
+      "name": "VALLE ORGANICO ACEITE DE COCO NEUTRO",
+      "slug": "valle-organico-aceite-de-coco-neutro",
+      "visible": true
+    },
+    {
+      "id": 20,
+      "name": "WIK",
+      "slug": "wik",
+      "visible": true
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Laura Gomez",
+      "email": "laura@demo.com",
+      "role": "admin",
+      "canSeePrices": true,
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Sofia Perez",
+      "email": "sofia@demo.com",
+      "role": "customer",
+      "canSeePrices": true,
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Martin Ruiz",
+      "email": "martin@demo.com",
+      "role": "customer",
+      "canSeePrices": false,
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Muestra Inactiva",
+      "email": "inactive@demo.com",
+      "role": "customer",
+      "canSeePrices": true,
+      "active": false
+    }
+  ],
+  "nextIds": {
+    "product": 21,
+    "category": 21,
+    "user": 5,
+    "heroSlide": 6
+  },
+  "ping": true
+}
