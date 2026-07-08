@@ -45,19 +45,19 @@
 
         var match;
 
-        if (/greenco\.com\.ar\/Galeria\//i.test(href) || /^\/Galeria\//i.test(href)) {
-            match = href.match(/(?:greenco\.com\.ar)?\/?Galeria\/([^?#]+)/i);
-            return match ? "galeria.html?source=/Galeria/" + encodeURIComponent(match[1]) : "galeria.html";
-        }
+            if (/greenco\.com\.ar\/Galeria\//i.test(href) || /^\/Galeria\//i.test(href)) {
+                match = href.match(/(?:greenco\.com\.ar)?\/?Galeria\/([^?#]+)/i);
+                return match ? "galeria.html?source=/Galeria/" + encodeURIComponent(match[1]) : "galeria.html";
+            }
 
         if (/greenco\.com\.ar\/DetalleArticulo\//i.test(href) || /^\/DetalleArticulo\//i.test(href)) {
             match = href.match(/(?:greenco\.com\.ar)?\/?DetalleArticulo\/(?:\d+-)?([a-z0-9]+)(?:-|\/|$)/i);
             return match ? "detallearticulo.html?sku=" + encodeURIComponent(match[1].toUpperCase()) : "detallearticulo.html";
         }
 
-        if (/greenco\.com\.ar\/Seguridad\/Register/i.test(href) || /^\/Seguridad\/Register/i.test(href)) {
-            return "login.html?mode=register";
-        }
+            if (/greenco\.com\.ar\/Seguridad\/Register/i.test(href) || /^\/Seguridad\/Register/i.test(href)) {
+                return "login.html?mode=register";
+            }
 
         if (/checkout/i.test(href)) {
             return "carrito.html";
@@ -74,14 +74,6 @@
             var next = normalizeRoute(current);
             if (next && next !== current) {
                 link.setAttribute("href", next);
-            }
-            if (/^((?:https?:)?\/\/|)?(?:[^?#\/]+\/)?DetalleArticulo\/|detallearticulo\.html/i.test(current || "")) {
-                var sku = extractSkuFromHref(current);
-                link.setAttribute("href", "#pfProductModal");
-                link.setAttribute("data-open-product-detail", "1");
-                if (sku) {
-                    link.setAttribute("data-product-sku", sku);
-                }
             }
         });
 
@@ -814,7 +806,7 @@
                                         <span>Cantidad: ${escapeHtml(item.qty || 0)}</span>
                                         <span>${escapeHtml(item.price == null ? "Sin precio" : formatMoney(Number(item.price || 0) * Number(item.qty || 0)))}</span>
                                         <div class="hero-actions" style="margin-top:12px;">
-                                            <a class="button button-secondary button-small" href="#pfProductModal" data-open-product-detail="1" data-product-sku="${escapeHtml(itemSku)}">Ver detalle</a>
+                                            <a class="button button-secondary button-small" href="detallearticulo.html?sku=${encodeURIComponent(itemSku)}" data-product-sku="${escapeHtml(itemSku)}">Ver detalle</a>
                                             <button class="button button-primary button-small" type="button" data-demo-cart-remove="${escapeHtml(item.id || item.sku || item.name)}">Quitar</button>
                                         </div>
                                     </div>
@@ -1068,7 +1060,10 @@
 
             if (productLink) {
                 event.preventDefault();
-                openProductModalFromTrigger(productLink);
+                var targetHref = normalizeRoute(productLink.getAttribute("href") || "");
+                if (targetHref) {
+                    window.location.href = targetHref;
+                }
                 return;
             }
 

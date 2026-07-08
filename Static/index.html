@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="pintofruta">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta charset="UTF-8" />
@@ -43,6 +43,104 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="Content/theme/css/app.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/theme/css/pintofruta-theme.css" media="screen">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/culori"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script>
+    (function () {
+        function applyTheme() {
+            if (!window.culori || typeof culori.interpolate !== 'function' || typeof culori.formatHex !== 'function') {
+                return;
+            }
+
+            var root = document.documentElement;
+            var primary = '#A86D45';
+            var secondary = '#C8B089';
+            var surface = '#E6DCC8';
+            var cream = '#F8F2E8';
+            var sage = '#6F8F72';
+            var neutral = '#3F2C22';
+
+            var mix = function (from, to, amount) {
+                try {
+                    return culori.formatHex(culori.interpolate([from, to], 'oklch')(amount));
+                } catch (error) {
+                    return to;
+                }
+            };
+
+            var primaryDark = mix(primary, neutral, 0.34);
+            var primaryDarker = mix(primary, neutral, 0.56);
+            var secondaryLight = mix(secondary, cream, 0.42);
+            var sandLight = mix(surface, cream, 0.46);
+            var sageLight = mix(sage, cream, 0.58);
+            var olive = mix(sage, neutral, 0.28);
+            var moss = mix(sage, neutral, 0.46);
+            var bg = mix(surface, cream, 0.22);
+            var surfaceAlt = mix(surface, cream, 0.32);
+            var border = 'rgba(168, 109, 69, 0.18)';
+            var borderStrong = 'rgba(168, 109, 69, 0.34)';
+            var text = neutral;
+            var muted = mix(neutral, surface, 0.42);
+            var shadow = '0 18px 40px rgba(92, 56, 32, 0.14)';
+            var shadowSoft = '0 10px 24px rgba(92, 56, 32, 0.10)';
+
+            root.dataset.theme = 'pintofruta';
+            root.style.setProperty('--pf-primary', primary);
+            root.style.setProperty('--pf-primary-dark', primaryDark);
+            root.style.setProperty('--pf-primary-darker', primaryDarker);
+            root.style.setProperty('--pf-secondary', secondary);
+            root.style.setProperty('--pf-secondary-light', secondaryLight);
+            root.style.setProperty('--pf-sand', surface);
+            root.style.setProperty('--pf-sand-light', sandLight);
+            root.style.setProperty('--pf-cream', cream);
+            root.style.setProperty('--pf-cream-soft', mix(cream, surface, 0.22));
+            root.style.setProperty('--pf-sage', sage);
+            root.style.setProperty('--pf-sage-light', sageLight);
+            root.style.setProperty('--pf-olive', olive);
+            root.style.setProperty('--pf-moss', moss);
+            root.style.setProperty('--pf-bg', bg);
+            root.style.setProperty('--pf-surface', cream);
+            root.style.setProperty('--pf-surface-alt', surfaceAlt);
+            root.style.setProperty('--pf-border', border);
+            root.style.setProperty('--pf-border-strong', borderStrong);
+            root.style.setProperty('--pf-text', text);
+            root.style.setProperty('--pf-muted', muted);
+            root.style.setProperty('--pf-shadow', shadow);
+            root.style.setProperty('--pf-shadow-soft', shadowSoft);
+
+            root.style.setProperty('--color-primary', primary);
+            root.style.setProperty('--color-primary-content', '#fff9f1');
+            root.style.setProperty('--color-secondary', secondary);
+            root.style.setProperty('--color-secondary-content', neutral);
+            root.style.setProperty('--color-accent', sage);
+            root.style.setProperty('--color-accent-content', '#f8fbf5');
+            root.style.setProperty('--color-neutral', neutral);
+            root.style.setProperty('--color-neutral-content', cream);
+            root.style.setProperty('--color-base-100', cream);
+            root.style.setProperty('--color-base-200', sandLight);
+            root.style.setProperty('--color-base-300', secondaryLight);
+            root.style.setProperty('--color-base-content', text);
+            root.style.setProperty('--color-info', '#6B8FB6');
+            root.style.setProperty('--color-info-content', '#f7fbff');
+            root.style.setProperty('--color-success', '#5f9b62');
+            root.style.setProperty('--color-success-content', '#f5fbf5');
+            root.style.setProperty('--color-warning', '#c99638');
+            root.style.setProperty('--color-warning-content', '#fff8eb');
+            root.style.setProperty('--color-error', '#b85b52');
+            root.style.setProperty('--color-error-content', '#fff4f2');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyTheme, { once: true });
+        } else {
+            applyTheme();
+        }
+    })();
+</script>
 
 
 
@@ -1973,7 +2071,7 @@
 
 
 
-<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" data-content-source="shared-json">
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade hero-carousel-shell" data-ride="carousel" data-content-source="shared-json">
     <ol class="carousel-indicators">
             <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleCaptions" data-slide-to="1" class=""></li>
@@ -2049,6 +2147,116 @@
 </div>
     
 
+    <style>
+        .home-block {
+            position: relative;
+            margin: 0;
+            padding: 34px 0 38px;
+            overflow: hidden;
+        }
+        .home-block > * {
+            position: relative;
+            z-index: 1;
+        }
+        #productosDestacadosSection {
+            background: linear-gradient(180deg, var(--pf-cream) 0%, var(--pf-sand-light) 100%);
+            border-top: 1px solid rgba(168, 109, 69, .10);
+            border-bottom: 1px solid rgba(168, 109, 69, .10);
+        }
+        #tendenciasSection {
+            background: linear-gradient(180deg, var(--pf-sage-light) 0%, #cfe0cf 100%);
+            border-top: 1px solid rgba(70, 114, 78, .10);
+            border-bottom: 1px solid rgba(70, 114, 78, .10);
+        }
+        #marcasDestacadasSection {
+            background: linear-gradient(180deg, #e4ecdf 0%, var(--pf-cream-soft) 100%);
+            border-top: 1px solid rgba(70, 114, 78, .10);
+            border-bottom: 1px solid rgba(70, 114, 78, .10);
+        }
+        #Nosotros.about-section {
+            background: linear-gradient(180deg, var(--pf-sand-light) 0%, #efe6d8 100%);
+            border-top: 1px solid rgba(168, 109, 69, .08);
+            border-bottom: 1px solid rgba(168, 109, 69, .08);
+            padding-top: 42px;
+            padding-bottom: 42px;
+        }
+        #productosDestacadosSection .title1,
+        #tendenciasSection .title1,
+        #marcasDestacadasSection .title1,
+        #Nosotros .about-panel {
+            background: rgba(255, 255, 255, .30);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .35);
+            box-shadow: 0 10px 24px rgba(31, 42, 68, .05);
+            border-radius: 22px;
+        }
+        #productosDestacadosSection .title1,
+        #tendenciasSection .title1,
+        #marcasDestacadasSection .title1 {
+            padding: 14px 18px;
+        }
+        #tendenciasSection .tab-product-main {
+            width: min(1600px, calc(100% - 32px));
+            margin: 0 auto 18px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, .30);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .35);
+            box-shadow: 0 10px 24px rgba(31, 42, 68, .05);
+            border-radius: 22px;
+        }
+        #tendenciasSection .tab-prodcut-contain {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        #tendenciasSection .title1 {
+            padding: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+        #tendenciasSection .tabs.tab-title {
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        #tendenciasSection .tab-product-main,
+        #marcasDestacadasSection .custom-container,
+        #productosDestacadosSection .custom-container {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+        #tendenciasSection .container-fluid.container-destacados,
+        #productosDestacadosSection .custom-container.container-destacados,
+        #marcasDestacadasSection .custom-container {
+            width: min(1600px, calc(100% - 32px));
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 575px) {
+            .home-block {
+                padding: 22px 0 24px;
+            }
+            #Nosotros.about-section {
+                padding-top: 28px;
+                padding-bottom: 28px;
+            }
+            #tendenciasSection .tab-product-main {
+                width: calc(100% - 24px);
+                padding: 12px 14px;
+            }
+            #tendenciasSection .tabs.tab-title {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+
+    <section class="home-block home-block--products" id="productosDestacadosSection">
     <div class="title1 section-my-space">
         <h4>Productos Destacados</h4>
     </div>
@@ -2123,6 +2331,7 @@
         });
 
     </script>
+    </section>
 
     <section class="deal-banner2" id="homeSpotlightBanner"></section>
 
@@ -2136,33 +2345,48 @@
 
 
 <!--tab product-->
-<section class="section-pt-space" id="tendenciasSection">
+<section class="section-pt-space home-block home-block--trends" id="tendenciasSection">
     <div class="tab-product-main">
         <div class="tab-prodcut-contain">
             <div class="title1">
                 <h4>Tendencias</h4>
             </div>
             <ul class="tabs tab-title" id="trendFilters">
-                <li class="current"><a href="#" data-trend-filter="all">Todos</a></li>
-                <li><a href="#" data-trend-filter="vegano">Vegano</a></li>
-                <li><a href="#" data-trend-filter="kosher">Kosher</a></li>
+                <li class="current"><a href="#" data-trend-filter="all" class="btn btn-sm btn-outline">Todos</a></li>
+                <li><a href="#" data-trend-filter="vegano" class="btn btn-sm btn-outline">Vegano</a></li>
+                <li><a href="#" data-trend-filter="kosher" class="btn btn-sm btn-outline">Kosher</a></li>
 
             </ul>
         </div>
     </div>
     <div class="container-fluid container-destacados">
-        <div id="trendProductsGrid" class="trend-products-grid"></div>
+        <div class="swiper trend-swiper" id="trendProductsSwiper">
+            <div id="trendProductsGrid" class="swiper-wrapper trend-products-grid"></div>
+            <div class="swiper-pagination trend-swiper-pagination"></div>
+            <div class="swiper-button-prev trend-swiper-prev"></div>
+            <div class="swiper-button-next trend-swiper-next"></div>
+        </div>
         <div id="trendProductsEmpty" class="trend-empty" style="display:none;"></div>
     </div>
     <style>
         .trend-products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 170px));
             gap: 12px;
             align-items: stretch;
-            justify-content: start;
+            justify-content: center;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .trend-swiper {
+            width: 100%;
+            padding: 8px 44px 36px;
+            position: relative;
+        }
+        .trend-swiper .swiper-slide {
+            width: 170px !important;
+            height: auto;
         }
         .trend-card {
+            width: 170px;
             border-radius: 14px;
             overflow: hidden;
             background: #fff;
@@ -2228,9 +2452,44 @@
             text-align: center;
             color: #6d7380;
         }
+        .trend-swiper .swiper-button-prev,
+        .trend-swiper .swiper-button-next {
+            color: var(--pf-primary-darker);
+            top: 44%;
+        }
+        .trend-swiper .swiper-button-prev:after,
+        .trend-swiper .swiper-button-next:after {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .trend-swiper .swiper-pagination-bullet {
+            background: var(--pf-primary);
+            opacity: .28;
+        }
+        .trend-swiper .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: var(--pf-primary-darker);
+        }
+        @media (max-width: 575px) {
+            .trend-products-grid {
+                gap: 10px;
+            }
+            .trend-swiper {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
+            .trend-card {
+                width: 155px;
+            }
+            .trend-swiper .swiper-button-prev,
+            .trend-swiper .swiper-button-next {
+                display: none;
+            }
+        }
     </style>
     <script type="text/javascript">
         (function () {
+            var trendSwiper = null;
             function money(value) {
                 return new Intl.NumberFormat('es-AR', {
                     style: 'currency',
@@ -2260,6 +2519,10 @@
                     grid.innerHTML = '';
                     empty.style.display = 'block';
                     empty.innerHTML = '<strong>No hay productos para este filtro</strong>';
+                    if (trendSwiper) {
+                        trendSwiper.destroy(true, true);
+                        trendSwiper = null;
+                    }
                     return;
                 }
 
@@ -2271,21 +2534,45 @@
                     var image = product.image || 'assets/images/metaimage.jpg';
                     var detailLink = 'detallearticulo.html?sku=' + encodeURIComponent(String(product.sku || '').toUpperCase());
                     return [
-                        '<article class="trend-card">',
+                        '<div class="swiper-slide">',
+                        '<article class="trend-card card bg-base-100 shadow-lg border border-base-200">',
                         '  <section data-ga-id="' + String(product.sku || product.id || '') + '" data-ga-name="' + String(product.detail || product.name || '') + '" data-ga-brand="' + String(product.brand || '') + '">',
                         '    <a href="' + detailLink + '" data-open-product-detail="1" data-product-sku="' + String(product.sku || '').toUpperCase() + '">',
                         '      <img src="' + image + '" alt="' + String(product.detail || product.name || product.sku || 'Producto') + '">',
                         '    </a>',
-                        '    <div class="trend-card__body">',
+                        '    <div class="trend-card__body card-body p-3">',
                         '      <div class="trend-card__brand">' + String(product.brand || '') + '</div>',
                         '      <h3 class="trend-card__name">' + String(product.detail || product.name || '') + '</h3>',
                         '      <div class="trend-card__meta">' + String(category ? category.name : 'Sin categoria') + '</div>',
                         '      <div class="trend-card__prices"><strong>' + money(product.publicPrice) + '</strong><span>' + money(product.memberPrice) + '</span></div>',
                         '    </div>',
                         '  </section>',
-                        '</article>'
+                        '</article>',
+                        '</div>'
                     ].join('');
                 }).join('');
+                if (window.Swiper) {
+                    if (!trendSwiper) {
+                        trendSwiper = new Swiper('#trendProductsSwiper', {
+                            slidesPerView: 'auto',
+                            spaceBetween: 12,
+                            centeredSlides: true,
+                            centerInsufficientSlides: true,
+                            grabCursor: true,
+                            watchOverflow: true,
+                            pagination: {
+                                el: '.trend-swiper-pagination',
+                                clickable: true
+                            },
+                            navigation: {
+                                nextEl: '.trend-swiper-next',
+                                prevEl: '.trend-swiper-prev'
+                            }
+                        });
+                    } else {
+                        trendSwiper.update();
+                    }
+                }
             }
 
             document.addEventListener('DOMContentLoaded', function () {
@@ -2310,6 +2597,7 @@
                         event.preventDefault();
                         setActive(button.getAttribute('data-trend-filter') || 'all');
                     });
+                    button.classList.add('btn', 'btn-sm', 'btn-outline');
                 });
 
                 setActive('all');
@@ -2318,7 +2606,7 @@
     </script>
 </section>
 
-<section class="mb-5 pb-5" id="marcasDestacadasSection">
+<section class="mb-5 pb-5 home-block home-block--brands" id="marcasDestacadasSection">
     <div class="title1 section-my-space">
         <h4>Marcas destacadas</h4>
     </div>
@@ -2329,21 +2617,23 @@
     <style>
         .marcas-destacadas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 150px));
+            grid-template-columns: repeat(auto-fit, minmax(312px, 408px));
             gap: 18px;
-            justify-content: start;
+            justify-content: center;
             align-items: stretch;
+            justify-items: center;
         }
         .brand-logo-card {
             background: #fff;
-            border-radius: 14px;
+            border-radius: 20px;
             border: 1px solid rgba(31,42,68,.08);
-            box-shadow: 0 8px 18px rgba(31,42,68,.06);
+            box-shadow: 0 12px 26px rgba(31,42,68,.08);
             min-height: 92px;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px;
+            padding: 4px 12px;
         }
         .brand-logo-card__media {
             width: 100%;
@@ -2353,9 +2643,29 @@
         }
         .brand-logo-card__media img {
             display: block;
+            width: 100%;
+            height: auto;
             max-width: 100%;
-            max-height: 50px;
+            max-height: 86px;
+            transform: scale(1.15);
+            transform-origin: center center;
             object-fit: contain;
+        }
+        @media (max-width: 575px) {
+            .marcas-destacadas-grid {
+                grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
+                gap: 16px;
+            }
+            .brand-logo-card {
+                min-height: 82px;
+                padding: 4px 10px;
+            }
+            .brand-logo-card__media img {
+                max-width: 100%;
+                max-height: 72px;
+                transform: scale(1.12);
+                transform-origin: center center;
+            }
         }
         .marcas-destacadas-empty {
             padding: 14px 0 0;
@@ -2412,7 +2722,7 @@
 </div>
     </div>
 
-    <section id="Nosotros" class="about-section">
+    <section id="Nosotros" class="about-section home-block home-block--about">
         <div class="container">
             <div class="about-panel">
                 <div class="row align-items-center">
@@ -2761,12 +3071,53 @@
 <script src="Scripts/theme/modal.js"></script>
 <script type="text/javascript" src="demo-circuit.js"></script>
 
-<script type="text/javascript">
-    if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
-        ActualizarCantidadEnCarrito();
-        MostrarNotificacionFront();
-    }
-</script>
+    <script type="text/javascript">
+        if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+            ActualizarCantidadEnCarrito();
+            MostrarNotificacionFront();
+        }
+    </script>
+
+    <script>
+        (function () {
+            var revealTargets = [
+                document.getElementById('carouselExampleCaptions'),
+                document.getElementById('productosDestacadosSection'),
+                document.getElementById('tendenciasSection'),
+                document.getElementById('marcasDestacadasSection'),
+                document.getElementById('Nosotros')
+            ].filter(Boolean);
+
+            function reveal(node) {
+                node.classList.add('pf-reveal-ready');
+            }
+
+            revealTargets.forEach(reveal);
+
+            if (!('IntersectionObserver' in window)) {
+                revealTargets.forEach(function (node) {
+                    node.classList.add('pf-in-view');
+                });
+                return;
+            }
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('pf-in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.14,
+                rootMargin: '0px 0px -8% 0px'
+            });
+
+            revealTargets.forEach(function (node) {
+                observer.observe(node);
+            });
+        })();
+    </script>
 
     <style>
     .modal-dialog-pdf {

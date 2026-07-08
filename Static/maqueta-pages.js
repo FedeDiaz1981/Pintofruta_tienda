@@ -464,7 +464,7 @@
                                 </div>
                             </div>
                             <div class="product-actions">
-                                <a class="button button-primary button-small" href="#pfProductModal" data-open-product-detail="1" data-product-sku="${escapeHtml(product.sku || "")}">Ver detalle</a>
+                                <a class="button button-primary button-small" href="detallearticulo.html?sku=${encodeURIComponent(product.sku || "")}" data-product-sku="${escapeHtml(product.sku || "")}">Ver detalle</a>
                                 <button class="button button-secondary button-small" type="button"
                                     data-demo-cart-add="1"
                                     data-cart-id="${escapeHtml(product.id || product.sku || "")}"

@@ -81,6 +81,42 @@ body.bg-light {
   overflow-y: initial;
 }
 
+.fixed-body,
+#contenedorArticulos {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+#carouselExampleCaptions {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#carouselExampleCaptions .carousel-inner {
+  width: 100%;
+  margin: 0 auto;
+}
+
+#carouselExampleCaptions .carousel-item {
+  text-align: center;
+}
+
+#carouselExampleCaptions .carousel-item a {
+  display: block;
+  width: 100%;
+}
+
+#carouselExampleCaptions .carousel-item img {
+  width: 100%;
+  display: block;
+}
+
 p {
   margin-bottom: 25px;
   line-height: 1.7;
@@ -4958,6 +4994,15 @@ body {
   .fixed-body {
     margin-top: 0 !important;
   }
+  .fixed-body,
+  #contenedorArticulos {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
   #carouselExampleCaptions,
   #carouselExampleCaptions .carousel-inner,
   #carouselExampleCaptions .carousel-item {
@@ -4965,15 +5010,22 @@ body {
     max-width: 100%;
   }
   #carouselExampleCaptions {
+    display: block;
     margin: 0 !important;
     overflow: hidden;
     border-radius: 0;
     height: auto;
   }
+  #carouselExampleCaptions .carousel-inner {
+    margin: 0 auto;
+  }
   #carouselExampleCaptions .carousel-inner,
   #carouselExampleCaptions .carousel-item,
   #carouselExampleCaptions .carousel-item a {
     height: auto;
+  }
+  #carouselExampleCaptions .carousel-item {
+    text-align: center;
   }
   #carouselExampleCaptions .carousel-item img {
     width: 100%;

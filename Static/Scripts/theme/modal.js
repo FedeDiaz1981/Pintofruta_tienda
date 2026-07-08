@@ -1,15 +1,10 @@
 (function($) {
     "use strict";
 
-    function shouldShowPromoModal() {
-        var host = window.location.hostname;
-        return host === "localhost" || host === "127.0.0.1" || host === "::1";
-    }
-
-    $(window).on('load', function() {
-        if (shouldShowPromoModal()) {
-            $('#exampleModal').modal('show');
-        }
+    $(function () {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#exampleModal').modal('hide');
     });
 
     $(document).on('click', '#exampleModal .close', function (e) {

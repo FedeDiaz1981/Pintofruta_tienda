@@ -1,7 +1,7 @@
 {
   "sessionRole": "admin",
   "viewMode": "public",
-  "activeAdminPanel": "brands",
+  "activeAdminPanel": "products",
   "panelSearchQuery": "",
   "activeModalAction": "edit",
   "headerNavigation": {
@@ -606,10 +606,11 @@
       "testeadoEnAnimales": true,
       "publicPrice": 8500,
       "memberPrice": 8500,
-      "image": "assets/images/metaimage.jpg",
+      "image": "Content/Images/Products/gaviaagabe-330grs.jfif",
       "status": "published",
-      "featured": false,
-      "sourceSection": "T GAVIA sirope de agave sin tacc"
+      "featured": true,
+      "sourceSection": "T GAVIA sirope de agave sin tacc",
+      "trending": false
     },
     {
       "id": 150,
@@ -644,10 +645,11 @@
       "testeadoEnAnimales": true,
       "publicPrice": 4800,
       "memberPrice": 4400,
-      "image": "assets/images/metaimage.jpg",
+      "image": "Content/Images/Products/jualstevia.webp",
       "status": "published",
-      "featured": false,
-      "sourceSection": "M JUAL sin tacc ni azucar VEGANO"
+      "featured": true,
+      "sourceSection": "M JUAL sin tacc ni azucar VEGANO",
+      "trending": false
     },
     {
       "id": 253,
@@ -720,10 +722,11 @@
       "testeadoEnAnimales": true,
       "publicPrice": 17200,
       "memberPrice": 14100,
-      "image": "assets/images/metaimage.jpg",
+      "image": "Content/Images/Products/shopping.webp",
       "status": "published",
-      "featured": false,
-      "sourceSection": "R NATIER sin tacc VEGANO"
+      "featured": true,
+      "sourceSection": "R NATIER sin tacc VEGANO",
+      "trending": false
     },
     {
       "id": 395,
@@ -815,10 +818,11 @@
       "testeadoEnAnimales": true,
       "publicPrice": 29600,
       "memberPrice": 26500,
-      "image": "assets/images/metaimage.jpg",
+      "image": "Content/Images/Products/ultratech-proteinbar.jfif",
       "status": "published",
       "featured": false,
-      "sourceSection": "M ULTRA TECH"
+      "sourceSection": "M ULTRA TECH",
+      "trending": true
     },
     {
       "id": 498,

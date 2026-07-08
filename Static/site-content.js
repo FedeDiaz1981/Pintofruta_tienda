@@ -573,11 +573,15 @@
         if (!liveGrid) {
             liveGrid = document.createElement("div");
             liveGrid.id = "featuredProductsLive";
-            liveGrid.style.display = "grid";
-            liveGrid.style.gridTemplateColumns = "repeat(auto-fit, minmax(140px, 1fr))";
-            liveGrid.style.gap = "12px";
-            liveGrid.style.margin = "10px 0 4px";
+            liveGrid.style.display = "flex";
+            liveGrid.style.flexDirection = "row";
+            liveGrid.style.flexWrap = "nowrap";
+            liveGrid.style.gap = "10px";
+            liveGrid.style.margin = "10px auto 4px";
             liveGrid.style.alignItems = "stretch";
+            liveGrid.style.justifyContent = "center";
+            liveGrid.style.overflowX = "auto";
+            liveGrid.style.width = "100%";
             host.insertBefore(liveGrid, root);
         }
 
@@ -592,7 +596,7 @@
             return;
         }
 
-        liveGrid.style.display = "grid";
+        liveGrid.style.display = "flex";
         liveGrid.innerHTML = products.map((product) => {
             const category = (content.categories || []).find((item) => Number(item.id) === Number(product.categoryId));
             const detailLink = normalizeLink(`detallearticulo.html?sku=${encodeURIComponent(String(product.sku || "").toUpperCase())}`);
@@ -611,18 +615,18 @@
             }).format(memberPrice);
 
             return `
-                <article class="product-card" style="border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 8px 18px rgba(31,42,68,.08); border: 1px solid rgba(31,42,68,.08); max-width: 190px;">
+                <article class="product-card card card-compact bg-base-100 shadow-lg border border-base-200 pf-product-card" style="width:190px; max-width:190px; box-sizing: border-box;">
                     <section data-ga-id="${escapeHtml(product.sku || product.id || "")}" data-ga-name="${escapeHtml(product.detail || product.name || "")}" data-ga-brand="${escapeHtml(product.brand || "")}">
-                        <a href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}" style="display:block; background:#fff;">
-                            <img src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" style="width:100%; height:130px; object-fit: contain; display:block; background:#fff; padding:8px;">
+                        <a class="pf-product-link" href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}">
+                            <img class="pf-product-image" src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" loading="lazy">
                         </a>
-                        <div style="padding: 10px 11px 12px;">
-                            <div style="font-size: 10px; letter-spacing: .10em; text-transform: uppercase; color: #7a6a56; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(product.brand || "")}</div>
-                            <h3 style="margin: 0 0 4px; font-size: 13px; line-height: 1.2; color: #1f2a44; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHtml(product.detail || product.name || "")}</h3>
-                            <div style="font-size: 11px; color: #6d7380; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(category ? category.name : "Sin categoria")}</div>
-                            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
-                                <strong style="font-size: 13px; color: #1f2a44;">${escapeHtml(priceText)}</strong>
-                                <span style="font-size: 10px; color: #7c8596;">${escapeHtml(memberText)}</span>
+                        <div class="card-body pf-product-body">
+                            <div class="pf-product-brand">${escapeHtml(product.brand || "")}</div>
+                            <h3 class="pf-product-name">${escapeHtml(product.detail || product.name || "")}</h3>
+                            <div class="pf-product-category">${escapeHtml(category ? category.name : "Sin categoria")}</div>
+                            <div class="pf-product-prices">
+                                <strong class="pf-product-price-primary">${escapeHtml(priceText)}</strong>
+                                <span class="pf-product-price-secondary">${escapeHtml(memberText)}</span>
                             </div>
                         </div>
                     </section>
