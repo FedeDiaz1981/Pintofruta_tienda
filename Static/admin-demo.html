@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
@@ -37,16 +37,16 @@
                 <div class="sidebar-accordion is-open" data-accordion="lists">
                     <button class="sidebar-accordion-toggle" type="button" data-accordion-toggle="lists" aria-expanded="true">
                         <span class="sidebar-label">ABM - listas</span>
-                        <span class="accordion-caret">▾</span>
+                        <span class="accordion-caret">&#9662;</span>
                     </button>
                     <div class="sidebar-accordion-panel">
                         <nav class="sidebar-nav" id="panelSidebar">
                             <button class="sidebar-link active" type="button" data-panel-nav="products">Productos</button>
                             <button class="sidebar-link" type="button" data-panel-nav="brands">Marcas</button>
+                            <button class="sidebar-link" type="button" data-panel-nav="banner">Banner verde</button>
                             <button class="sidebar-link" type="button" data-panel-nav="categories">Categorias</button>
                             <button class="sidebar-link" type="button" data-panel-nav="users">Usuarios</button>
                             <button class="sidebar-link" type="button" data-panel-nav="hero">Hero / Carrusel</button>
-                            <button class="sidebar-link" type="button" data-panel-nav="navigation">Navegación</button>
                         </nav>
                     </div>
                 </div>
@@ -54,12 +54,11 @@
                 <div class="sidebar-accordion" data-accordion="tools">
                     <button class="sidebar-accordion-toggle" type="button" data-accordion-toggle="tools" aria-expanded="false">
                         <span class="sidebar-label">Herramientas</span>
-                        <span class="accordion-caret">▾</span>
+                        <span class="accordion-caret">&#9662;</span>
                     </button>
                     <div class="sidebar-accordion-panel">
                         <nav class="sidebar-nav">
                             <button class="sidebar-link" type="button" data-panel-nav="bulk">Cargas masivas</button>
-                            <button class="sidebar-link" type="button" id="downloadJsonCard">Exportar JSON</button>
                         </nav>
                     </div>
                 </div>
@@ -200,7 +199,7 @@
                 <p>Selecciona el perfil Administrador arriba para mostrar el ABM completo.</p>
             </div>
 
-            <div class="admin-launcher" id="adminLauncher">
+                        <div class="admin-launcher" id="adminLauncher">
                 <button class="admin-card" type="button" data-open-panel="products">
                     <span class="admin-card-kicker">ABM</span>
                     <strong>Productos</strong>
@@ -210,6 +209,11 @@
                     <span class="admin-card-kicker">Catalogo</span>
                     <strong>Marcas</strong>
                     <p>Listado de marcas únicas detectadas en los Excel.</p>
+                </button>
+                <button class="admin-card" type="button" data-open-panel="banner">
+                    <span class="admin-card-kicker">Contenido</span>
+                    <strong>Banner verde</strong>
+                    <p>Texto institucional editable que alimenta el bloque medio.</p>
                 </button>
                 <button class="admin-card" type="button" data-open-panel="categories">
                     <span class="admin-card-kicker">Catalogo</span>
@@ -225,11 +229,6 @@
                     <span class="admin-card-kicker">Contenido</span>
                     <strong>Hero / Carrusel</strong>
                     <p>Edicion de slides, orden e imagen principal.</p>
-                </button>
-                <button class="admin-card" type="button" data-open-panel="navigation">
-                    <span class="admin-card-kicker">Header</span>
-                    <strong>Navegación</strong>
-                    <p>Listas del header, secciones y grupos anidados del index.</p>
                 </button>
                 <button class="admin-card" type="button" data-open-panel="bulk">
                     <span class="admin-card-kicker">Excel</span>
@@ -284,7 +283,7 @@
                                     Imagen
                                     <input type="hidden" id="productImage">
                                     <input type="file" id="productImageFile" accept="image/*">
-                                    <small id="productImageCurrent">No hay imagen cargada. Se guardar� dentro de <code>Content/Images/Products</code>.</small>
+                                    <small id="productImageCurrent">No hay imagen cargada. Se guardará dentro de <code>Content/Images/Products</code>.</small>
                                 </label>
                                 <label class="checkbox-row">
                                     <input type="checkbox" id="productFeatured">
@@ -367,7 +366,7 @@
                                     Imagen
                                     <input type="hidden" id="brandImage">
                                     <input type="file" id="brandImageFile" accept="image/*">
-                                    <small id="brandImageCurrent">No hay imagen cargada. Se guardar� dentro de <code>Content/Images/Brands</code>.</small>
+                                    <small id="brandImageCurrent">No hay imagen cargada. Se guardará dentro de <code>Content/Images/Brands</code>.</small>
                                 </label>
                                 <label class="checkbox-row">
                                     <input type="checkbox" id="brandFeatured">
@@ -394,6 +393,32 @@
                                 </table>
                                 </div>
                             </details>
+                        </section>
+
+                        <section class="modal-panel" data-panel="banner">
+                            <div class="panel-head">
+                                <h3>Banner verde</h3>
+                                <span class="panel-badge soft">Contenido</span>
+                            </div>
+                            <form id="bannerForm" class="mini-form">
+                                <input type="hidden" id="bannerId">
+                                <label>
+                                    Texto
+                                    <input type="text" id="bannerText" placeholder="Conectamos marcas, productos y personas." required>
+                                </label>
+                                <label>
+                                    Orden
+                                    <input type="number" id="bannerOrder" min="1" step="1" required>
+                                </label>
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="bannerActive" checked>
+                                    <span>Activo</span>
+                                </label>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Guardar banner</button>
+                                    <button class="btn btn-ghost" type="button" id="resetBannerForm">Limpiar</button>
+                                </div>
+                            </form>
                         </section>
 
                         <section class="modal-panel" data-panel="categories">
@@ -627,4 +652,7 @@
     <script type="text/javascript" src="demo-circuit.js"></script>
 </body>
 </html>
+
+
+
 

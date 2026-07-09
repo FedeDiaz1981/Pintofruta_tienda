@@ -41,7 +41,6 @@
 <link rel="stylesheet" type="text/css" href="Content/Shared/lightbox.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/theme/css/modificables.css" media="screen" id="color">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="Content/theme/css/app.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/theme/css/pintofruta-theme.css" media="screen">
 
@@ -147,7 +146,7 @@
     <div class="top-header">
     <div class="row">
         <div class="col-12">
-            <h6>¡Más de 350 marcas | Congelado | Refrigerado | Seco! </h6>
+            <h6 data-banner-role="top"></h6>
         </div>
     </div>
 </div>
@@ -1841,7 +1840,7 @@
 <script src="Scripts/controlesMaer/bootstrap-slider.js"></script>
 <script src="Scripts/Shared/Filtros.js"></script>
 
-<div class="collection-filter-block creative-card creative-inner category-side">
+<div class="collection-filter-block creative-card creative-inner category-side" id="searchSidebarFilters" style="display:none">
 
     <div class="collection-mobile-back d-block d-xl-none"><span class="filter-back"><i class="fa fa-angle-left" aria-hidden="true"></i> Cerrar Filtros</span></div>
 
@@ -3784,17 +3783,8 @@
 
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        var config = {
-            url: 'busqueda.html'
-        };
-
-        Filtros.init(config);
-
-    });
-</script>
+<script type="text/javascript" src="Scripts/Shared/SearchFilters.js"></script>
+<script type="text/javascript" src="Scripts/Shared/SearchResults.js"></script>
 
 
 
@@ -4235,7 +4225,7 @@
             var title = ($section.data('ga-name') || $relatedTarget.closest('.product').find('.price-title').text() || '').trim();
             var brand = ($section.data('ga-brand') || '').trim();
             var img = $relatedTarget.closest('.product-box').find('img').first();
-            var imgSrc = img.attr('src') || 'assets/images/metaimage.jpg';
+            var imgSrc = img.attr('src') || 'assets/images/no-image.svg';
             var imgAlt = img.attr('alt') || title || 'Producto';
             var etiquetas = $relatedTarget.closest('.product-box').find('.region-etiquetas .etiqueta img').map(function () {
                 return '<span class="badge badge-pill badge-light border mr-1 mb-1">' + escapeHtml($(this).attr('alt') || $(this).attr('title') || 'Etiqueta') + '</span>';
@@ -4385,7 +4375,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-7">
                         <span class="about-kicker">Quienes somos</span>
-                        <h2 class="about-title">Una red que conecta marcas, productos y personas.</h2>
+                        <h2 class="about-title">Conectamos marcas, productos y personas.</h2>
                         <p class="about-text">
                             Somos un equipo de profesionales con foco en alimentos saludables, abastecimiento ordenado y una experiencia de compra simple.
                             Nacimos trabajando con propuestas plant based y, con el tiempo, ampliamos la oferta para acompañar el crecimiento del canal natural,

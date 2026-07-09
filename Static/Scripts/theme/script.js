@@ -1016,53 +1016,11 @@
     $(".tabs li a").on('click', function () {
         event.preventDefault();
         $('.tab_product_slider').slick('unslick');
-        $('.product-slide-6').slick('unslick');
         $(this).parent().parent().find("li").removeClass("current");
         $(this).parent().addClass("current");
         var currunt_href = $(this).attr("href");
         $('#' + currunt_href).show();
         $(this).parent().parent().parent().parent().parent().parent().find(".tab-content").not('#' + currunt_href).css("display", "none");
-        $(".product-slide-6").slick({
-            arrows: true,
-            dots: false,
-            infinite: true,
-            speed: 300,
-            slidesToShow: 6,
-            slidesToScroll: 1,
-            responsive: [
-                {
-                    breakpoint: 1700,
-                    settings: {
-                        slidesToShow: 5,
-                        slidesToScroll: 5,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 1200,
-                    settings: {
-                        slidesToShow: 4,
-                        slidesToScroll: 4,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 991,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 3,
-                        infinite: true
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 1
-                    }
-                }
-            ]
-        });
     });
 
     // product-5
@@ -1120,56 +1078,6 @@
         });
     });
 
-    // new tab
-    var MaxSlidesToShow = 6;
-    if ($(".product-slide-6").get(0) != undefined)        
-            MaxSlidesToShow = $(".product-slide-6").get(0).childElementCount;
-
-    $(".product-slide-6").slick({
-        arrows: true,
-        dots: false,
-        infinite: true,
-        speed: 300,
-        slidesToShow: Math.min(6, MaxSlidesToShow),
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2500,
-        pauseOnHover: true,
-        pauseOnFocus: false,
-        responsive: [
-            {
-                breakpoint: 1700,
-                settings: {
-                    slidesToShow: Math.min(4, MaxSlidesToShow),
-                    slidesToScroll: 1,
-                    infinite: true
-                }
-            },
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: Math.min(4, MaxSlidesToShow),
-                    slidesToScroll: 1,
-                    infinite: true
-                }
-            },
-            {
-                breakpoint: 991,
-                settings: {
-                    slidesToShow: Math.min(3, MaxSlidesToShow),
-                    slidesToScroll: 1,
-                    infinite: true
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: Math.min(2, MaxSlidesToShow),
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    });
     $('.product-4').slick({
         infinite: true,
         speed: 300,
@@ -1457,13 +1365,30 @@
     /*=====================
      17. Tap on Top
      ==========================*/
-    $(window).on('scroll', function () {
-        if ($(this).scrollTop() > 600) {
-            $('.tap-top').fadeIn();
-        } else {
-            $('.tap-top').fadeOut();
+    (function () {
+        var ticking = false;
+        var visible = null;
+
+        function updateTapTop() {
+            ticking = false;
+            var shouldShow = window.pageYOffset > 600;
+            if (visible === shouldShow) {
+                return;
+            }
+
+            visible = shouldShow;
+            $('.tap-top').stop(true, true)[shouldShow ? 'fadeIn' : 'fadeOut'](180);
         }
-    });
+
+        $(window).on('scroll', function () {
+            if (!ticking) {
+                ticking = true;
+                window.requestAnimationFrame(updateTapTop);
+            }
+        });
+
+        updateTapTop();
+    })();
     $('.tap-top').on('click', function () {
         $("html, body").animate({
             scrollTop: 0
@@ -1606,3 +1531,45 @@ function openSetting() {
 function closeSetting() {
     document.getElementById("mySetting").classList.remove('open-side');
 }
+
+(function syncAboutBannerTitle() {
+    var apply = function (content) {
+        var titles = document.querySelectorAll("#Nosotros .about-title");
+        if (!titles.length || !content || !Array.isArray(content.banners)) {
+            return;
+        }
+
+        var selected = content.banners
+            .filter(function (banner) {
+                return banner && banner.active !== false && String(banner.text || "").trim();
+            })
+            .slice()
+            .sort(function (a, b) {
+                return Number(a.order || 0) - Number(b.order || 0);
+            })[0];
+
+        if (!selected) {
+            return;
+        }
+
+        titles.forEach(function (el) {
+            el.textContent = selected.text;
+        });
+    };
+
+    var run = function () {
+        if (window.PFContent && typeof window.PFContent.load === "function") {
+            window.PFContent.load().then(apply).catch(function () {
+                apply(window.PF_BASE_CONTENT || {});
+            });
+            return;
+        }
+        apply(window.PF_BASE_CONTENT || {});
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+    } else {
+        run();
+    }
+})();

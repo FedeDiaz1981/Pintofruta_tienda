@@ -469,6 +469,14 @@ window.PF_BASE_CONTENT = {
       "active": true
     }
   ],
+  "banners": [
+    {
+      "id": 1,
+      "text": "Conectamos marcas, productos y personas.",
+      "order": 1,
+      "active": true
+    }
+  ],
   "products": [
     {
       "id": 1,

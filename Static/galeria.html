@@ -1,40 +1,183 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="caramellatte">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Galería estática de Pintofruta con estética inspirada en el home." />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Galería estática de Pintofruta." />
+    <meta name="author" content="Maer Software">
     <title>Pintofruta | Galería</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="maqueta-pages.css">
-    <script src="data/site-content-data.js" defer></script>
-    <script defer src="auth.js"></script>
-    <script defer src="site-content.js"></script>
-    <script defer src="maqueta-pages.js"></script>
-</head>
-<body data-page="gallery">
-    <main class="page-shell">
-        <header class="topbar">
-            <a class="brand" href="index.html">
-                <span class="brand-mark">PF</span>
-                <span class="brand-copy">
-                    <strong>Pintofruta</strong>
-                    <span>Galería estática</span>
-                </span>
-            </a>
-            <nav class="top-links">
-                <a class="chip-link" href="index.html">Home</a>
-                <a class="chip-link" href="busqueda.html">Búsqueda</a>
-                <a class="chip-link" href="admin-demo.html">Admin demo</a>
-                <a class="chip-link button-primary" href="#pfProductModal" data-open-product-detail="1" data-product-sku="MERA09">Ver detalle</a>
-                <a class="chip-link" href="login.html">Ingresar</a>
-            </nav>
-        </header>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        <section class="section">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/theme/css/themify.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/theme/css/slick.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/theme/css/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/theme/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/theme/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/site.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Maersoftware/EcommmerceMaer@master/Content/loading.css" />
+
+    <link rel="stylesheet" type="text/css" href="Content/Shared/basic.css" media="screen" id="color">
+    <link rel="stylesheet" type="text/css" href="Content/Shared/media.css" media="screen" id="color">
+    <link rel="stylesheet" type="text/css" href="Content/Shared/lightbox.css" media="screen" id="color">
+    <link rel="stylesheet" type="text/css" href="Content/theme/css/modificables.css" media="screen" id="color">
+    <link rel="stylesheet" type="text/css" href="Content/theme/css/app.css" media="screen" id="color">
+    <link rel="stylesheet" type="text/css" href="Content/theme/css/pintofruta-theme.css" media="screen">
+    <link rel="stylesheet" href="maqueta-pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+    <script defer src="data/site-content-data.js"></script>
+    <script defer src="site-content.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="maqueta-pages.js"></script>
+
+    <style>
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-light" data-page="gallery">
+    <header>
+        <div class="mobile-fix-option"></div>
+
+        <div class="top-header">
+            <div class="row">
+                <div class="col-12">
+                    <h6 data-banner-role="top"></h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-header-menu">
+            <div class="layout-header2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="main-menu-block">
+                            <div class="menu-nav">
+                                <span class="toggle-nav">
+                                    <i class="fa fa-bars"></i>
+                                </span>
+                            </div>
+                            <div class="logo-block">
+                                <a href="index.html"><img src="assets/images/logo/logo-Pintofruta.png" class="img-fluid-ovr" alt="logo"></a>
+                            </div>
+                            <div>
+                                <div>
+                                    <span class="search">
+                                        <form action="busqueda.html" class="big-deal-form big-deal-search" method="get" role="search">
+                                            <div class="input-block serch-style-bg">
+                                                <div class="input-box">
+                                                    <div class="input-group">
+                                                        <button type="submit" class="input-group-prepend-ovr search-button-ovr">
+                                                            <span class="search"><i class="fa fa-search"></i></span>
+                                                        </button>
+                                                        <input type="text" class="form-control form-ovr ml-2" placeholder="Buscar" id="valorBusqueda" name="valorBusqueda" value="">
+                                                        <div class="input-group-prepend">
+                                                            <select class="categoriaBusqueda boton-search-categories boton-search-categories-vgo" id="subMenuIdString" name="subMenuIdString">
+                                                                <option value="">Toda la web</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row header-seccion-iconos">
+                                <div class="cart-block cart-hover-div" onclick="openAccount()">
+                                    <div class="cart">
+                                        <ul>
+                                            <li class="mobile-user onhover-dropdown" onclick="openAccount()">
+                                                <a href="#">
+                                                    <i class="fas fa-user user-login fa-2x"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="cart-block cart-hover-div">
+                                    <div class="cart ">
+                                        <ul>
+                                            <li class="mobile-cart hidden-lg-up" onclick="MiniCart.abrir()">
+                                                <a href="#">
+                                                    <span id="carritoCantidad" class="cart-product">0</span>
+                                                    <i class="fas fa-shopping-bag fa-2x"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="cart-block cart-hover-div">
+                                    <div class="cart header-icono-preguntas">
+                                        <ul>
+                                            <li class="mobile-ask onhover-dropdown">
+                                                <a href="#Nosotros">
+                                                    <i class="fa-solid fa-people-carry-box"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="d-none d-md-flex align-items-center ml-3">
+                                    <a href="admin-demo.html" class="btn btn-sm btn-warning">
+                                        Admin demo
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-header-2 nav-nav">
+                <div class="custom-container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="navbar-menu">
+                                <div class="category-left">
+                                    <div class="menu-block">
+                                        <nav id="main-nav">
+                                            <ul id="main-menu" class="sm pixelstrap sm-horizontal">
+                                                <li>
+                                                    <div class="mobile-back text-right">Volver<i class="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
+                                                </li>
+                                                <li class="mobile-admin">
+                                                    <a href="admin-demo.html" class="mobile-admin-link">
+                                                        <i class="fas fa-user-shield"></i>
+                                                        Ir a admin
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-shell">
+    <section class="section">
             <section class="products-panel">
                 <div class="products-head">
                     <div>
@@ -62,6 +205,639 @@
             </section>
         </section>
     </main>
+
+    <style>
+    .product-detail-modal .modal-dialog {
+        max-width: min(1020px, calc(100vw - 24px));
+        width: 100%;
+        margin: 0;
+        display: block;
+        pointer-events: auto;
+    }
+
+    .product-detail-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 5000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background: rgba(31, 42, 68, 0.52);
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+
+    .product-detail-modal.show {
+        display: flex;
+    }
+
+    .product-detail-modal .modal-content {
+        border: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #fffdf8, #f8f1e5);
+        box-shadow: 0 26px 56px rgba(64, 43, 22, .22);
+        width: 100%;
+        max-height: calc(100vh - 24px);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .product-detail-modal .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        border: 0;
+        padding: 22px 22px 8px 22px;
+    }
+
+    .product-detail-modal .modal-kicker {
+        margin: 0 0 4px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--pf-primary-darker);
+    }
+
+    .product-detail-modal .modal-title {
+        margin: 0;
+        font-size: clamp(1.4rem, 2.6vw, 2.25rem);
+        line-height: 1.04;
+        font-weight: 900;
+        color: var(--pf-text);
+    }
+
+    .product-detail-modal .close {
+        position: static;
+        margin-left: auto;
+        margin-top: -2px;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(75, 123, 100, 0.12);
+        color: var(--pf-primary-darker);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        line-height: 1;
+        opacity: 1;
+        text-shadow: none;
+        box-shadow: none;
+    }
+
+    .product-detail-modal .close:hover {
+        background: rgba(75, 123, 100, 0.18);
+        color: var(--pf-primary-darker);
+    }
+
+    .product-detail-modal .modal-body {
+        padding: 0 22px 22px;
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+
+    .product-modal-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+        gap: 18px;
+        align-items: stretch;
+    }
+
+    .product-modal-media,
+    .product-modal-info {
+        border-radius: 22px;
+        background: rgba(255, 255, 255, .82);
+        border: 1px solid rgba(75, 123, 100, 0.10);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .product-modal-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 380px;
+        padding: 20px;
+    }
+
+    .product-modal-media img {
+        width: 100%;
+        max-height: 420px;
+        object-fit: contain;
+    }
+
+    .product-modal-info {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .product-modal-description {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.55;
+        color: rgba(46, 49, 48, 0.82);
+    }
+
+    .product-modal-price {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(248, 236, 210, .92), rgba(255, 246, 227, .92));
+    }
+
+    .product-modal-price span {
+        font-size: 0.92rem;
+        color: rgba(46, 49, 48, 0.74);
+        font-weight: 700;
+    }
+
+    .product-modal-price strong {
+        font-size: clamp(1.35rem, 2vw, 1.9rem);
+        font-weight: 900;
+        color: var(--pf-text);
+    }
+
+    .product-modal-buy {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .product-modal-qty {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .product-modal-qty label {
+        font-size: .9rem;
+        font-weight: 700;
+        color: var(--pf-text);
+    }
+
+    .product-modal-qty input {
+        width: 110px;
+        min-height: 42px;
+        border-radius: 14px;
+        border: 1px solid rgba(75, 123, 100, 0.18);
+        padding: 0 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--pf-text);
+        background: #fff;
+    }
+
+    .product-modal-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: auto;
+    }
+
+    .product-modal-facts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .product-modal-fact {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255,255,255,.72);
+        border: 1px solid rgba(75, 123, 100, 0.10);
+        color: var(--pf-text);
+    }
+
+    .product-modal-fact span {
+        font-weight: 700;
+        color: rgba(46, 49, 48, 0.72);
+    }
+
+    @media (max-width: 767px) {
+        .product-detail-modal {
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            padding: 8px;
+            overflow: hidden;
+        }
+
+        .product-detail-modal .modal-dialog {
+            width: 100%;
+            max-width: calc(100vw - 16px);
+            height: 100%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .product-detail-modal .modal-content {
+            width: 100%;
+            max-width: 100%;
+            max-height: calc(100vh - 16px);
+        }
+
+        .product-detail-modal .modal-header,
+        .product-detail-modal .modal-body {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .product-detail-modal .modal-header {
+            padding-top: 16px;
+        }
+
+        .product-detail-modal .close {
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            margin-top: 0;
+            margin-right: 4px;
+        }
+
+        .product-modal-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .product-modal-media {
+            min-height: 170px;
+            padding: 12px;
+        }
+
+        .product-modal-media img {
+            max-height: 180px;
+        }
+
+        .product-modal-info {
+            gap: 10px;
+            padding: 14px;
+        }
+
+        .product-modal-description {
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .product-modal-price {
+            padding: 12px 14px;
+        }
+
+        .product-modal-price strong {
+            font-size: 1.35rem;
+        }
+
+        .product-modal-buy {
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .product-modal-qty input {
+            width: 100%;
+        }
+    }
+    </style>
+
+    <div class="product-detail-modal" id="productDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <p class="modal-kicker">Ficha / Producto</p>
+                        <h5 class="modal-title" data-product-modal-title>Producto destacado</h5>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" data-product-modal-close aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="product-modal-grid">
+                        <div class="product-modal-media">
+                            <img data-product-modal-image src="assets/images/no-image.svg" alt="Producto">
+                        </div>
+                        <div class="product-modal-info">
+                            <p class="product-modal-description" data-product-modal-description>
+                                Descripción del producto.
+                            </p>
+                            <div class="product-modal-price">
+                                <span>Precio</span>
+                                <strong data-product-modal-price>$0</strong>
+                            </div>
+                            <div class="product-modal-buy">
+                                <div class="product-modal-qty">
+                                    <label for="productDetailQty">Cantidad</label>
+                                    <input id="productDetailQty" type="number" min="1" step="1" value="1" data-product-modal-qty>
+                                </div>
+                                <button type="button" class="btn btn-rounded btn-warning" data-demo-cart-add="1" data-product-modal-add data-cart-id="" data-cart-sku="" data-cart-name="" data-cart-brand="" data-cart-href="" data-cart-qty="1">
+                                    Agregar al carrito
+                                </button>
+                            </div>
+                            <div class="product-modal-facts">
+                                <div class="product-modal-fact">
+                                    <span>Marca</span>
+                                    <strong data-product-modal-brand>-</strong>
+                                </div>
+                                <div class="product-modal-fact">
+                                    <span>Categoría</span>
+                                    <strong data-product-modal-category>-</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-main-contian">
+                        <div class="row fila-container-footer">
+                            <div class="col-lg-3 col-md-12">
+                                <div class="footer-left">
+                                    <div class="footer-logo">
+                                        <img src="assets/images/logo/logo-Pintofruta_bl.png" class="img-fluid" alt="logo">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 col-md-12">
+                                <div class="footer-right">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="account-right">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="footer-box">
+                                                            <div class="footer-title">
+                                                                <h5>Menú</h5>
+                                                            </div>
+                                                            <div class="footer-contant">
+                                                                <ul>
+                                                                    <li><a href="#1-categorias">CATEGORIAS</a></li>
+                                                                    <li><a href="#2-marcas">MARCAS</a></li>
+                                                                    <li><a href="#693-nuevos-ingresos">NUEVOS INGRESOS</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="footer-box">
+                                                            <div class="footer-title">
+                                                                <h5>Ayuda</h5>
+                                                            </div>
+                                                            <div class="footer-contant">
+                                                                <ul>
+                                                                    <li><a href="#Faq">Preguntas Frecuentes</a></li>
+                                                                    <li><a href="#ComoComprar">¿Cómo Comprar?</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="footer-box footer-seccion-contacto">
+                                                            <div class="footer-title">
+                                                                <h5>Contacto</h5>
+                                                            </div>
+                                                            <div class="footer-contant">
+                                                                <ul class="contact-list">
+                                                                    <li><i class="far fa-envelope-open"></i><span><a href="mailto:info@greenco.com.ar"><span class="__cf_email__" data-cfemail="771e19111837100512121914185914181a591605">[email&#160;protected]</span></a></span></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="sub-footer-contain">
+                                <p>Pintofruta <span>2026</span> TODOS LOS DERECHOS RESERVADOS </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="tap-top">
+        <div>
+            <i class="fa fa-angle-double-up"></i>
+        </div>
+    </div>
+
+    <div id="cart_side" class=" add_to_cart right"></div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Scripts/ScriptsMaer.js"></script>
+    <script type="text/javascript" src="Scripts/Shared/MiniCart.js"></script>
+    <script type="text/javascript" src="Scripts/Shared/MenuUsuario.js"></script>
+    <script type="text/javascript" src="Scripts/Shared/GoogleAnalytics.js"></script>
+    <script type="text/javascript" src="Scripts/Shared/GoogleAnalytics4.js"></script>
+    <script type="text/javascript" src="Scripts/Shared/Sucursales.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+    <script src="Scripts/theme/menu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script type="text/javascript" src="Scripts/theme/script.js"></script>
+    <script src="Scripts/theme/modal.js"></script>
     <script type="text/javascript" src="demo-circuit.js"></script>
+
+    <script>
+        (function () {
+            const money = new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                maximumFractionDigits: 0
+            });
+
+            function isAuthenticated() {
+                return window.PFAuth && typeof window.PFAuth.isAuthenticated === 'function' && window.PFAuth.isAuthenticated();
+            }
+
+            function getDisplayPrice(product) {
+                if (window.PFAuth && typeof window.PFAuth.getDisplayPrice === 'function') {
+                    return window.PFAuth.getDisplayPrice(product);
+                }
+                const publicPrice = Number(product && product.publicPrice || 0);
+                const memberPrice = Number(product && product.memberPrice || publicPrice);
+                return isAuthenticated() ? memberPrice : publicPrice;
+            }
+
+            function getProductSkuFromLink(link) {
+                if (!link) return '';
+                const skuAttr = link.getAttribute('data-product-sku') || '';
+                if (skuAttr) return String(skuAttr).trim();
+                try {
+                    const url = new URL(link.getAttribute('href') || '', window.location.href);
+                    return String(url.searchParams.get('sku') || '').trim();
+                } catch (error) {
+                    return '';
+                }
+            }
+
+            function findProductBySku(content, sku) {
+                const targetSku = String(sku || '').trim().toUpperCase();
+                const products = content && Array.isArray(content.products) ? content.products : [];
+                return products.find((product) => {
+                    const productSku = String(product && product.sku || '').trim().toUpperCase();
+                    const productId = String(product && product.id || '').trim().toUpperCase();
+                    return productSku === targetSku || productId === targetSku;
+                }) || null;
+            }
+
+            function openModal() {
+                const modal = document.getElementById('productDetailModal');
+                if (modal) {
+                    modal.classList.add('show');
+                    modal.style.display = 'flex';
+                    document.body.classList.add('modal-open');
+                    document.querySelectorAll('.modal-backdrop').forEach((node) => node.remove());
+                }
+            }
+
+            function closeModal() {
+                const modal = document.getElementById('productDetailModal');
+                if (modal) {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.querySelectorAll('.modal-backdrop').forEach((node) => node.remove());
+                }
+            }
+
+            function fillModal(product, content) {
+                const modal = document.getElementById('productDetailModal');
+                if (!modal || !product) return;
+
+                const category = (content && Array.isArray(content.categories) ? content.categories : []).find((item) => Number(item.id) === Number(product.categoryId));
+                const title = String(product.detail || product.name || 'Producto destacado');
+                const description = String(product.description || product.name || 'Ficha pensada para mostrar la imagen, el precio y la compra rápida del producto.');
+                const image = (!product.image || /metaimage\.jpg|green&co|greenco/i.test(String(product.image))) ? 'assets/images/no-image.svg' : String(product.image);
+            const displayPrice = getDisplayPrice(product);
+            const priceText = money.format(Number(displayPrice || 0));
+            const publicPrice = Number(product.publicPrice || 0);
+            const memberPrice = Number(product.memberPrice || publicPrice);
+            const categoryName = category ? String(category.name || '-') : 'Sin categoría';
+
+                const titleNode = modal.querySelector('[data-product-modal-title]');
+                const imageNode = modal.querySelector('[data-product-modal-image]');
+                const descriptionNode = modal.querySelector('[data-product-modal-description]');
+                const priceNode = modal.querySelector('[data-product-modal-price]');
+                const brandNode = modal.querySelector('[data-product-modal-brand]');
+                const categoryNode = modal.querySelector('[data-product-modal-category]');
+                const qtyNode = modal.querySelector('[data-product-modal-qty]');
+                const addButton = modal.querySelector('[data-product-modal-add]');
+                const detailHref = `detallearticulo.html?sku=${encodeURIComponent(String(product.sku || '').toUpperCase())}`;
+
+                if (titleNode) titleNode.textContent = title;
+                if (imageNode) {
+                    imageNode.src = image;
+                    imageNode.alt = title;
+                }
+                if (descriptionNode) descriptionNode.textContent = description;
+                if (priceNode) priceNode.textContent = priceText;
+                if (brandNode) brandNode.textContent = product.brand || '-';
+                if (categoryNode) categoryNode.textContent = categoryName;
+                if (qtyNode) qtyNode.value = '1';
+                if (addButton) {
+                addButton.setAttribute('data-cart-id', product.id || product.sku || '');
+                addButton.setAttribute('data-cart-sku', product.sku || '');
+                addButton.setAttribute('data-cart-name', title);
+                addButton.setAttribute('data-cart-brand', product.brand || '');
+                addButton.setAttribute('data-cart-href', detailHref);
+                addButton.setAttribute('data-cart-qty', '1');
+                addButton.setAttribute('data-cart-public-price', String(publicPrice));
+                addButton.setAttribute('data-cart-member-price', String(memberPrice));
+                addButton.setAttribute('data-cart-price', String(displayPrice));
+            }
+            }
+
+            async function openFromSku(sku) {
+                if (!window.PFContent || typeof window.PFContent.load !== 'function') {
+                    return;
+                }
+                const content = await window.PFContent.load();
+                const product = findProductBySku(content, sku);
+                if (!product) {
+                    return;
+                }
+                fillModal(product, content);
+                openModal();
+            }
+
+            function openFromLink(link) {
+                const sku = getProductSkuFromLink(link);
+                if (!sku) return;
+                openFromSku(sku);
+            }
+
+            window.PFProductModal = {
+                openFromSku,
+                openFromLink,
+                close: closeModal,
+            };
+
+            document.addEventListener('click', function (event) {
+                const closeButton = event.target.closest('[data-product-modal-close]');
+                if (closeButton) {
+                    event.preventDefault();
+                    closeModal();
+                }
+            }, true);
+
+            const modal = document.getElementById('productDetailModal');
+            if (modal) {
+                modal.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <script>
+        if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+            ActualizarCantidadEnCarrito();
+            MostrarNotificacionFront();
+        }
+    </script>
 </body>
 </html>

@@ -83,6 +83,14 @@ const defaultState = {
             homeSpotlight: false
         }
     ],
+    banners: [
+        {
+            id: 1,
+            text: "Conectamos marcas, productos y personas.",
+            order: 1,
+            active: true,
+        },
+    ],
     products: [],
     brands: [],
     categories: [
@@ -94,7 +102,7 @@ const defaultState = {
         { id: 3, name: "Martin Ruiz", email: "martin@demo.com", role: "customer", canSeePrices: false, active: true },
         { id: 4, name: "Muestra Inactiva", email: "inactive@demo.com", role: "customer", canSeePrices: true, active: false },
     ],
-    nextIds: { product: 1, category: 2, user: 5, heroSlide: 7 },
+    nextIds: { product: 1, category: 2, user: 5, heroSlide: 7, banner: 2 },
 };
 
 let state = loadState();
@@ -128,7 +136,8 @@ function bindElements() {
         "heroTable", "resetHeroForm", "navForm", "navRecordId", "navRecordType", "navParentSectionField", "navParentSection",
         "navRecordLabel", "navRecordHref", "saveNavRecord", "resetNavForm", "navScopesList", "navSectionsList", "downloadTemplate",
         "downloadCatalog", "priceFile", "importPrices", "importState", "downloadJson", "topbarBrands", "brandForm", "brandId", "brandCode", "brandName", "brandImage", "brandImageFile", "brandImageCurrent", "brandFeatured", "resetBrandForm", "brandTable",
-        "brandPanelForm", "brandPanelId", "brandPanelCode", "brandPanelName", "resetBrandPanelForm"
+        "brandPanelForm", "brandPanelId", "brandPanelCode", "brandPanelName", "resetBrandPanelForm",
+        "bannerForm", "bannerId", "bannerText", "bannerOrder", "bannerActive", "resetBannerForm"
     ];
     ids.forEach((id) => {
         els[id] = document.getElementById(id);
@@ -155,6 +164,9 @@ function bindEvents() {
     els.brandForm.addEventListener("submit", saveBrand);
     if (els.brandPanelForm) {
         els.brandPanelForm.addEventListener("submit", saveBrandPanel);
+    }
+    if (els.bannerForm) {
+        els.bannerForm.addEventListener("submit", saveBanner);
     }
     els.categoryForm.addEventListener("submit", saveCategory);
     els.userForm.addEventListener("submit", saveUser);
@@ -185,6 +197,11 @@ function bindEvents() {
     els.resetBrandForm.addEventListener("click", () => {
         resetBrandForm();
     });
+    if (els.resetBannerForm) {
+        els.resetBannerForm.addEventListener("click", () => {
+            resetBannerForm();
+        });
+    }
     if (els.brandImageFile) {
         els.brandImageFile.addEventListener("change", () => {
             const file = els.brandImageFile.files && els.brandImageFile.files[0];
@@ -229,7 +246,9 @@ function bindEvents() {
     els.downloadCatalog.addEventListener("click", downloadCatalog);
     els.importPrices.addEventListener("click", importPriceFile);
     els.downloadJson.addEventListener("click", downloadJson);
-    els.downloadJsonCard.addEventListener("click", downloadJson);
+    if (els.downloadJsonCard) {
+        els.downloadJsonCard.addEventListener("click", downloadJson);
+    }
 
     els.adminLauncher.addEventListener("click", handleLauncherClick);
     els.closeAdminModal.addEventListener("click", closeAdminModal);
@@ -246,6 +265,10 @@ function handlePanelSidebarClick(event) {
     state.panelSearchQuery = "";
     els.panelSearch.value = "";
     persistAndRender();
+    if (panel === "banner") {
+        closeAdminModal();
+        return;
+    }
     if (panel === "bulk") {
         openAdminModal("bulk", "view");
     } else {
@@ -268,6 +291,11 @@ function handlePanelSearch(event) {
 
 function handlePanelCreate() {
     state.activeModalAction = "create";
+    if (state.activeAdminPanel === "banner") {
+        resetBannerForm();
+        openAdminModal("banner", "create");
+        return;
+    }
     if (state.activeAdminPanel === "bulk") {
         openAdminModal("bulk", "view");
         return;
@@ -290,6 +318,10 @@ function openEditor(type, id) {
         editBrand(id);
         return;
     }
+    if (type === "banner") {
+        editBanner(id);
+        return;
+    }
     if (type === "navigation-scope") {
         editNavigationScope(id);
         return;
@@ -302,11 +334,13 @@ function openEditor(type, id) {
     if (type === "category") editCategory(id);
     if (type === "user") editUser(id);
     if (type === "hero") editHeroSlide(id);
+    if (type === "banner") editBanner(id);
     const panelMap = {
         product: "products",
         category: "categories",
         user: "users",
         hero: "hero",
+        banner: "banner",
     };
     const panel = panelMap[type] || type;
     state.activeModalAction = "edit";
@@ -330,6 +364,7 @@ function removeRecord(type, id) {
     if (type === "category") removeCategory(id);
     if (type === "user") removeUser(id);
     if (type === "hero") removeHeroSlide(id);
+    if (type === "banner") removeBanner(id);
     renderAll();
 }
 
@@ -351,7 +386,7 @@ function handlePanelTableClick(event) {
             });
             return;
         }
-        const id = type === "brand" ? String(editButton.dataset.id || "") : Number(editButton.dataset.id);
+        const id = (type === "brand") ? String(editButton.dataset.id || "") : Number(editButton.dataset.id);
         openEditor(type, id);
         return;
     }
@@ -369,7 +404,7 @@ function handlePanelTableClick(event) {
             });
             return;
         }
-        const id = type === "brand" ? String(deleteButton.dataset.id || "") : Number(deleteButton.dataset.id);
+        const id = (type === "brand") ? String(deleteButton.dataset.id || "") : Number(deleteButton.dataset.id);
         removeRecord(type, id);
         return;
     }
@@ -383,6 +418,13 @@ function handleLauncherClick(event) {
     const button = event.target.closest("[data-open-panel]");
     if (!button) return;
     const panel = button.dataset.openPanel;
+    if (panel === "banner") {
+        state.activeAdminPanel = panel;
+        state.activeModalAction = "view";
+        persistAndRender();
+        closeAdminModal();
+        return;
+    }
     openAdminModal(panel, "view");
 }
 
@@ -440,14 +482,17 @@ function loadState() {
         const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
         if (!raw) return structuredClone(defaultState);
         const parsed = JSON.parse(raw);
+        const activeAdminPanel = parsed.activeAdminPanel === "navigation" ? "products" : (parsed.activeAdminPanel || "products");
         return {
             ...structuredClone(defaultState),
             ...parsed,
             nextIds: { ...defaultState.nextIds, ...(parsed.nextIds || {}) },
             panelSearchQuery: parsed.panelSearchQuery || "",
             activeModalAction: parsed.activeModalAction || "view",
+            activeAdminPanel,
             sessionRole: "admin",
             heroSlides: Array.isArray(parsed.heroSlides) && parsed.heroSlides.length ? parsed.heroSlides : structuredClone(defaultState.heroSlides),
+            banners: Array.isArray(parsed.banners) && parsed.banners.length ? parsed.banners : structuredClone(defaultState.banners),
             products: Array.isArray(parsed.products) && parsed.products.length ? parsed.products : structuredClone(defaultState.products),
             brands: Array.isArray(parsed.brands) && parsed.brands.length ? normalizeBrandCollection(parsed.brands) : structuredClone(defaultState.brands),
             categories: Array.isArray(parsed.categories) && parsed.categories.length ? parsed.categories : structuredClone(defaultState.categories),
@@ -473,16 +518,18 @@ async function loadInitialState() {
 }
 
 function mergeState(base, incoming) {
+    const activeAdminPanel = incoming.activeAdminPanel === "navigation" ? "products" : (incoming.activeAdminPanel || base.activeAdminPanel);
     const merged = {
         ...base,
         ...incoming,
         nextIds: { ...base.nextIds, ...(incoming.nextIds || {}) }
     };
     merged.sessionRole = "admin";
-    merged.activeAdminPanel = incoming.activeAdminPanel || base.activeAdminPanel;
+    merged.activeAdminPanel = activeAdminPanel;
     merged.activeModalAction = incoming.activeModalAction || base.activeModalAction;
     merged.panelSearchQuery = incoming.panelSearchQuery || base.panelSearchQuery;
     merged.heroSlides = Array.isArray(incoming.heroSlides) && incoming.heroSlides.length ? incoming.heroSlides : base.heroSlides;
+    merged.banners = Array.isArray(incoming.banners) && incoming.banners.length ? incoming.banners : base.banners;
     merged.products = Array.isArray(incoming.products) && incoming.products.length ? incoming.products : base.products;
     merged.brands = Array.isArray(incoming.brands) && incoming.brands.length ? normalizeBrandCollection(incoming.brands) : base.brands;
     merged.categories = Array.isArray(incoming.categories) && incoming.categories.length ? incoming.categories : base.categories;
@@ -537,6 +584,7 @@ function renderMainPanel() {
     const tableParts = renderPanelTableHTML(state.activeAdminPanel, filtered);
     els.panelTableHead.innerHTML = tableParts.head;
     els.panelTableBody.innerHTML = tableParts.body;
+
     document.querySelectorAll(".sidebar-link[data-panel-nav]").forEach((button) => {
         button.classList.toggle("active", button.dataset.panelNav === state.activeAdminPanel);
     });
@@ -547,12 +595,26 @@ function renderPanelEditor() {
         return;
     }
     els.panelEditorSlot.innerHTML = renderPanelEditorHTML(state.activeAdminPanel);
+    els.bannerForm = document.getElementById("bannerForm");
+    els.bannerId = document.getElementById("bannerId");
+    els.bannerText = document.getElementById("bannerText");
+    els.bannerOrder = document.getElementById("bannerOrder");
+    els.bannerActive = document.getElementById("bannerActive");
+    els.resetBannerForm = document.getElementById("resetBannerForm");
     els.brandPanelForm = document.getElementById("brandPanelForm");
     els.brandPanelId = document.getElementById("brandPanelId");
     els.brandPanelCode = document.getElementById("brandPanelCode");
     els.brandPanelName = document.getElementById("brandPanelName");
     els.resetBrandPanelForm = document.getElementById("resetBrandPanelForm");
 
+    if (els.bannerForm) {
+        els.bannerForm.addEventListener("submit", saveBanner);
+    }
+    if (els.resetBannerForm) {
+        els.resetBannerForm.addEventListener("click", () => {
+            resetBannerForm();
+        });
+    }
     if (els.brandPanelForm) {
         els.brandPanelForm.addEventListener("submit", saveBrandPanel);
     }
@@ -613,6 +675,19 @@ function getPanelMeta(panel) {
                 { label: "Marcas", value: (filtered) => filtered.length },
                 { label: "Con codigo", value: (filtered) => filtered.filter((item) => Boolean(item.code)).length },
                 { label: "Sin codigo", value: (filtered) => filtered.filter((item) => !item.code).length },
+            ],
+        },
+        banner: {
+            title: "Banner verde",
+            subtitle: "Texto institucional editable para el bloque medio del sitio.",
+            kicker: "Contenido / Banner",
+            tableTitle: "Listado de banners",
+            viewLabel: "SQL / Banner",
+            createLabel: "Nuevo banner",
+            kpis: [
+                { label: "Activos", value: (filtered) => filtered.filter((item) => item.active).length },
+                { label: "Orden max", value: (filtered) => (filtered.length ? Math.max(...filtered.map((item) => Number(item.order || 0))) : 0) },
+                { label: "Total", value: (filtered) => filtered.length },
             ],
         },
         categories: {
@@ -690,6 +765,8 @@ function getPanelRecords(panel) {
             return state.products;
         case "brands":
             return getBrandRows();
+        case "banner":
+            return [...(state.banners || [])].sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
         case "categories":
             return state.categories;
         case "users":
@@ -1225,6 +1302,32 @@ function removeNavigationGroup(sectionId, groupId) {
 }
 
 function renderPanelTableHTML(panel, records) {
+    if (panel === "banner") {
+        return {
+            head: `
+                <tr>
+                    <th>Texto</th>
+                    <th>Orden</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            `,
+            body: records.map((banner) => `
+                    <tr>
+                        <td><strong>${escapeHtml(banner.text || "")}</strong></td>
+                        <td>${escapeHtml(String(banner.order || ""))}</td>
+                        <td>${banner.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto")}</td>
+                        <td>
+                            <div class="sql-actions">
+                                <button class="sql-action primary" type="button" data-edit-type="banner" data-id="${banner.id}">Editar</button>
+                                <button class="sql-action danger" type="button" data-delete-type="banner" data-id="${banner.id}">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join(""),
+        };
+    }
+
     if (panel === "products") {
     return {
         head: `
@@ -1709,6 +1812,10 @@ function renderAdminModal() {
             title: state.activeModalAction === "edit" ? "Editar marca" : "Nueva marca",
             kicker: "Catalogo",
         },
+        banner: {
+            title: state.activeModalAction === "edit" ? "Editar banner" : "Nuevo banner",
+            kicker: "Contenido",
+        },
         categories: {
             title: state.activeModalAction === "edit" ? "Editar categoria" : "Nueva categoria",
             kicker: "Catalogo",
@@ -1845,6 +1952,24 @@ function resetBrandPanelForm() {
     clearHiddenFormField("brandPanelId");
 }
 
+function resetBannerForm() {
+    if (els.bannerForm) {
+        els.bannerForm.reset();
+    }
+    clearHiddenFormField("bannerId");
+    if (els.bannerActive) {
+        els.bannerActive.checked = true;
+    }
+    if (els.bannerOrder) {
+        els.bannerOrder.value = String(nextBannerOrder());
+    }
+}
+
+function nextBannerOrder() {
+    const highest = (state.banners || []).reduce((max, banner) => Math.max(max, Number(banner.order || 0)), 0);
+    return highest + 1;
+}
+
 function saveBrandPanel(event) {
     event.preventDefault();
     const id = String(els.brandPanelId?.value || "").trim();
@@ -1864,6 +1989,47 @@ function saveBrandPanel(event) {
     }
 
     resetBrandPanelForm();
+    persistAndRender();
+}
+
+function saveBanner(event) {
+    event.preventDefault();
+    const id = Number(els.bannerId.value || 0);
+    const text = String(els.bannerText.value || "").trim();
+    const order = Number(els.bannerOrder.value || 0);
+    const active = !!els.bannerActive?.checked;
+    if (!text) {
+        return;
+    }
+
+    const payload = { text, order, active };
+    if (id) {
+        state.banners = state.banners.map((banner) => (banner.id === id ? { ...banner, ...payload } : banner));
+    } else {
+        state.banners.unshift({ id: state.nextIds.banner++, ...payload });
+    }
+
+    resetBannerForm();
+    persistAndRender();
+    closeAdminModal();
+}
+
+function editBanner(id) {
+    const banner = (state.banners || []).find((item) => Number(item.id) === Number(id));
+    if (!banner) {
+        return;
+    }
+    if (els.bannerId) els.bannerId.value = String(banner.id);
+    if (els.bannerText) els.bannerText.value = banner.text || "";
+    if (els.bannerOrder) els.bannerOrder.value = String(banner.order || "");
+    if (els.bannerActive) els.bannerActive.checked = banner.active !== false;
+    state.activeModalAction = "edit";
+    openAdminModal("banner", "edit");
+}
+
+function removeBanner(id) {
+    const numericId = Number(id);
+    state.banners = (state.banners || []).filter((banner) => banner.id !== numericId);
     persistAndRender();
 }
 
