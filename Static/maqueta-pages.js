@@ -276,17 +276,19 @@
     }
 
     function productImage(product) {
-        if (product && product.image) {
-            return product.image;
+        const image = String(product && product.image ? product.image : "").trim();
+        const normalized = image.toLowerCase();
+        if (image && !normalized.includes("metaimage.jpg") && !normalized.includes("green&co") && !normalized.includes("greenco")) {
+            return image;
         }
         if (String(product && product.sku || "").toUpperCase() === "MERA09") {
             return "Content/Images/articulos/PF_DETAIL_MERA09.png";
         }
-        return `Content/Images/articulos/${String(product.sku || "").toUpperCase()}_g.jpg`;
+        return "assets/images/no-image.svg";
     }
 
     function fallbackImage() {
-        return "assets/images/metaimage.jpg";
+        return "assets/images/no-image.svg";
     }
 
     function categoryName(content, categoryId) {
@@ -334,6 +336,117 @@
         };
     }
 
+    function normalizeText(value) {
+        return String(value == null ? "" : value)
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    }
+
+    function getUrlValues(paramName) {
+        return String(new URLSearchParams(window.location.search).get(paramName) || "")
+            .split(",")
+            .map((value) => String(value).trim())
+            .filter(Boolean);
+    }
+
+    function buildBrandAliasSet(content, selectedValues) {
+        const brands = Array.isArray(content?.brands) ? content.brands : [];
+        const aliasSet = new Set();
+
+        selectedValues.forEach((value) => {
+            const normalized = normalizeText(value);
+            const brand = brands.find((item) => {
+                const keys = [item?.id, item?.code, item?.name].map(normalizeText).filter(Boolean);
+                return keys.includes(normalized);
+            });
+
+            if (brand) {
+                [brand.id, brand.code, brand.name].map(normalizeText).filter(Boolean).forEach((alias) => aliasSet.add(alias));
+            } else if (normalized) {
+                aliasSet.add(normalized);
+            }
+        });
+
+        return aliasSet;
+    }
+
+    function buildCategoryAliasSet(content, selectedValues) {
+        const categories = Array.isArray(content?.categories) ? content.categories : [];
+        const aliasSet = new Set();
+
+        selectedValues.forEach((value) => {
+            const normalized = normalizeText(value);
+            const category = categories.find((item) => {
+                const keys = [item?.id, item?.name, item?.slug].map(normalizeText).filter(Boolean);
+                return keys.includes(normalized);
+            });
+
+            if (category) {
+                [category.id, category.name, category.slug].map(normalizeText).filter(Boolean).forEach((alias) => aliasSet.add(alias));
+            } else if (normalized) {
+                aliasSet.add(normalized);
+            }
+        });
+
+        return aliasSet;
+    }
+
+    function resolveGalleryContextV2(content = {}) {
+        const slug = slugFromSource(sourcePath());
+        const preset = galleryPresets[slug] || {
+            title: "GalerÃ­a",
+            kicker: "ColecciÃ³n / Destacados",
+            description: "Una vitrina estÃ¡tica para navegar campaÃ±as, categorÃ­as y marcas con la misma paleta del home.",
+            accent: "Explorar",
+            filterFeatured: true,
+        };
+        const categoryValues = getUrlValues("Categoria");
+        const brandValues = getUrlValues("Marca");
+        const categoryAliases = buildCategoryAliasSet(content, categoryValues);
+        const brandAliases = buildBrandAliasSet(content, brandValues);
+        const categories = Array.isArray(content.categories) ? content.categories : [];
+        const brands = Array.isArray(content.brands) ? content.brands : [];
+
+        const selectedCategory = categoryValues.length === 1
+            ? categories.find((item) => categoryAliases.has(normalizeText(item.id)) || categoryAliases.has(normalizeText(item.name)) || categoryAliases.has(normalizeText(item.slug)))
+            : null;
+        const selectedBrand = brandValues.length === 1
+            ? brands.find((item) => brandAliases.has(normalizeText(item.id)) || brandAliases.has(normalizeText(item.code)) || brandAliases.has(normalizeText(item.name)))
+            : null;
+
+        if (selectedCategory) {
+            return {
+                ...preset,
+                title: selectedCategory.name || preset.title,
+                kicker: "Categoría / Header",
+                description: `Todos los productos de ${selectedCategory.name}.`,
+                accent: selectedCategory.name || preset.accent,
+                categoryValues,
+                brandValues,
+            };
+        }
+
+        if (selectedBrand) {
+            return {
+                ...preset,
+                title: selectedBrand.name || preset.title,
+                kicker: "Marca / Header",
+                description: `Todos los productos de ${selectedBrand.name}.`,
+                accent: selectedBrand.name || preset.accent,
+                categoryValues,
+                brandValues,
+            };
+        }
+
+        return {
+            ...preset,
+            categoryValues,
+            brandValues,
+        };
+    }
+
     async function loadContent() {
         if (window.PFContent && typeof window.PFContent.load === "function") {
             return window.PFContent.load();
@@ -378,14 +491,23 @@
     }
 
     function renderGallery(content) {
-        const ctx = resolveGalleryContext();
+        const ctx = resolveGalleryContextV2(content);
         const products = (content.products || []).filter((item) => item.status !== "hidden");
         const categoryFilter = Array.isArray(ctx.filterCategoryIds) ? ctx.filterCategoryIds.map((id) => Number(id)) : [];
+        const selectedCategoryAliases = buildCategoryAliasSet(content, ctx.categoryValues || []);
+        const selectedBrandAliases = buildBrandAliasSet(content, ctx.brandValues || []);
         const filteredProducts = products.filter((item) => {
             const matchesCategory = !categoryFilter.length || categoryFilter.includes(Number(item.categoryId));
             const matchesBrand = matchesBrandPrefix(item, ctx.filterBrandPrefixes);
             const matchesFeatured = !ctx.filterFeatured || item.featured;
-            return matchesCategory && matchesBrand && matchesFeatured;
+            const category = (content.categories || []).find((entry) => Number(entry.id) === Number(item.categoryId));
+            const matchesSelectedCategory = !selectedCategoryAliases.size
+                || selectedCategoryAliases.has(normalizeText(item.categoryId))
+                || selectedCategoryAliases.has(normalizeText(category?.name))
+                || selectedCategoryAliases.has(normalizeText(category?.slug));
+            const matchesSelectedBrand = !selectedBrandAliases.size
+                || selectedBrandAliases.has(normalizeText(item.brand || ""));
+            return matchesCategory && matchesBrand && matchesFeatured && matchesSelectedCategory && matchesSelectedBrand;
         });
         const sortKey = getGallerySortKey();
         const featured = sortGalleryProducts(filteredProducts, sortKey);
@@ -442,9 +564,11 @@
 
             productsEl.innerHTML = featured.map((product) => {
                 const image = productImage(product);
+                const publicPrice = Number(product.publicPrice || 0);
+                const memberPrice = Number(product.memberPrice || publicPrice);
                 const displayPrice = window.PFAuth && typeof window.PFAuth.getDisplayPrice === "function"
                     ? window.PFAuth.getDisplayPrice(product)
-                    : Number(product.publicPrice || 0);
+                    : publicPrice;
                 const priceLabel = "Precio";
                 return `
                     <article class="product-card">
@@ -464,15 +588,19 @@
                                 </div>
                             </div>
                             <div class="product-actions">
-                                <a class="button button-primary button-small" href="#pfProductModal" data-open-product-detail="1" data-product-sku="${escapeHtml(product.sku || "")}">Ver detalle</a>
-                                <button class="button button-secondary button-small" type="button"
+                                <a class="button button-primary button-small" href="detallearticulo.html?sku=${encodeURIComponent(product.sku || "")}" data-product-sku="${escapeHtml(product.sku || "")}">Ver detalle</a>
+                                <button class="button button-secondary button-small button-cart" type="button"
                                     data-demo-cart-add="1"
                                     data-cart-id="${escapeHtml(product.id || product.sku || "")}"
                                     data-cart-sku="${escapeHtml(product.sku || "")}"
                                     data-cart-name="${escapeHtml(product.name || "")}"
                                     data-cart-brand="${escapeHtml(product.brand || "")}"
                                     data-cart-href="detallearticulo.html?sku=${encodeURIComponent(product.sku || "")}"
-                                    data-cart-qty="1" aria-label="Agregar al pedido" title="Agregar al pedido"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                    data-cart-qty="1"
+                                    data-cart-public-price="${escapeHtml(publicPrice)}"
+                                    data-cart-member-price="${escapeHtml(memberPrice)}"
+                                    data-cart-price="${escapeHtml(displayPrice)}"
+                                    aria-label="Agregar al pedido" title="Agregar al pedido"><i class="fa fa-cart-plus" aria-hidden="true"></i><span>Agregar</span></button>
                                 <a class="button button-secondary button-small" href="busqueda.html">Seguir viendo</a>
                             </div>
                         </div>
@@ -486,9 +614,11 @@
         const product = resolveProduct(content);
         const category = categoryName(content, product.categoryId);
         const image = productImage(product);
+        const publicPrice = Number(product.publicPrice || 0);
+        const memberPrice = Number(product.memberPrice || publicPrice);
         const displayPrice = window.PFAuth && typeof window.PFAuth.getDisplayPrice === "function"
             ? window.PFAuth.getDisplayPrice(product)
-            : Number(product.publicPrice || 0);
+            : publicPrice;
         const priceLabel = "Precio";
         const detailEl = document.getElementById("detailRoot");
         const titleEl = document.getElementById("detailTitle");
@@ -539,6 +669,9 @@
                 addButton.setAttribute("data-cart-name", product.name || "");
                 addButton.setAttribute("data-cart-brand", product.brand || "");
                 addButton.setAttribute("data-cart-href", `detallearticulo.html?sku=${encodeURIComponent(product.sku || "")}`);
+                addButton.setAttribute("data-cart-public-price", String(publicPrice));
+                addButton.setAttribute("data-cart-member-price", String(memberPrice));
+                addButton.setAttribute("data-cart-price", String(displayPrice));
             }
         }
 

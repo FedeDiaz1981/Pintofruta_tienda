@@ -2520,13 +2520,55 @@ a {
     align-items: center
 }
 
-    .top-header .top-header-left .app-link h6 {
+.top-header .top-header-left .app-link h6 {
         font-size: 13px;
         color: #fff;
         text-transform: capitalize;
         font-family: 'Raleway', sans-serif;
         ;
     }
+
+.top-header [data-banner-role="top"] {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 8px 16px;
+    text-align: center;
+    color: #f6fbf3;
+    font-family: Spartan;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.4), 0 0 12px rgba(145, 255, 190, 0.35), 0 0 22px rgba(69, 117, 90, 0.45);
+    filter: saturate(1.08);
+    transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease, text-shadow 0.35s ease;
+    animation: pfTopBannerGlow 2.8s ease-in-out infinite;
+}
+
+.top-header [data-banner-role="top"].pf-top-banner-switching {
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.55), 0 0 18px rgba(171, 255, 205, 0.45), 0 0 30px rgba(57, 94, 71, 0.55);
+}
+
+@keyframes pfTopBannerGlow {
+    0% {
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.35), 0 0 10px rgba(171, 255, 205, 0.28), 0 0 18px rgba(57, 94, 71, 0.36);
+        filter: saturate(1) brightness(1);
+    }
+
+    50% {
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.55), 0 0 16px rgba(171, 255, 205, 0.48), 0 0 32px rgba(57, 94, 71, 0.6);
+        filter: saturate(1.12) brightness(1.04);
+    }
+
+    100% {
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.35), 0 0 10px rgba(171, 255, 205, 0.28), 0 0 18px rgba(57, 94, 71, 0.36);
+        filter: saturate(1) brightness(1);
+    }
+}
 
     .top-header .top-header-left .app-link ul li {
         margin-left: 10px

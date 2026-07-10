@@ -550,6 +550,20 @@ img {
     flex-wrap: wrap;
 }
 
+.button-cart {
+    background: rgba(111, 140, 255, 0.12);
+    color: var(--ink);
+    min-width: 120px;
+}
+
+.button-cart i {
+    font-size: 0.9rem;
+}
+
+.button-cart span {
+    line-height: 1;
+}
+
 .button-small {
     min-height: 38px;
     padding: 0 14px;

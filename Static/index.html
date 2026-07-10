@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="caramellatte">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta charset="UTF-8" />
@@ -43,6 +43,133 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" type="text/css" href="Content/theme/css/app.css" media="screen" id="color">
 <link rel="stylesheet" type="text/css" href="Content/theme/css/pintofruta-theme.css" media="screen">
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<script>
+    (function () {
+        function hexToRgb(hex) {
+            var normalized = String(hex || '').replace('#', '').trim();
+            if (normalized.length === 3) {
+                normalized = normalized.split('').map(function (char) {
+                    return char + char;
+                }).join('');
+            }
+
+            if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+                return null;
+            }
+
+            return {
+                r: parseInt(normalized.slice(0, 2), 16),
+                g: parseInt(normalized.slice(2, 4), 16),
+                b: parseInt(normalized.slice(4, 6), 16)
+            };
+        }
+
+        function rgbToHex(rgb) {
+            var toHex = function (value) {
+                return Math.max(0, Math.min(255, Math.round(value))).toString(16).padStart(2, '0');
+            };
+
+            return '#' + toHex(rgb.r) + toHex(rgb.g) + toHex(rgb.b);
+        }
+
+        function mixHex(from, to, amount) {
+            var start = hexToRgb(from);
+            var end = hexToRgb(to);
+            if (!start || !end) {
+                return to;
+            }
+
+            var ratio = Math.max(0, Math.min(1, Number(amount)));
+            return rgbToHex({
+                r: start.r + (end.r - start.r) * ratio,
+                g: start.g + (end.g - start.g) * ratio,
+                b: start.b + (end.b - start.b) * ratio
+            });
+        }
+
+        function applyTheme() {
+            var root = document.documentElement;
+            var primary = '#4B7B64';
+            var secondary = '#D7A56D';
+            var surface = '#E9DCC9';
+            var cream = '#FCFAF6';
+            var sage = '#7EA58A';
+            var neutral = '#2E3130';
+
+            var primaryDark = mixHex(primary, neutral, 0.30);
+            var primaryDarker = mixHex(primary, neutral, 0.50);
+            var secondaryLight = mixHex(secondary, cream, 0.38);
+            var sandLight = mixHex(surface, cream, 0.42);
+            var sageLight = mixHex(sage, cream, 0.50);
+            var olive = mixHex(sage, neutral, 0.24);
+            var moss = mixHex(sage, neutral, 0.42);
+            var bg = mixHex(surface, cream, 0.18);
+            var surfaceAlt = mixHex(surface, cream, 0.28);
+            var border = 'rgba(75, 123, 100, 0.16)';
+            var borderStrong = 'rgba(75, 123, 100, 0.30)';
+            var text = neutral;
+            var muted = mixHex(neutral, surface, 0.40);
+            var shadow = '0 18px 40px rgba(53, 72, 61, 0.14)';
+            var shadowSoft = '0 10px 24px rgba(53, 72, 61, 0.10)';
+
+            root.dataset.theme = 'caramellatte';
+            root.style.setProperty('--pf-primary', primary);
+            root.style.setProperty('--pf-primary-dark', primaryDark);
+            root.style.setProperty('--pf-primary-darker', primaryDarker);
+            root.style.setProperty('--pf-secondary', secondary);
+            root.style.setProperty('--pf-secondary-light', secondaryLight);
+            root.style.setProperty('--pf-sand', surface);
+            root.style.setProperty('--pf-sand-light', sandLight);
+            root.style.setProperty('--pf-cream', cream);
+            root.style.setProperty('--pf-cream-soft', mixHex(cream, surface, 0.22));
+            root.style.setProperty('--pf-sage', sage);
+            root.style.setProperty('--pf-sage-light', sageLight);
+            root.style.setProperty('--pf-olive', olive);
+            root.style.setProperty('--pf-moss', moss);
+            root.style.setProperty('--pf-bg', bg);
+            root.style.setProperty('--pf-surface', cream);
+            root.style.setProperty('--pf-surface-alt', surfaceAlt);
+            root.style.setProperty('--pf-border', border);
+            root.style.setProperty('--pf-border-strong', borderStrong);
+            root.style.setProperty('--pf-text', text);
+            root.style.setProperty('--pf-muted', muted);
+            root.style.setProperty('--pf-shadow', shadow);
+            root.style.setProperty('--pf-shadow-soft', shadowSoft);
+
+            root.style.setProperty('--color-primary', primary);
+            root.style.setProperty('--color-primary-content', '#f7fbf7');
+            root.style.setProperty('--color-secondary', secondary);
+            root.style.setProperty('--color-secondary-content', neutral);
+            root.style.setProperty('--color-accent', sage);
+            root.style.setProperty('--color-accent-content', '#f8fbf5');
+            root.style.setProperty('--color-neutral', neutral);
+            root.style.setProperty('--color-neutral-content', cream);
+            root.style.setProperty('--color-base-100', cream);
+            root.style.setProperty('--color-base-200', sandLight);
+            root.style.setProperty('--color-base-300', secondaryLight);
+            root.style.setProperty('--color-base-content', text);
+            root.style.setProperty('--color-info', '#5F86AD');
+            root.style.setProperty('--color-info-content', '#f7fbff');
+            root.style.setProperty('--color-success', '#5f9b62');
+            root.style.setProperty('--color-success-content', '#f5fbf5');
+            root.style.setProperty('--color-warning', '#d08d38');
+            root.style.setProperty('--color-warning-content', '#fff8eb');
+            root.style.setProperty('--color-error', '#b85b52');
+            root.style.setProperty('--color-error-content', '#fff4f2');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', applyTheme, { once: true });
+        } else {
+            applyTheme();
+        }
+    })();
+</script>
 
 
 
@@ -145,7 +272,7 @@
     <div class="top-header">
     <div class="row">
         <div class="col-12">
-            <h6>Más de 300 marcas!!!</h6>
+            <h6 data-banner-role="top"></h6>
         </div>
     </div>
 </div>
@@ -251,7 +378,7 @@
     <div class="cart ">
         <ul>
             <li class="mobile-cart hidden-lg-up" onclick="MiniCart.abrir()">
-                <a href="#">
+                <a href="javascript:void(0)" onclick="MiniCart.abrir(); return false;">
                     <span id="carritoCantidad" class="cart-product">0</span>
                     <i class="fas fa-shopping-bag fa-2x"></i>
                 </a>
@@ -1810,9 +1937,55 @@
                 <i class="fas fa-user user-login fa-2x"></i>
             </a>
         </li>
+        <li class="mobile-search">
+            <a href="#"><i class="fas fa-search"></i></a>
+            <div class="search-overlay">
+                <div>
+                    <span class="close-mobile-search">×</span>
+                    <div class="overlay-content">
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <form action="busqueda.html" class="big-deal-form big-deal-search" method="get" role="search">        <div class="form-group"><input type="text" class="form-control" id="valorBusqueda" name="valorBusqueda" placeholder="Buscar" value=""></div>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+</form>
+
+
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
         <li class="onhover-dropdown">
-            <a href="#Faq">
-                <i class="fas fa-question-circle"></i>
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+            </a>
+        </li>
+        <li class="mobile-cart hidden-lg-up" onclick="MiniCart.abrir()">
+            <a href="javascript:void(0)" onclick="MiniCart.abrir(); return false;">
+                <span id="carritoCantidad" class="cart-product">0</span>
+                <i class="fas fa-shopping-bag fa-2x"></i>
+            </a>
+        </li>
+        <li class="toggle-nav">
+            <i class="fa fa-bars "></i>
+        </li>
+    </ul>
+
+
+    <ul class="d-none">
+        <li class="mobile-user onhover-dropdown" onclick="openAccount()">
+            <a href="#">
+                <i class="fas fa-user user-login fa-2x"></i>
             </a>
         </li>
         <li class="onhover-dropdown">
@@ -1847,46 +2020,6 @@
                     </div>
                 </div>
             </div>
-        </li>
-        <li class="toggle-nav">
-            <i class="fa fa-bars "></i>
-        </li>
-    </ul>
-
-
-    <ul class="d-none">
-        <li class="mobile-search">
-            <a href="#"><i class="fas fa-search"></i></a>
-            <div class="search-overlay">
-                <div>
-                    <span class="close-mobile-search">×</span>
-                    <div class="overlay-content">
-
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <form action="busqueda.html" class="big-deal-form big-deal-search" method="get" role="search">        <div class="form-group"><input type="text" class="form-control" id="valorBusqueda" name="valorBusqueda" placeholder="Buscar" value=""></div>
-        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-</form>
-
-
-
-
-
-
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li class="mobile-user onhover-dropdown" onclick="openAccount()">
-            <a href="#">
-                <i class="fas fa-user user-login fa-2x"></i>
-            </a>
         </li>
         <li class="mobile-ask onhover-dropdown">
             <a href="#Nosotros">
@@ -1973,7 +2106,7 @@
 
 
 
-<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" data-content-source="shared-json">
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade hero-carousel-shell" data-ride="carousel" data-content-source="shared-json">
     <ol class="carousel-indicators">
             <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
             <li data-target="#carouselExampleCaptions" data-slide-to="1" class=""></li>
@@ -2049,70 +2182,213 @@
 </div>
     
 
-    <div class="title1 section-my-space">
-        <h4>Productos Destacados</h4>
-    </div>
-    <div class="custom-container container-destacados">
-        <div class="row">
-            <div class="col pr-1">
-                <div class="theme-tab product mb--5 tab-abjust">
-                    <div>
-                        <div>
+    <style>
+        .home-block {
+            position: relative;
+            margin: 0;
+            padding: 34px 0 38px;
+            overflow: hidden;
+        }
+        .home-block > * {
+            position: relative;
+            z-index: 1;
+        }
+        #productosDestacadosSection {
+            background: linear-gradient(180deg, var(--pf-cream) 0%, #f4ebdd 100%);
+            border-top: 1px solid rgba(75, 123, 100, .10);
+            border-bottom: 1px solid rgba(75, 123, 100, .10);
+        }
+        #tendenciasSection {
+            background: linear-gradient(180deg, #d7e5db 0%, #c9dccf 100%);
+            border-top: 1px solid rgba(75, 123, 100, .10);
+            border-bottom: 1px solid rgba(75, 123, 100, .10);
+        }
+        #marcasDestacadasSection {
+            background: linear-gradient(180deg, #e8f0e9 0%, var(--pf-cream-soft) 100%);
+            border-top: 1px solid rgba(75, 123, 100, .10);
+            border-bottom: 1px solid rgba(75, 123, 100, .10);
+        }
+        #Nosotros.about-section {
+            background: linear-gradient(180deg, #f3eadb 0%, #ece1cf 100%);
+            border-top: 1px solid rgba(75, 123, 100, .08);
+            border-bottom: 1px solid rgba(75, 123, 100, .08);
+            padding-top: 42px;
+            padding-bottom: 42px;
+        }
+        #productosDestacadosSection .title1,
+        #tendenciasSection .title1,
+        #marcasDestacadasSection .title1,
+        #Nosotros .about-panel {
+            background: rgba(255, 255, 255, .30);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .35);
+            box-shadow: 0 10px 24px rgba(31, 42, 68, .05);
+            border-radius: 22px;
+        }
+        #productosDestacadosSection .title1,
+        #tendenciasSection .title1,
+        #marcasDestacadasSection .title1 {
+            padding: 14px 18px;
+        }
+        #tendenciasSection .tab-product-main {
+            width: min(1600px, calc(100% - 32px));
+            margin: 0 auto 18px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, .30);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, .35);
+            box-shadow: 0 10px 24px rgba(31, 42, 68, .05);
+            border-radius: 22px;
+        }
+        #tendenciasSection .tab-prodcut-contain {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        #tendenciasSection .title1 {
+            padding: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+        #tendenciasSection .tabs.tab-title {
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        #tendenciasSection .tabs.tab-title li {
+            margin: 0;
+            padding: 0;
+        }
+        #tendenciasSection .tabs.tab-title li a.btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(75, 123, 100, 0.22);
+            background: rgba(255, 255, 255, .78);
+            color: var(--pf-primary-darker);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: .02em;
+            box-sizing: border-box;
+            box-shadow: none;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+        }
+        #tendenciasSection .tabs.tab-title li a.btn:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: rgba(75, 123, 100, 0.32);
+        }
+        #tendenciasSection .tabs.tab-title li.current a.btn {
+            background: var(--pf-primary-darker);
+            color: #fff;
+            border-color: rgba(61, 94, 76, 0.92);
+            box-shadow: none;
+            transform: none;
+        }
+        #tendenciasSection .tab-product-main,
+        #marcasDestacadasSection .custom-container,
+        #productosDestacadosSection .custom-container {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+        #tendenciasSection .container-fluid.container-destacados,
+        #productosDestacadosSection .container-fluid.container-destacados,
+        #productosDestacadosSection .custom-container.container-destacados,
+        #marcasDestacadasSection .custom-container {
+            width: min(1600px, calc(100% - 32px));
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #productosDestacadosSection .container-fluid.container-destacados {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        @media (max-width: 575px) {
+            .home-block {
+                padding: 22px 0 24px;
+            }
+            #Nosotros.about-section {
+                padding-top: 28px;
+                padding-bottom: 28px;
+            }
+            #tendenciasSection .tab-product-main {
+                width: calc(100% - 24px);
+                padding: 12px 14px;
+            }
+            #tendenciasSection .tabs.tab-title {
+                justify-content: flex-start;
+            }
+            #tendenciasSection .tabs.tab-title li a.btn {
+                min-height: 34px;
+                padding: 0.42rem 0.9rem;
+                font-size: 0.78rem;
+            }
+        }
+    </style>
 
-                            <div class="product-slide-6 product-m slick-arrow">
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-                                    <div class="product addtocart_count articulos_destacados">
-                                        <div class="flex-1">
-</div>
-                                    </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+    <section class="home-block home-block--products" id="productosDestacadosSection">
+    <div class="tab-product-main featured-products-main">
+        <div class="tab-prodcut-contain">
+            <div class="title1">
+                <h4>Productos Destacados</h4>
             </div>
+        </div>
+    </div>
+    <div class="container-fluid container-destacados">
+        <div class="featured-swiper-shell">
+            <div class="swiper-button-prev featured-swiper-prev"></div>
+            <div class="swiper featured-swiper" id="featuredProductsSwiper">
+                <div id="featuredProductsGrid" class="swiper-wrapper featured-products-grid"></div>
+                <div class="swiper-pagination featured-swiper-pagination"></div>
+            </div>
+            <div class="swiper-button-next featured-swiper-next"></div>
         </div>
     </div>
     <script type="text/javascript">
 
         $(document).ready(function () {
-
+            if (window.Swiper) {
+                if (window.featuredProductsSwiper && typeof window.featuredProductsSwiper.destroy === 'function') {
+                    window.featuredProductsSwiper.destroy(true, true);
+                }
+                window.featuredProductsSwiper = new Swiper('#featuredProductsSwiper', {
+                    slidesPerView: 'auto',
+                    spaceBetween: 16,
+                    centeredSlides: false,
+                    centeredSlidesBounds: false,
+                    centerInsufficientSlides: false,
+                    grabCursor: true,
+                    watchOverflow: true,
+                    slidesOffsetBefore: 0,
+                    slidesOffsetAfter: 0,
+                    observer: true,
+                    observeParents: true,
+                    breakpoints: {
+                        768: {
+                            centeredSlides: false,
+                            centerInsufficientSlides: false,
+                            centeredSlidesBounds: false,
+                            spaceBetween: 16
+                        }
+                    },
+                    pagination: {
+                        el: '.featured-swiper-pagination',
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: '.featured-swiper-next',
+                        prevEl: '.featured-swiper-prev'
+                    }
+                });
+            }
             var items = [];
             $('.articulos_destacados').not('.slick-cloned').each(function (i, obj) {
                 items.push(GoogleAnalytics4.getItem($(obj).find('section')));
@@ -2123,6 +2399,7 @@
         });
 
     </script>
+    </section>
 
     <section class="deal-banner2" id="homeSpotlightBanner"></section>
 
@@ -2136,101 +2413,214 @@
 
 
 <!--tab product-->
-<section class="section-pt-space" id="tendenciasSection">
+<section class="section-pt-space home-block home-block--trends" id="tendenciasSection">
     <div class="tab-product-main">
         <div class="tab-prodcut-contain">
             <div class="title1">
                 <h4>Tendencias</h4>
             </div>
             <ul class="tabs tab-title" id="trendFilters">
-                <li class="current"><a href="#" data-trend-filter="all">Todos</a></li>
-                <li><a href="#" data-trend-filter="vegano">Vegano</a></li>
-                <li><a href="#" data-trend-filter="kosher">Kosher</a></li>
+                <li class="current"><a href="#" data-trend-filter="all" class="btn btn-sm btn-outline">Todos</a></li>
+                <li><a href="#" data-trend-filter="vegano" class="btn btn-sm btn-outline">Vegano</a></li>
+                <li><a href="#" data-trend-filter="kosher" class="btn btn-sm btn-outline">Kosher</a></li>
 
             </ul>
         </div>
     </div>
     <div class="container-fluid container-destacados">
-        <div id="trendProductsGrid" class="trend-products-grid"></div>
+        <div class="swiper trend-swiper" id="trendProductsSwiper">
+            <div id="trendProductsGrid" class="swiper-wrapper trend-products-grid"></div>
+            <div class="swiper-pagination trend-swiper-pagination"></div>
+            <div class="swiper-button-prev trend-swiper-prev"></div>
+            <div class="swiper-button-next trend-swiper-next"></div>
+        </div>
         <div id="trendProductsEmpty" class="trend-empty" style="display:none;"></div>
     </div>
     <style>
         .trend-products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 170px));
-            gap: 12px;
+            gap: 0;
             align-items: stretch;
-            justify-content: start;
+            justify-content: flex-start;
+            width: 100%;
+            margin: 0;
+        }
+        .trend-swiper {
+            width: 100%;
+            padding: 8px 56px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        .trend-swiper .swiper-slide {
+            width: 314px !important;
+            height: auto;
+            display: flex;
+            justify-content: center;
         }
         .trend-card {
-            border-radius: 14px;
+            width: 100%;
+            max-width: 314px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 22px;
             overflow: hidden;
-            background: #fff;
+            background: linear-gradient(180deg, #fff, #f8f4ec);
             box-shadow: 0 8px 18px rgba(31,42,68,.08);
             border: 1px solid rgba(31,42,68,.08);
         }
+        .trend-card section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .trend-card a {
+            display: block;
+            background: linear-gradient(180deg, rgba(75,123,100,.06), rgba(255,255,255,.96));
+        }
         .trend-card img {
             width: 100%;
-            height: 120px;
+            height: 178px;
             object-fit: contain;
             display: block;
             background: #fff;
-            padding: 8px;
+            padding: 14px 16px 8px;
         }
         .trend-card__body {
-            padding: 10px 11px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 12px 16px 16px;
+            flex: 1 1 auto;
         }
         .trend-card__brand {
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: .10em;
             text-transform: uppercase;
-            color: #7a6a56;
-            margin-bottom: 4px;
+            color: rgba(46, 49, 48, 0.58);
+            margin-bottom: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .trend-card__name {
-            margin: 0 0 4px;
-            font-size: 13px;
-            line-height: 1.2;
-            color: #1f2a44;
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.16;
+            color: var(--pf-text);
+            font-weight: 800;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 31px;
+            min-height: 36px;
         }
         .trend-card__meta {
             font-size: 11px;
-            color: #6d7380;
-            margin-bottom: 8px;
+            color: rgba(46, 49, 48, 0.58);
+            margin-bottom: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .trend-card__prices {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: baseline;
             gap: 8px;
+            margin-top: auto;
         }
         .trend-card__prices strong {
-            font-size: 13px;
-            color: #1f2a44;
-        }
-        .trend-card__prices span {
-            font-size: 10px;
-            color: #7c8596;
+            font-size: 15px;
+            color: var(--pf-text);
         }
         .trend-empty {
             padding: 18px;
             text-align: center;
             color: #6d7380;
         }
+        .trend-swiper .swiper-button-prev,
+        .trend-swiper .swiper-button-next {
+            color: var(--pf-primary-darker);
+            top: 44%;
+        }
+        .trend-swiper .swiper-button-prev:after,
+        .trend-swiper .swiper-button-next:after {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .trend-swiper .swiper-pagination-bullet {
+            background: var(--pf-primary);
+            opacity: .28;
+        }
+        .trend-swiper .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: var(--pf-primary-darker);
+        }
+        @media (max-width: 575px) {
+            #tendenciasSection #trendFilters.tabs {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                justify-content: flex-start !important;
+                align-items: center !important;
+                gap: 8px !important;
+                overflow-x: auto !important;
+                overflow-y: visible !important;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px 0 8px 0 !important;
+                margin: 0 !important;
+                list-style: none !important;
+            }
+            #tendenciasSection #trendFilters.tabs li {
+                display: inline-flex !important;
+                flex: 0 0 auto !important;
+                width: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #tendenciasSection #trendFilters.tabs a {
+                white-space: nowrap !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-height: 38px !important;
+                padding: 0.5rem 1rem !important;
+                line-height: 1 !important;
+                box-sizing: border-box !important;
+                box-shadow: none !important;
+            }
+            .trend-products-grid {
+                gap: 0;
+            }
+            .trend-swiper {
+                padding-left: 42px;
+                padding-right: 42px;
+                padding-bottom: 30px;
+            }
+            .trend-card {
+                max-width: min(72vw, 180px);
+            }
+            .trend-swiper .swiper-slide {
+                width: min(72vw, 180px) !important;
+            }
+            .trend-card img {
+                height: 96px;
+            }
+            .trend-card__name {
+                font-size: 12px;
+                min-height: 40px;
+                -webkit-line-clamp: 2;
+            }
+            .trend-swiper .swiper-button-prev,
+            .trend-swiper .swiper-button-next {
+                display: flex;
+                width: 34px;
+                height: 34px;
+            }
+        }
     </style>
     <script type="text/javascript">
         (function () {
+            var trendSwiper = null;
             function money(value) {
                 return new Intl.NumberFormat('es-AR', {
                     style: 'currency',
@@ -2260,6 +2650,10 @@
                     grid.innerHTML = '';
                     empty.style.display = 'block';
                     empty.innerHTML = '<strong>No hay productos para este filtro</strong>';
+                    if (trendSwiper) {
+                        trendSwiper.destroy(true, true);
+                        trendSwiper = null;
+                    }
                     return;
                 }
 
@@ -2268,24 +2662,63 @@
                     var category = (content.categories || []).find(function (item) {
                         return Number(item.id) === Number(product.categoryId);
                     });
-                    var image = product.image || 'assets/images/metaimage.jpg';
+                    var image = (!product.image || /metaimage\.jpg|green&co|greenco/i.test(String(product.image))) ? 'assets/images/no-image.svg' : product.image;
                     var detailLink = 'detallearticulo.html?sku=' + encodeURIComponent(String(product.sku || '').toUpperCase());
+                    var isAuthenticated = window.PFAuth && typeof window.PFAuth.isAuthenticated === 'function' && window.PFAuth.isAuthenticated();
+                    var displayPrice = isAuthenticated ? product.memberPrice : product.publicPrice;
                     return [
-                        '<article class="trend-card">',
+                        '<div class="swiper-slide">',
+                        '<article class="trend-card card bg-base-100 shadow-lg border border-base-200">',
                         '  <section data-ga-id="' + String(product.sku || product.id || '') + '" data-ga-name="' + String(product.detail || product.name || '') + '" data-ga-brand="' + String(product.brand || '') + '">',
                         '    <a href="' + detailLink + '" data-open-product-detail="1" data-product-sku="' + String(product.sku || '').toUpperCase() + '">',
                         '      <img src="' + image + '" alt="' + String(product.detail || product.name || product.sku || 'Producto') + '">',
                         '    </a>',
-                        '    <div class="trend-card__body">',
+                        '    <div class="trend-card__body card-body p-3">',
                         '      <div class="trend-card__brand">' + String(product.brand || '') + '</div>',
                         '      <h3 class="trend-card__name">' + String(product.detail || product.name || '') + '</h3>',
                         '      <div class="trend-card__meta">' + String(category ? category.name : 'Sin categoria') + '</div>',
-                        '      <div class="trend-card__prices"><strong>' + money(product.publicPrice) + '</strong><span>' + money(product.memberPrice) + '</span></div>',
+                        '      <div class="trend-card__prices"><strong>' + money(displayPrice) + '</strong></div>',
                         '    </div>',
                         '  </section>',
-                        '</article>'
+                        '</article>',
+                        '</div>'
                     ].join('');
                 }).join('');
+                if (window.Swiper) {
+                    if (!trendSwiper) {
+                        trendSwiper = new Swiper('#trendProductsSwiper', {
+                            slidesPerView: 'auto',
+                            spaceBetween: 16,
+                            centeredSlides: true,
+                            centeredSlidesBounds: true,
+                            centerInsufficientSlides: true,
+                            grabCursor: true,
+                            watchOverflow: true,
+                            slidesOffsetBefore: 0,
+                            slidesOffsetAfter: 0,
+                            observer: true,
+                            observeParents: true,
+                            breakpoints: {
+                                768: {
+                                    centeredSlides: true,
+                                    centeredSlidesBounds: true,
+                                    centerInsufficientSlides: true,
+                                    spaceBetween: 16
+                                }
+                            },
+                            pagination: {
+                                el: '.trend-swiper-pagination',
+                                clickable: true
+                            },
+                            navigation: {
+                                nextEl: '.trend-swiper-next',
+                                prevEl: '.trend-swiper-prev'
+                            }
+                        });
+                    } else {
+                        trendSwiper.update();
+                    }
+                }
             }
 
             document.addEventListener('DOMContentLoaded', function () {
@@ -2310,6 +2743,7 @@
                         event.preventDefault();
                         setActive(button.getAttribute('data-trend-filter') || 'all');
                     });
+                    button.classList.add('btn', 'btn-sm', 'btn-outline');
                 });
 
                 setActive('all');
@@ -2318,7 +2752,7 @@
     </script>
 </section>
 
-<section class="mb-5 pb-5" id="marcasDestacadasSection">
+<section class="mb-5 pb-5 home-block home-block--brands" id="marcasDestacadasSection">
     <div class="title1 section-my-space">
         <h4>Marcas destacadas</h4>
     </div>
@@ -2329,21 +2763,23 @@
     <style>
         .marcas-destacadas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 150px));
+            grid-template-columns: repeat(auto-fit, minmax(312px, 408px));
             gap: 18px;
-            justify-content: start;
+            justify-content: center;
             align-items: stretch;
+            justify-items: center;
         }
         .brand-logo-card {
             background: #fff;
-            border-radius: 14px;
+            border-radius: 20px;
             border: 1px solid rgba(31,42,68,.08);
-            box-shadow: 0 8px 18px rgba(31,42,68,.06);
+            box-shadow: 0 12px 26px rgba(31,42,68,.08);
             min-height: 92px;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px;
+            padding: 4px 12px;
         }
         .brand-logo-card__media {
             width: 100%;
@@ -2353,9 +2789,29 @@
         }
         .brand-logo-card__media img {
             display: block;
+            width: 100%;
+            height: auto;
             max-width: 100%;
-            max-height: 50px;
+            max-height: 86px;
+            transform: scale(1.15);
+            transform-origin: center center;
             object-fit: contain;
+        }
+        @media (max-width: 575px) {
+            .marcas-destacadas-grid {
+                grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
+                gap: 16px;
+            }
+            .brand-logo-card {
+                min-height: 82px;
+                padding: 4px 10px;
+            }
+            .brand-logo-card__media img {
+                max-width: 100%;
+                max-height: 72px;
+                transform: scale(1.12);
+                transform-origin: center center;
+            }
         }
         .marcas-destacadas-empty {
             padding: 14px 0 0;
@@ -2412,13 +2868,13 @@
 </div>
     </div>
 
-    <section id="Nosotros" class="about-section">
+    <section id="Nosotros" class="about-section home-block home-block--about">
         <div class="container">
             <div class="about-panel">
                 <div class="row align-items-center">
                     <div class="col-lg-7">
                         <span class="about-kicker">Quienes somos</span>
-                        <h2 class="about-title">Una red que conecta marcas, productos y personas.</h2>
+                        <h2 class="about-title">Conectamos marcas, productos y personas.</h2>
                         <p class="about-text">
                             Somos un equipo de profesionales con foco en alimentos saludables, abastecimiento ordenado y una experiencia de compra simple.
                             Nacimos trabajando con propuestas plant based y, con el tiempo, ampliamos la oferta para acompañar el crecimiento del canal natural,
@@ -2677,8 +3133,8 @@
     </div>
 <form action="/Seguridad/LogIn" class="theme-form" id="frmLoginMenu" method="post">            <div id="validatorLogInMenu" class="alert alert-block alert-danger" style="display:none"></div>
 <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="/" />            <div class="form-group">
-                <label for="Nombre">Usuario</label>
-                <input id="nombreMenuLogin" class="form-control form-color" name="Nombre" placeholder="Correo Electrónico" type="text" value="">
+                <label for="nombreMenuLogin">Usuario</label>
+                <input id="nombreMenuLogin" class="form-control form-color" name="Nombre" placeholder="Correo Electrónico" type="text" value="" autocomplete="username" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label for="passwordMenuLogin">Contraseña</label>
@@ -2687,7 +3143,7 @@
                            class="input-validation-error form-control form-color password-eye"                            
                            name="Password" 
                            placeholder="Contraseña" 
-                           type="password" value="">
+                           type="password" value="" autocomplete="current-password">
                     <div class="input-group-append" id="showPasswordToggle">
                         <span class="input-group-text"><i class="far fa-eye"></i></span>
                     </div>
@@ -2761,17 +3217,406 @@
 <script src="Scripts/theme/modal.js"></script>
 <script type="text/javascript" src="demo-circuit.js"></script>
 
-<script type="text/javascript">
-    if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
-        ActualizarCantidadEnCarrito();
-        MostrarNotificacionFront();
-    }
-</script>
+    <script type="text/javascript">
+        if (window.location.protocol !== 'file:' && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+            ActualizarCantidadEnCarrito();
+            MostrarNotificacionFront();
+        }
+    </script>
+
+    <script>
+        (function () {
+            var revealTargets = [
+                document.getElementById('carouselExampleCaptions'),
+                document.getElementById('productosDestacadosSection'),
+                document.getElementById('tendenciasSection'),
+                document.getElementById('marcasDestacadasSection'),
+                document.getElementById('Nosotros')
+            ].filter(Boolean);
+
+            function reveal(node) {
+                node.classList.add('pf-reveal-ready');
+            }
+
+            revealTargets.forEach(reveal);
+
+            if (!('IntersectionObserver' in window)) {
+                revealTargets.forEach(function (node) {
+                    node.classList.add('pf-in-view');
+                });
+                return;
+            }
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('pf-in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.14,
+                rootMargin: '0px 0px -8% 0px'
+            });
+
+            revealTargets.forEach(function (node) {
+                observer.observe(node);
+            });
+        })();
+    </script>
 
     <style>
+    .product-detail-modal .modal-dialog {
+        max-width: min(1020px, calc(100vw - 24px));
+        width: 100%;
+        margin: 0;
+        display: block;
+        pointer-events: auto;
+    }
+
+    .product-detail-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background: rgba(31, 42, 68, 0.52);
+        overflow-y: auto;
+        box-sizing: border-box;
+        overscroll-behavior: contain;
+        touch-action: none;
+    }
+
+    .product-detail-modal.show {
+        display: flex;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+        touch-action: none;
+    }
+
+    .product-detail-modal .modal-content {
+        border: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #fffdf8, #f8f1e5);
+        box-shadow: 0 26px 56px rgba(64, 43, 22, .22);
+        width: 100%;
+        max-height: calc(100vh - 24px);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .product-detail-modal .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        border: 0;
+        padding: 22px 22px 8px 22px;
+    }
+
+    .product-detail-modal .modal-kicker {
+        margin: 0 0 4px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--pf-primary-darker);
+    }
+
+    .product-detail-modal .modal-title {
+        margin: 0;
+        font-size: clamp(1.4rem, 2.6vw, 2.25rem);
+        line-height: 1.04;
+        font-weight: 900;
+        color: var(--pf-text);
+    }
+
+    .product-detail-modal .close {
+        position: static;
+        margin-left: auto;
+        margin-top: -2px;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(75, 123, 100, 0.12);
+        color: var(--pf-primary-darker);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        line-height: 1;
+        opacity: 1;
+        text-shadow: none;
+        box-shadow: none;
+    }
+
+    .product-detail-modal .close:hover {
+        background: rgba(75, 123, 100, 0.18);
+        color: var(--pf-primary-darker);
+    }
+
+    .product-detail-modal .modal-body {
+        padding: 0 22px 22px;
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
+
+    .product-modal-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+        gap: 18px;
+        align-items: stretch;
+    }
+
+    .product-modal-media,
+    .product-modal-info {
+        border-radius: 22px;
+        background: rgba(255, 255, 255, .82);
+        border: 1px solid rgba(75, 123, 100, 0.10);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .product-modal-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 380px;
+        padding: 20px;
+    }
+
+    .product-modal-media img {
+        width: 100%;
+        max-height: 420px;
+        object-fit: contain;
+    }
+
+    .product-modal-info {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .product-modal-description {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.55;
+        color: rgba(46, 49, 48, 0.82);
+    }
+
+    .product-modal-price {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(248, 236, 210, .92), rgba(255, 246, 227, .92));
+    }
+
+    .product-modal-price span {
+        font-size: 0.92rem;
+        color: rgba(46, 49, 48, 0.74);
+        font-weight: 700;
+    }
+
+    .product-modal-price strong {
+        font-size: clamp(1.35rem, 2vw, 1.9rem);
+        font-weight: 900;
+        color: var(--pf-text);
+    }
+
+    .product-modal-buy {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .product-modal-qty {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .product-modal-qty label {
+        font-size: .9rem;
+        font-weight: 700;
+        color: var(--pf-text);
+    }
+
+    .product-modal-qty input {
+        width: 110px;
+        min-height: 42px;
+        border-radius: 14px;
+        border: 1px solid rgba(75, 123, 100, 0.18);
+        padding: 0 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--pf-text);
+        background: #fff;
+    }
+
+    .product-modal-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: auto;
+    }
+
+    .product-modal-facts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .product-modal-fact {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255,255,255,.72);
+        border: 1px solid rgba(75, 123, 100, 0.10);
+        color: var(--pf-text);
+    }
+
+    .product-modal-fact span {
+        font-weight: 700;
+        color: rgba(46, 49, 48, 0.72);
+    }
+
+    @media (max-width: 767px) {
+        .product-detail-modal {
+            display: none;
+            align-items: stretch;
+            justify-content: stretch;
+            inset: 0;
+            width: 100vw;
+            height: 100dvh;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .product-detail-modal .modal-dialog {
+            width: 100%;
+            max-width: 100vw;
+            height: 100%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .product-detail-modal .modal-content {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            max-height: 100%;
+            border-radius: 0;
+        }
+
+        .product-detail-modal .modal-header,
+        .product-detail-modal .modal-body {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .product-detail-modal .modal-header {
+            padding-top: calc(16px + env(safe-area-inset-top));
+        }
+
+        .product-detail-modal .close {
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            margin-top: 0;
+            margin-right: 0;
+        }
+
+        .product-modal-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .product-modal-media {
+            min-height: 170px;
+            padding: 12px;
+        }
+
+        .product-modal-media img {
+            max-height: 180px;
+        }
+
+        .product-modal-info {
+            gap: 10px;
+            padding: 14px;
+        }
+
+        .product-modal-description {
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .product-modal-price {
+            padding: 12px 14px;
+        }
+
+        .product-modal-price strong {
+            font-size: 1.35rem;
+        }
+
+        .product-modal-buy {
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .product-modal-qty input {
+            width: 100%;
+        }
+
+        .product-detail-modal .modal-body {
+            padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+
     .modal-dialog-pdf {
         height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
         max-width:90% !important;
+    }
+
+    @media (max-width: 767px) {
+        .icon-block > ul:first-of-type {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(1) {
+            order: 1;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(4) {
+            order: 2;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(3) {
+            order: 3;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(2) {
+            order: 4;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(5) {
+            order: 5;
+        }
     }
 
     .modal-content-pdf {
@@ -2784,7 +3629,225 @@
 </style>
 
 
+<div class="product-detail-modal" id="productDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <p class="modal-kicker">Ficha / Producto</p>
+                    <h5 class="modal-title" data-product-modal-title>Producto destacado</h5>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" data-product-modal-close aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="product-modal-grid">
+                    <div class="product-modal-media">
+                        <img data-product-modal-image src="assets/images/no-image.svg" alt="Producto">
+                    </div>
+                    <div class="product-modal-info">
+                        <p class="product-modal-description" data-product-modal-description>
+                            Descripción del producto.
+                        </p>
+                        <div class="product-modal-price">
+                            <span>Precio</span>
+                            <strong data-product-modal-price>$0</strong>
+                        </div>
+                        <div class="product-modal-buy">
+                            <div class="product-modal-qty">
+                                <label for="productDetailQty">Cantidad</label>
+                                <input id="productDetailQty" type="number" min="1" step="1" value="1" data-product-modal-qty>
+                            </div>
+                            <button type="button" class="btn btn-rounded btn-warning" data-demo-cart-add="1" data-product-modal-add data-cart-id="" data-cart-sku="" data-cart-name="" data-cart-brand="" data-cart-href="" data-cart-qty="1">
+                                Agregar al carrito
+                            </button>
+                        </div>
+                        <div class="product-modal-facts">
+                            <div class="product-modal-fact">
+                                <span>Marca</span>
+                                <strong data-product-modal-brand>-</strong>
+                            </div>
+                            <div class="product-modal-fact">
+                                <span>Categoría</span>
+                                <strong data-product-modal-category>-</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modalGeneric" role="dialog"></div>
+
+<script>
+    (function () {
+        const money = new Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            maximumFractionDigits: 0
+        });
+
+        function isAuthenticated() {
+            return window.PFAuth && typeof window.PFAuth.isAuthenticated === 'function' && window.PFAuth.isAuthenticated();
+        }
+
+        function getDisplayPrice(product) {
+            if (window.PFAuth && typeof window.PFAuth.getDisplayPrice === 'function') {
+                return window.PFAuth.getDisplayPrice(product);
+            }
+            const publicPrice = Number(product && product.publicPrice || 0);
+            const memberPrice = Number(product && product.memberPrice || publicPrice);
+            return isAuthenticated() ? memberPrice : publicPrice;
+        }
+
+        function getProductSkuFromLink(link) {
+            if (!link) return '';
+            const skuAttr = link.getAttribute('data-product-sku') || '';
+            if (skuAttr) return String(skuAttr).trim();
+            try {
+                const url = new URL(link.getAttribute('href') || '', window.location.href);
+                return String(url.searchParams.get('sku') || '').trim();
+            } catch (error) {
+                return '';
+            }
+        }
+
+        function findProductBySku(content, sku) {
+            const targetSku = String(sku || '').trim().toUpperCase();
+            const products = content && Array.isArray(content.products) ? content.products : [];
+            return products.find((product) => {
+                const productSku = String(product && product.sku || '').trim().toUpperCase();
+                const productId = String(product && product.id || '').trim().toUpperCase();
+                return productSku === targetSku || productId === targetSku;
+            }) || null;
+        }
+
+        function openModal() {
+            const modal = document.getElementById('productDetailModal');
+            if (modal) {
+                const scrollY = window.scrollY || window.pageYOffset || 0;
+                document.body.dataset.modalScrollY = String(scrollY);
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollY}px`;
+                document.body.style.left = '0';
+                document.body.style.right = '0';
+                modal.classList.add('show');
+                modal.style.display = 'flex';
+                document.body.classList.add('modal-open');
+                document.querySelectorAll('.modal-backdrop').forEach((node) => node.remove());
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('productDetailModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                const scrollY = Number(document.body.dataset.modalScrollY || '0');
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.left = '';
+                document.body.style.right = '';
+                delete document.body.dataset.modalScrollY;
+                window.scrollTo(0, scrollY);
+                document.querySelectorAll('.modal-backdrop').forEach((node) => node.remove());
+            }
+        }
+
+        function fillModal(product, content) {
+            const modal = document.getElementById('productDetailModal');
+            if (!modal || !product) return;
+
+            const category = (content && Array.isArray(content.categories) ? content.categories : []).find((item) => Number(item.id) === Number(product.categoryId));
+            const title = String(product.detail || product.name || 'Producto destacado');
+            const description = String(product.description || product.name || 'Ficha pensada para mostrar la imagen, el precio y la compra rápida del producto.');
+            const image = (!product.image || /metaimage\.jpg|green&co|greenco/i.test(String(product.image))) ? 'assets/images/no-image.svg' : String(product.image);
+            const displayPrice = getDisplayPrice(product);
+            const publicPrice = Number(product.publicPrice || 0);
+            const memberPrice = Number(product.memberPrice || publicPrice);
+            const priceText = money.format(Number(displayPrice || 0));
+            const categoryName = category ? String(category.name || '-') : 'Sin categoría';
+
+            const titleNode = modal.querySelector('[data-product-modal-title]');
+            const imageNode = modal.querySelector('[data-product-modal-image]');
+            const descriptionNode = modal.querySelector('[data-product-modal-description]');
+            const priceNode = modal.querySelector('[data-product-modal-price]');
+            const brandNode = modal.querySelector('[data-product-modal-brand]');
+            const categoryNode = modal.querySelector('[data-product-modal-category]');
+            const qtyNode = modal.querySelector('[data-product-modal-qty]');
+            const addButton = modal.querySelector('[data-product-modal-add]');
+            const detailHref = `detallearticulo.html?sku=${encodeURIComponent(String(product.sku || '').toUpperCase())}`;
+
+            if (titleNode) titleNode.textContent = title;
+            if (imageNode) {
+                imageNode.src = image;
+                imageNode.alt = title;
+            }
+            if (descriptionNode) descriptionNode.textContent = description;
+            if (priceNode) priceNode.textContent = priceText;
+            if (brandNode) brandNode.textContent = product.brand || '-';
+            if (categoryNode) categoryNode.textContent = categoryName;
+            if (qtyNode) qtyNode.value = '1';
+            if (addButton) {
+                addButton.setAttribute('data-cart-id', product.id || product.sku || '');
+                addButton.setAttribute('data-cart-sku', product.sku || '');
+                addButton.setAttribute('data-cart-name', title);
+                addButton.setAttribute('data-cart-brand', product.brand || '');
+                addButton.setAttribute('data-cart-href', detailHref);
+                addButton.setAttribute('data-cart-qty', '1');
+                addButton.setAttribute('data-cart-public-price', String(publicPrice));
+                addButton.setAttribute('data-cart-member-price', String(memberPrice));
+                addButton.setAttribute('data-cart-price', String(displayPrice));
+            }
+        }
+
+        async function openFromSku(sku) {
+            if (!window.PFContent || typeof window.PFContent.load !== 'function') {
+                return;
+            }
+            const content = await window.PFContent.load();
+            const product = findProductBySku(content, sku);
+            if (!product) {
+                return;
+            }
+            fillModal(product, content);
+            openModal();
+        }
+
+        function openFromLink(link) {
+            const sku = getProductSkuFromLink(link);
+            if (!sku) return;
+            openFromSku(sku);
+        }
+
+        window.PFProductModal = {
+            openFromSku,
+            openFromLink,
+            close: closeModal,
+        };
+
+        document.addEventListener('click', function (event) {
+            const closeButton = event.target.closest('[data-product-modal-close]');
+            if (closeButton) {
+                event.preventDefault();
+                closeModal();
+            }
+        }, true);
+
+        const modal = document.getElementById('productDetailModal');
+        if (modal) {
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+    })();
+</script>
 
 
 </body>

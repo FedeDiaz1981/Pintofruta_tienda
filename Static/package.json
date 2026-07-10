@@ -1,0 +1,19 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "admin-demo.js",
+  "scripts": {
+    "start": "node local-save-server.js",
+    "backstop:reference": "backstop reference --config=backstop.config.js",
+    "backstop:test": "backstop test --config=backstop.config.js",
+    "backstop:approve": "backstop approve --config=backstop.config.js",
+    "backstop:open": "backstop openReport --config=backstop.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "backstopjs": "^6.3.25"
+  }
+}

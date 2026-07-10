@@ -18,6 +18,14 @@
                 link: "/Galeria/1015-sierra-de-los-padres",
                 active: true
             }
+        ],
+        banners: [
+            {
+                id: 1,
+                order: 1,
+                text: "Conectamos marcas, productos y personas.",
+                active: true
+            }
         ]
     };
     const baseContent = window.PF_BASE_CONTENT || fallbackContent;
@@ -265,15 +273,23 @@
             if (project) {
                 cachedContent = deepMerge(cachedContent, project);
             }
-            cachedContent.products = [project?.products, local.products, remote.products, baseContent.products]
-                .find((list) => Array.isArray(list) && list.length)
-                || [];
+            cachedContent.products = mergeRecordsById(
+                baseContent.products,
+                mergeRecordsById(
+                    remote.products,
+                    mergeRecordsById(local.products, project?.products)
+                )
+            );
             cachedContent.brands = [project?.brands, local.brands, remote.brands, baseContent.brands]
                 .find((list) => Array.isArray(list) && list.length)
                 || [];
             cachedContent.categories = [project?.categories, local.categories, remote.categories, baseContent.categories]
                 .find((list) => Array.isArray(list) && list.length)
                 || [];
+            cachedContent.banners = mergeRecordsById(
+                baseContent.banners,
+                mergeRecordsById(remote.banners, mergeRecordsById(local.banners, project?.banners))
+            );
             cachedContent.headerNavigation = createHeaderNavigation(cachedContent);
             cachedContent.heroSlides = mergeRecordsById(
                 baseContent.heroSlides,
@@ -338,12 +354,26 @@
 
     function heroImageForViewport(slide) {
         if (!slide) {
-            return "assets/images/metaimage.jpg";
+            return "assets/images/no-image.svg";
         }
         if (isMobileHeroViewport() && slide.imageMobile) {
             return slide.imageMobile;
         }
-        return slide.image || "assets/images/metaimage.jpg";
+        return slide.image || "assets/images/no-image.svg";
+    }
+
+    function isPlaceholderImage(image) {
+        const normalized = String(image || "")
+            .trim()
+            .toLowerCase();
+        return !normalized ||
+            normalized.includes("metaimage.jpg") ||
+            normalized.includes("green&co") ||
+            normalized.includes("greenco");
+    }
+
+    function normalizeProductImage(image) {
+        return isPlaceholderImage(image) ? "assets/images/no-image.svg" : image;
     }
 
     function cleanBrandName(value) {
@@ -377,7 +407,7 @@
     }
 
     function letterBucket(value) {
-        const first = cleanBrandName(value).charAt(0).toUpperCase();
+        const first = cleanDisplayName(value).charAt(0).toUpperCase();
         const groups = [
             ["A", "B"],
             ["C", "D"],
@@ -397,7 +427,30 @@
         return found ? `${found[0]}-${found[1]}` : "Y-Z";
     }
 
-    function buildBucketedGroups(values) {
+    function slugifyMenuValue(value) {
+        return cleanDisplayName(value)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .toLowerCase();
+    }
+
+    function buildGalleryUrl(source, params = {}) {
+        const query = new URLSearchParams();
+        if (source) {
+            query.set("source", source);
+        }
+        Object.entries(params).forEach(([key, value]) => {
+            const normalized = String(value == null ? "" : value).trim();
+            if (normalized) {
+                query.set(key, normalized);
+            }
+        });
+        return `galeria.html?${query.toString()}`;
+    }
+
+    function buildBucketedGroups(items) {
         const groupOrder = [
             "A-B", "C-D", "E-F", "G-H", "I-J", "K-L", "M-N", "O-P", "Q-R", "S-T", "U-V", "W-X", "Y-Z"
         ];
@@ -405,71 +458,89 @@
             id: bucket.toLowerCase(),
             label: bucket,
             href: "#",
-            items: values
-                .filter((value) => letterBucket(value) === bucket)
-                .map((value) => {
-                    const slug = String(value || "")
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                        .replace(/[^a-zA-Z0-9]+/g, "-")
-                        .replace(/^-+|-+$/g, "")
-                        .toLowerCase();
-                    return {
-                        id: slug,
-                        label: value,
-                        href: `#${slug}`,
-                    };
-                }),
+            items: items
+                .filter((item) => letterBucket(item.label) === bucket)
+                .map((item) => ({
+                    id: item.id || slugifyMenuValue(item.label),
+                    label: item.label,
+                    href: item.href || "#",
+                })),
         }));
     }
 
-    function buildNavigationSection(sectionId, label, values, icon, cleaner = cleanBrandName) {
+    function buildNavigationSection(sectionId, label, values, icon, options = {}) {
+        const cleaner = options.cleaner || cleanDisplayName;
+        const hrefBuilder = options.hrefBuilder || ((item) => item.href || "#");
+        const baseHref = options.baseHref || "#";
         const cleanedValues = [];
         const seen = new Set();
         values.forEach((value) => {
-            const cleaned = cleaner(value);
+            const rawLabel = typeof value === "string" ? value : (value && (value.label || value.name || value.value || ""));
+            const cleaned = cleaner(rawLabel);
             if (!cleaned || seen.has(cleaned)) {
                 return;
             }
             seen.add(cleaned);
-            cleanedValues.push(cleaned);
+            cleanedValues.push({
+                id: typeof value === "object" && value ? (value.id || value.code || slugifyMenuValue(cleaned)) : slugifyMenuValue(cleaned),
+                label: cleaned,
+                href: hrefBuilder(value, cleaned),
+            });
         });
-        cleanedValues.sort((a, b) => cleanBrandName(a).localeCompare(cleanBrandName(b), "es", { sensitivity: "base" }));
+        cleanedValues.sort((a, b) => cleanDisplayName(a.label).localeCompare(cleanDisplayName(b.label), "es", { sensitivity: "base" }));
 
         return {
             id: sectionId,
             label,
             icon,
-            href: `#${sectionId === "products" ? "1-productos" : "2-marcas"}`,
+            href: baseHref,
             groups: buildBucketedGroups(cleanedValues),
         };
     }
 
     function createHeaderNavigation(content) {
         const products = Array.isArray(content && content.products) ? content.products : [];
-        const productNames = [];
-        const brands = [];
-        const seenProducts = new Set();
-        const seenBrands = new Set();
-
-        products.forEach((product) => {
-            const productLabel = cleanBrandName(product && (product.detail || product.name || ""));
-            if (productLabel && !seenProducts.has(productLabel)) {
-                seenProducts.add(productLabel);
-                productNames.push(productLabel);
-            }
-
-            const brand = cleanBrandName(product && product.brand);
-            if (!brand || seenBrands.has(brand)) {
-                return;
-            }
-            seenBrands.add(brand);
-            brands.push(brand);
-        });
+        const categories = Array.isArray(content && content.categories) ? content.categories.filter((category) => category && category.visible !== false) : [];
+        const brandsSource = Array.isArray(content && content.brands) && content.brands.length
+            ? content.brands
+            : products.reduce((accumulator, product) => {
+                const brand = cleanDisplayName(product && product.brand);
+                if (!brand || accumulator.some((item) => cleanDisplayName(item?.name || item?.label || item?.code || "") === brand)) {
+                    return accumulator;
+                }
+                accumulator.push({ id: brand, code: brand, name: brand });
+                return accumulator;
+            }, []);
 
         const sections = [
-            buildNavigationSection("products", "PRODUCTOS", productNames, "Content/Iconos/CATEGORIAS.png", cleanDisplayName),
-            buildNavigationSection("brands", "MARCAS", brands, "Content/Iconos/MARCAS.png")
+            buildNavigationSection(
+                "categories",
+                "CATEGORÍAS",
+                categories.map((category) => ({
+                    id: category.id,
+                    label: category.name || category.slug || `Categoría ${category.id}`,
+                    href: buildGalleryUrl("/Galeria/1-categorias", { Categoria: category.id }),
+                })),
+                "Content/Iconos/CATEGORIAS.png",
+                {
+                    cleaner: cleanDisplayName,
+                    baseHref: buildGalleryUrl("/Galeria/1-categorias"),
+                }
+            ),
+            buildNavigationSection(
+                "brands",
+                "MARCAS",
+                brandsSource.map((brand) => ({
+                    id: brand.id || brand.code || brand.name,
+                    label: brand.name || brand.code || brand.id,
+                    href: buildGalleryUrl("/Galeria/2-marcas", { Marca: brand.id || brand.code || brand.name }),
+                })),
+                "Content/Iconos/MARCAS.png",
+                {
+                    cleaner: cleanDisplayName,
+                    baseHref: buildGalleryUrl("/Galeria/2-marcas"),
+                }
+            )
         ].filter((section) => section.groups.length);
 
         return {
@@ -555,6 +626,95 @@
         `;
     }
 
+    function renderAboutBanner(content) {
+        const titleNodes = document.querySelectorAll("#Nosotros .about-title");
+        if (!titleNodes.length) {
+            return;
+        }
+
+        const banners = Array.isArray(content?.banners) ? content.banners : [];
+        const selected = banners
+            .filter((banner) => banner && banner.active !== false && String(banner.text || "").trim())
+            .slice()
+            .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))[0];
+
+        if (!selected) {
+            return;
+        }
+
+        titleNodes.forEach((node) => {
+            node.textContent = selected.text;
+        });
+    }
+
+    function stopTopBannerRotation() {
+        if (window.__pfTopBannerInterval) {
+            clearInterval(window.__pfTopBannerInterval);
+            window.__pfTopBannerInterval = null;
+        }
+        if (window.__pfTopBannerTimeout) {
+            clearTimeout(window.__pfTopBannerTimeout);
+            window.__pfTopBannerTimeout = null;
+        }
+    }
+
+    function paintTopBannerText(bannerNode, text) {
+        bannerNode.classList.add("pf-top-banner-neon");
+        bannerNode.classList.add("pf-top-banner-switching");
+        bannerNode.style.opacity = "0";
+        bannerNode.style.transform = "translateY(-2px) scale(0.985)";
+        bannerNode.style.filter = "blur(1px)";
+
+        window.__pfTopBannerTimeout = window.setTimeout(() => {
+            bannerNode.textContent = text;
+            bannerNode.style.opacity = "1";
+            bannerNode.style.transform = "translateY(0) scale(1)";
+            bannerNode.style.filter = "blur(0)";
+
+            window.__pfTopBannerTimeout = window.setTimeout(() => {
+                bannerNode.classList.remove("pf-top-banner-switching");
+                window.__pfTopBannerTimeout = null;
+            }, 260);
+        }, 180);
+    }
+
+    function renderTopBanner(content) {
+        const bannerNode = document.querySelector(".top-header h6");
+        if (!bannerNode) {
+            stopTopBannerRotation();
+            return;
+        }
+
+        const banners = Array.isArray(content?.banners) ? content.banners : [];
+        const texts = banners
+            .filter((banner) => banner && banner.active !== false && String(banner.text || "").trim())
+            .slice()
+            .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+            .map((banner) => String(banner.text).trim())
+            .filter(Boolean);
+
+        stopTopBannerRotation();
+
+        if (!texts.length) {
+            bannerNode.textContent = "";
+            return;
+        }
+
+        let index = 0;
+        const paint = () => {
+            paintTopBannerText(bannerNode, texts[index] || "");
+        };
+
+        paint();
+
+        if (texts.length > 1) {
+            window.__pfTopBannerInterval = window.setInterval(() => {
+                index = (index + 1) % texts.length;
+                paint();
+            }, 5000);
+        }
+    }
+
     function renderFeaturedProducts(content) {
         const root = document.querySelector(".product-slide-6");
         if (!root || !content || !Array.isArray(content.products)) {
@@ -573,11 +733,15 @@
         if (!liveGrid) {
             liveGrid = document.createElement("div");
             liveGrid.id = "featuredProductsLive";
-            liveGrid.style.display = "grid";
-            liveGrid.style.gridTemplateColumns = "repeat(auto-fit, minmax(140px, 1fr))";
-            liveGrid.style.gap = "12px";
-            liveGrid.style.margin = "10px 0 4px";
+            liveGrid.style.display = "flex";
+            liveGrid.style.flexDirection = "row";
+            liveGrid.style.flexWrap = "nowrap";
+            liveGrid.style.gap = "10px";
+            liveGrid.style.margin = "10px auto 4px";
             liveGrid.style.alignItems = "stretch";
+            liveGrid.style.justifyContent = "center";
+            liveGrid.style.overflowX = "auto";
+            liveGrid.style.width = "100%";
             host.insertBefore(liveGrid, root);
         }
 
@@ -592,37 +756,33 @@
             return;
         }
 
-        liveGrid.style.display = "grid";
+        liveGrid.style.display = "flex";
         liveGrid.innerHTML = products.map((product) => {
             const category = (content.categories || []).find((item) => Number(item.id) === Number(product.categoryId));
             const detailLink = normalizeLink(`detallearticulo.html?sku=${encodeURIComponent(String(product.sku || "").toUpperCase())}`);
-            const image = product.image || "assets/images/metaimage.jpg";
+            const image = normalizeProductImage(product.image);
             const publicPrice = Number(product.publicPrice || 0);
             const memberPrice = Number(product.memberPrice || publicPrice);
+            const isAuthenticated = window.PFAuth && typeof window.PFAuth.isAuthenticated === "function" && window.PFAuth.isAuthenticated();
+            const displayPrice = isAuthenticated ? memberPrice : publicPrice;
             const priceText = new Intl.NumberFormat("es-AR", {
                 style: "currency",
                 currency: "ARS",
                 maximumFractionDigits: 0,
-            }).format(publicPrice);
-            const memberText = new Intl.NumberFormat("es-AR", {
-                style: "currency",
-                currency: "ARS",
-                maximumFractionDigits: 0,
-            }).format(memberPrice);
+            }).format(displayPrice);
 
             return `
-                <article class="product-card" style="border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 8px 18px rgba(31,42,68,.08); border: 1px solid rgba(31,42,68,.08); max-width: 190px;">
+                <article class="product-card card card-compact bg-base-100 shadow-lg border border-base-200 pf-product-card" style="width:190px; max-width:190px; box-sizing: border-box;">
                     <section data-ga-id="${escapeHtml(product.sku || product.id || "")}" data-ga-name="${escapeHtml(product.detail || product.name || "")}" data-ga-brand="${escapeHtml(product.brand || "")}">
-                        <a href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}" style="display:block; background:#fff;">
-                            <img src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" style="width:100%; height:130px; object-fit: contain; display:block; background:#fff; padding:8px;">
+                        <a class="pf-product-link" href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}">
+                            <img class="pf-product-image" src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" loading="lazy">
                         </a>
-                        <div style="padding: 10px 11px 12px;">
-                            <div style="font-size: 10px; letter-spacing: .10em; text-transform: uppercase; color: #7a6a56; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(product.brand || "")}</div>
-                            <h3 style="margin: 0 0 4px; font-size: 13px; line-height: 1.2; color: #1f2a44; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHtml(product.detail || product.name || "")}</h3>
-                            <div style="font-size: 11px; color: #6d7380; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(category ? category.name : "Sin categoria")}</div>
-                            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
-                                <strong style="font-size: 13px; color: #1f2a44;">${escapeHtml(priceText)}</strong>
-                                <span style="font-size: 10px; color: #7c8596;">${escapeHtml(memberText)}</span>
+                        <div class="card-body pf-product-body">
+                            <div class="pf-product-brand">${escapeHtml(product.brand || "")}</div>
+                            <h3 class="pf-product-name">${escapeHtml(product.detail || product.name || "")}</h3>
+                            <div class="pf-product-category">${escapeHtml(category ? category.name : "Sin categoria")}</div>
+                            <div class="pf-product-prices">
+                                <strong class="pf-product-price-primary">${escapeHtml(priceText)}</strong>
                             </div>
                         </div>
                     </section>
@@ -631,6 +791,81 @@
         }).join("");
 
         root.style.display = "none";
+    }
+
+    function renderFeaturedProducts(content) {
+        const root = document.getElementById("featuredProductsGrid");
+        if (!root || !content || !Array.isArray(content.products)) {
+            return;
+        }
+
+        const products = content.products
+            .filter((product) => product && product.featured && product.status !== "hidden")
+            .slice();
+
+        if (!products.length) {
+            root.innerHTML = `
+                <div class="swiper-slide">
+                    <div class="product addtocart_count">
+                        <div class="flex-1">
+                            <div class="empty-state" style="padding: 24px 16px; text-align: center;">
+                                <strong>No hay productos destacados</strong>
+                                <p>Marcá productos como destacados desde el panel de productos para que aparezcan acá.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            if (window.featuredProductsSwiper && typeof window.featuredProductsSwiper.update === "function") {
+                window.featuredProductsSwiper.update();
+                if (typeof window.featuredProductsSwiper.slideTo === "function") {
+                    window.featuredProductsSwiper.slideTo(0, 0, false);
+                }
+            }
+            return;
+        }
+
+        root.innerHTML = products.map((product) => {
+            const category = (content.categories || []).find((item) => Number(item.id) === Number(product.categoryId));
+            const detailLink = normalizeLink(`detallearticulo.html?sku=${encodeURIComponent(String(product.sku || "").toUpperCase())}`);
+            const image = normalizeProductImage(product.image);
+            const publicPrice = Number(product.publicPrice || 0);
+            const memberPrice = Number(product.memberPrice || publicPrice);
+            const isAuthenticated = window.PFAuth && typeof window.PFAuth.isAuthenticated === "function" && window.PFAuth.isAuthenticated();
+            const displayPrice = isAuthenticated ? memberPrice : publicPrice;
+            const priceText = new Intl.NumberFormat("es-AR", {
+                style: "currency",
+                currency: "ARS",
+                maximumFractionDigits: 0,
+            }).format(displayPrice);
+
+            return `
+                <div class="swiper-slide">
+                    <div class="product addtocart_count articulos_destacados">
+                        <section data-ga-id="${escapeHtml(product.sku || product.id || "")}" data-ga-name="${escapeHtml(product.detail || product.name || "")}" data-ga-brand="${escapeHtml(product.brand || "")}">
+                            <a class="pf-product-link" href="${escapeHtml(detailLink)}" data-open-product-detail="1" data-product-sku="${escapeHtml(String(product.sku || "").toUpperCase())}">
+                                <img class="pf-product-image" src="${escapeHtml(image)}" alt="${escapeHtml(product.detail || product.name || product.sku || "Producto destacado")}" loading="lazy">
+                            </a>
+                            <div class="card-body pf-product-body">
+                                <div class="pf-product-brand">${escapeHtml(product.brand || "")}</div>
+                                <h3 class="pf-product-name">${escapeHtml(product.detail || product.name || "")}</h3>
+                                <div class="pf-product-category">${escapeHtml(category ? category.name : "Sin categoria")}</div>
+                                <div class="pf-product-prices">
+                                    <strong class="pf-product-price-primary">${escapeHtml(priceText)}</strong>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        if (window.featuredProductsSwiper && typeof window.featuredProductsSwiper.update === "function") {
+            window.featuredProductsSwiper.update();
+            if (typeof window.featuredProductsSwiper.slideTo === "function") {
+                window.featuredProductsSwiper.slideTo(0, 0, false);
+            }
+        }
     }
 
     function renderFeaturedBrands(content) {
@@ -943,6 +1178,10 @@
         }
 
         nodes.forEach((node, index) => {
+            if (node.closest && node.closest("#productosDestacadosSection")) {
+                return;
+            }
+
             if (index < limit) {
                 return;
             }
@@ -959,7 +1198,9 @@
     async function initHeroCarousel() {
         const content = await load();
         renderHeroCarousel(content);
+        renderTopBanner(content);
         renderHomeSpotlightBanner(content);
+        renderAboutBanner(content);
         renderFeaturedProducts(content);
         renderFeaturedBrands(content);
         renderHeaderSearchScopes(content);
@@ -974,7 +1215,9 @@
             }
             lastMobileState = mobileState;
             renderHeroCarousel(content);
+            renderTopBanner(content);
             renderHomeSpotlightBanner(content);
+            renderAboutBanner(content);
             renderFeaturedProducts(content);
             renderFeaturedBrands(content);
             renderHeaderNavigation(content);
@@ -987,7 +1230,9 @@
         save,
         get,
         renderHeroCarousel,
+        renderTopBanner,
         renderHomeSpotlightBanner,
+        renderAboutBanner,
         ensureProjectRootHandle,
         writeProjectFile,
     };
@@ -999,7 +1244,9 @@
         }
         load(true).then((content) => {
             renderHeroCarousel(content);
+            renderTopBanner(content);
             renderHomeSpotlightBanner(content);
+            renderAboutBanner(content);
             renderFeaturedProducts(content);
             renderFeaturedBrands(content);
             renderHeaderSearchScopes(content);
