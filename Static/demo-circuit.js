@@ -153,8 +153,14 @@
                 align-items: center;
                 justify-content: center;
                 padding: 18px;
+                overscroll-behavior: contain;
+                touch-action: none;
             }
             .pf-product-modal.is-open { display: flex; }
+            body.modal-open {
+                overflow: hidden;
+                touch-action: none;
+            }
             .pf-product-modal__backdrop {
                 position: absolute;
                 inset: 0;
@@ -351,6 +357,29 @@
                 .pf-product-modal__prices { grid-template-columns: 1fr; }
                 .pf-product-modal__inner { padding: 18px; }
             }
+            @media (max-width: 767px) {
+                .pf-product-modal {
+                    align-items: stretch;
+                    justify-content: stretch;
+                    padding: 0;
+                    height: 100dvh;
+                }
+                .pf-product-modal__dialog {
+                    width: 100%;
+                    max-height: 100dvh;
+                    height: 100dvh;
+                    border-radius: 0;
+                }
+                .pf-product-modal__inner {
+                    padding: 16px;
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+                .pf-product-modal__close {
+                    top: calc(12px + env(safe-area-inset-top));
+                    right: 12px;
+                }
+            }
         `;
         document.head.appendChild(style);
 
@@ -417,7 +446,15 @@
             return;
         }
         modal.classList.remove("is-open");
+        var scrollY = Number(document.body.dataset.modalScrollY || "0");
         document.body.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.classList.remove("modal-open");
+        delete document.body.dataset.modalScrollY;
+        window.scrollTo(0, scrollY);
     }
 
     async function openProductModalFromTrigger(trigger) {
@@ -445,6 +482,14 @@
         if (!modal) {
             return;
         }
+
+        var scrollY = window.scrollY || window.pageYOffset || 0;
+        document.body.dataset.modalScrollY = String(scrollY);
+        document.body.style.position = "fixed";
+        document.body.style.top = "-" + scrollY + "px";
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.classList.add("modal-open");
 
         var image = String(product.sku || "").toUpperCase() === "MERA09"
             ? "Content/Images/articulos/PF_DETAIL_MERA09.png"

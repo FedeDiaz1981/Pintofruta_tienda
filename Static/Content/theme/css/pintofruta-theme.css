@@ -594,6 +594,10 @@ select:focus,
   backdrop-filter: blur(10px);
 }
 
+body.mini-cart-modal-open {
+  overflow: hidden;
+}
+
 .cart-section .cart-table,
 .table-pedidos .cart-table,
 .cart-section .table,
@@ -1547,6 +1551,56 @@ select:focus,
 }
 
 @media (max-width: 768px) {
+  .top-header {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .main-header-menu,
+  .layout-header2 {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 12px;
+  }
+
+  .main-menu-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 10px;
+  }
+
+  .main-menu-block > .menu-nav {
+    display: none !important;
+  }
+
+  .main-menu-block > .logo-block {
+    display: none !important;
+  }
+
+  .main-menu-block > div:nth-of-type(3) {
+    display: none !important;
+  }
+
+  .main-menu-block > div:nth-of-type(4) {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .main-menu-block > div:nth-of-type(4),
+  .main-menu-block > div:nth-of-type(4) .cart-block,
+  .main-menu-block > div:nth-of-type(4) .mobile-cart {
+    position: relative;
+    z-index: 10080;
+    pointer-events: auto;
+  }
+
+  .main-menu-block > div:nth-of-type(4) .mobile-cart a {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
   .main-header-menu .logo-block {
     padding: 0.35rem 0.8rem;
   }
@@ -1564,6 +1618,63 @@ select:focus,
   .search .form-ovr,
   .serch-style-bg .form-control {
     padding-left: 0.9rem !important;
+  }
+
+  .search .big-deal-search,
+  .serch-style-bg {
+    width: 100%;
+  }
+
+  .search .input-group,
+  .serch-style-bg .input-group {
+    width: 100%;
+  }
+
+  body.modal-search-open {
+    overflow: hidden;
+  }
+
+  .search-overlay {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    padding: 16px !important;
+    background: rgba(30, 42, 40, 0.58) !important;
+    box-shadow: none !important;
+    z-index: 20060 !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .search-overlay > div {
+    width: 100%;
+    max-width: 560px;
+    background: linear-gradient(180deg, #fffdf8, #f5ecde);
+    border-radius: 28px;
+    box-shadow: 0 24px 60px rgba(29, 40, 34, 0.22);
+    padding: 22px 18px 18px;
+    position: relative;
+  }
+
+  .search-overlay > div .close-mobile-search {
+    top: 12px;
+    right: 14px;
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .search-overlay > div .overlay-content input {
+    width: 100%;
+    min-height: 54px;
+    padding-left: 18px;
+    padding-right: 60px;
+    border-radius: 18px;
+  }
+
+  .search-overlay > div .overlay-content button {
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
   }
 
   .boton-search-categories-vgo {
@@ -1587,6 +1698,63 @@ select:focus,
   #cart_side.add_to_cart.right .cart-inner {
     height: calc(100dvh - 96px);
     width: 85vw;
+  }
+
+  #cart_side.add_to_cart.right.open-side {
+    inset: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 12px !important;
+    background: rgba(27, 38, 34, 0.58);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  #cart_side.add_to_cart.right.open-side .overlay {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 1;
+    visibility: visible;
+    background: rgba(19, 28, 24, 0.58);
+  }
+
+  #cart_side.add_to_cart.right.open-side .cart-inner {
+    position: relative;
+    z-index: 2;
+    width: min(calc(100vw - 24px), 560px) !important;
+    max-width: none !important;
+    height: calc(100dvh - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    margin: 0 !important;
+    border-radius: 22px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 28px 70px rgba(23, 34, 28, 0.28);
+  }
+
+  #cart_side.add_to_cart.right.open-side .cart_top {
+    border-radius: 22px 22px 0 0;
+    padding-right: 56px;
+  }
+
+  #cart_side.add_to_cart.right.open-side .close-cart {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    margin-left: 0;
+    z-index: 3;
+  }
+
+  #cart_side.add_to_cart.right.open-side .cart_media {
+    padding: 0 16px 18px;
   }
 
   .about-section {

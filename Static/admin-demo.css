@@ -1432,9 +1432,24 @@ details.table-toggle > summary::-webkit-details-marker {
         padding-top: 14px;
     }
 
+    .panel-app,
+    .panel-content {
+        min-height: auto;
+    }
+
+    .panel-app {
+        border-radius: 22px;
+        overflow: visible;
+    }
+
+    .panel-sidebar {
+        gap: 16px;
+        padding: 16px 14px;
+    }
+
     .panel-content,
     .panel-sidebar {
-        padding: 18px;
+        padding: 14px;
     }
 
     .topbar,
@@ -1442,6 +1457,11 @@ details.table-toggle > summary::-webkit-details-marker {
     .table-shell-head {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .topbar-meta,
+    .toolbar-actions {
+        width: 100%;
     }
 
     .sidebar-footer,
@@ -1461,7 +1481,7 @@ details.table-toggle > summary::-webkit-details-marker {
     .panel,
     .admin-lock {
         border-radius: 22px;
-        padding: 18px;
+        padding: 16px;
     }
 
     .section-head,
@@ -1503,5 +1523,9 @@ details.table-toggle > summary::-webkit-details-marker {
     .admin-modal-body {
         padding-left: 16px;
         padding-right: 16px;
+    }
+
+    .admin-modal {
+        width: calc(100vw - 16px);
     }
 }

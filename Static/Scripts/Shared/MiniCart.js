@@ -7,6 +7,17 @@ var MiniCart = {
         }
 
         var esMobile = window.matchMedia && window.matchMedia("(max-width: 575px)").matches;
+        if (esMobile) {
+            side.style.removeProperty("left");
+            side.style.removeProperty("right");
+            side.style.removeProperty("width");
+            side.style.removeProperty("box-sizing");
+            side.style.removeProperty("height");
+            document.body.classList.add("mini-cart-modal-open");
+            return;
+        }
+
+        document.body.classList.remove("mini-cart-modal-open");
         var inset = esMobile ? 16 : 0;
         var widthGap = esMobile ? 32 : 8;
         var maxWidth = esMobile ? 430 : 470;
@@ -46,16 +57,19 @@ var MiniCart = {
     cerrar: function () {
         var side = document.getElementById("cart_side");
         $("#cart_side").removeClass('open-side');
+        document.body.classList.remove("mini-cart-modal-open");
 
         if (side) {
             side.style.right = "";
             side.style.left = "";
             side.style.width = "";
             side.style.boxSizing = "";
+            side.style.height = "";
             side.style.removeProperty("right");
             side.style.removeProperty("left");
             side.style.removeProperty("width");
             side.style.removeProperty("box-sizing");
+            side.style.removeProperty("height");
         }
     },
 

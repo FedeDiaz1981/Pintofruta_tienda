@@ -378,7 +378,7 @@
     <div class="cart ">
         <ul>
             <li class="mobile-cart hidden-lg-up" onclick="MiniCart.abrir()">
-                <a href="#">
+                <a href="javascript:void(0)" onclick="MiniCart.abrir(); return false;">
                     <span id="carritoCantidad" class="cart-product">0</span>
                     <i class="fas fa-shopping-bag fa-2x"></i>
                 </a>
@@ -1937,9 +1937,55 @@
                 <i class="fas fa-user user-login fa-2x"></i>
             </a>
         </li>
+        <li class="mobile-search">
+            <a href="#"><i class="fas fa-search"></i></a>
+            <div class="search-overlay">
+                <div>
+                    <span class="close-mobile-search">×</span>
+                    <div class="overlay-content">
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <form action="busqueda.html" class="big-deal-form big-deal-search" method="get" role="search">        <div class="form-group"><input type="text" class="form-control" id="valorBusqueda" name="valorBusqueda" placeholder="Buscar" value=""></div>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+</form>
+
+
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
         <li class="onhover-dropdown">
-            <a href="#Faq">
-                <i class="fas fa-question-circle"></i>
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+            </a>
+        </li>
+        <li class="mobile-cart hidden-lg-up" onclick="MiniCart.abrir()">
+            <a href="javascript:void(0)" onclick="MiniCart.abrir(); return false;">
+                <span id="carritoCantidad" class="cart-product">0</span>
+                <i class="fas fa-shopping-bag fa-2x"></i>
+            </a>
+        </li>
+        <li class="toggle-nav">
+            <i class="fa fa-bars "></i>
+        </li>
+    </ul>
+
+
+    <ul class="d-none">
+        <li class="mobile-user onhover-dropdown" onclick="openAccount()">
+            <a href="#">
+                <i class="fas fa-user user-login fa-2x"></i>
             </a>
         </li>
         <li class="onhover-dropdown">
@@ -1974,46 +2020,6 @@
                     </div>
                 </div>
             </div>
-        </li>
-        <li class="toggle-nav">
-            <i class="fa fa-bars "></i>
-        </li>
-    </ul>
-
-
-    <ul class="d-none">
-        <li class="mobile-search">
-            <a href="#"><i class="fas fa-search"></i></a>
-            <div class="search-overlay">
-                <div>
-                    <span class="close-mobile-search">×</span>
-                    <div class="overlay-content">
-
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <form action="busqueda.html" class="big-deal-form big-deal-search" method="get" role="search">        <div class="form-group"><input type="text" class="form-control" id="valorBusqueda" name="valorBusqueda" placeholder="Buscar" value=""></div>
-        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-</form>
-
-
-
-
-
-
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <li class="mobile-user onhover-dropdown" onclick="openAccount()">
-            <a href="#">
-                <i class="fas fa-user user-login fa-2x"></i>
-            </a>
         </li>
         <li class="mobile-ask onhover-dropdown">
             <a href="#Nosotros">
@@ -3127,7 +3133,7 @@
     </div>
 <form action="/Seguridad/LogIn" class="theme-form" id="frmLoginMenu" method="post">            <div id="validatorLogInMenu" class="alert alert-block alert-danger" style="display:none"></div>
 <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="/" />            <div class="form-group">
-                <label for="Nombre">Usuario</label>
+                <label for="nombreMenuLogin">Usuario</label>
                 <input id="nombreMenuLogin" class="form-control form-color" name="Nombre" placeholder="Correo Electrónico" type="text" value="" autocomplete="username" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
@@ -3271,7 +3277,7 @@
     .product-detail-modal {
         position: fixed;
         inset: 0;
-        z-index: 5000;
+        z-index: 20000;
         display: none;
         align-items: center;
         justify-content: center;
@@ -3279,10 +3285,17 @@
         background: rgba(31, 42, 68, 0.52);
         overflow-y: auto;
         box-sizing: border-box;
+        overscroll-behavior: contain;
+        touch-action: none;
     }
 
     .product-detail-modal.show {
         display: flex;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+        touch-action: none;
     }
 
     .product-detail-modal .modal-content {
@@ -3484,18 +3497,18 @@
     @media (max-width: 767px) {
         .product-detail-modal {
             display: none;
-            align-items: flex-start;
-            justify-content: center;
+            align-items: stretch;
+            justify-content: stretch;
             inset: 0;
             width: 100vw;
-            height: 100vh;
-            padding: 8px;
+            height: 100dvh;
+            padding: 0;
             overflow: hidden;
         }
 
         .product-detail-modal .modal-dialog {
             width: 100%;
-            max-width: calc(100vw - 16px);
+            max-width: 100vw;
             height: 100%;
             margin: 0;
             box-sizing: border-box;
@@ -3504,17 +3517,19 @@
         .product-detail-modal .modal-content {
             width: 100%;
             max-width: 100%;
-            max-height: calc(100vh - 16px);
+            height: 100%;
+            max-height: 100%;
+            border-radius: 0;
         }
 
         .product-detail-modal .modal-header,
         .product-detail-modal .modal-body {
-            padding-left: 14px;
-            padding-right: 14px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         .product-detail-modal .modal-header {
-            padding-top: 16px;
+            padding-top: calc(16px + env(safe-area-inset-top));
         }
 
         .product-detail-modal .close {
@@ -3522,7 +3537,7 @@
             height: 30px;
             font-size: 20px;
             margin-top: 0;
-            margin-right: 4px;
+            margin-right: 0;
         }
 
         .product-modal-grid {
@@ -3565,11 +3580,43 @@
         .product-modal-qty input {
             width: 100%;
         }
+
+        .product-detail-modal .modal-body {
+            padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            -webkit-overflow-scrolling: touch;
+        }
     }
 
     .modal-dialog-pdf {
         height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
         max-width:90% !important;
+    }
+
+    @media (max-width: 767px) {
+        .icon-block > ul:first-of-type {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(1) {
+            order: 1;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(4) {
+            order: 2;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(3) {
+            order: 3;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(2) {
+            order: 4;
+        }
+
+        .icon-block > ul:first-of-type > li:nth-child(5) {
+            order: 5;
+        }
     }
 
     .modal-content-pdf {
@@ -3681,6 +3728,12 @@
         function openModal() {
             const modal = document.getElementById('productDetailModal');
             if (modal) {
+                const scrollY = window.scrollY || window.pageYOffset || 0;
+                document.body.dataset.modalScrollY = String(scrollY);
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollY}px`;
+                document.body.style.left = '0';
+                document.body.style.right = '0';
                 modal.classList.add('show');
                 modal.style.display = 'flex';
                 document.body.classList.add('modal-open');
@@ -3694,6 +3747,13 @@
                 modal.classList.remove('show');
                 modal.style.display = 'none';
                 document.body.classList.remove('modal-open');
+                const scrollY = Number(document.body.dataset.modalScrollY || '0');
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.left = '';
+                document.body.style.right = '';
+                delete document.body.dataset.modalScrollY;
+                window.scrollTo(0, scrollY);
                 document.querySelectorAll('.modal-backdrop').forEach((node) => node.remove());
             }
         }
