@@ -1,7 +1,7 @@
 {
   "sessionRole": "admin",
   "viewMode": "public",
-  "activeAdminPanel": "brands",
+  "activeAdminPanel": "hero",
   "panelSearchQuery": "",
   "activeModalAction": "edit",
   "headerNavigation": {
@@ -421,8 +421,8 @@
       "title": "Temporada fresca",
       "subtitle": "Una apertura limpia para entrar al catalogo por novedades y categorias.",
       "badge": "Inicio",
-      "image": "Content/Images/Banners/pf-hero-01.jpg",
-      "imageMobile": "Content/Images/Banners/pf-hero-01-mobile.jpg",
+      "image": "Content/Images/Hero/Slider_01.png",
+      "imageMobile": "Content/Images/Hero/Slider_01_mob.png",
       "link": "galeria.html?source=/Galeria/1-categorias",
       "active": true,
       "homeSpotlight": false
@@ -433,8 +433,8 @@
       "title": "Energia para el dia",
       "subtitle": "Una portada orientada a snacks y opciones listas para rotacion rapida.",
       "badge": "Snack",
-      "image": "Content/Images/Banners/pf-hero-02.jpg",
-      "imageMobile": "Content/Images/Banners/pf-hero-02-mobile.jpg",
+      "image": "Content/Images/Hero/Slider_02.png",
+      "imageMobile": "Content/Images/Hero/Slider_02_mob.png",
       "link": "galeria.html?source=/Galeria/3-dietas",
       "active": true,
       "homeSpotlight": false
@@ -445,8 +445,8 @@
       "title": "Marcas destacadas",
       "subtitle": "Un banner pensado para navegar el catalogo por identidad comercial.",
       "badge": "Marca",
-      "image": "Content/Images/Banners/pf-hero-03.jpg",
-      "imageMobile": "Content/Images/Banners/pf-hero-03-mobile.jpg",
+      "image": "Content/Images/Hero/Slider_03.png",
+      "imageMobile": "Content/Images/Hero/Slider_03_mob.png",
       "link": "galeria.html?source=/Galeria/2-marcas",
       "active": true,
       "homeSpotlight": true
@@ -457,23 +457,11 @@
       "title": "Ofertas activas",
       "subtitle": "Una pieza de promo para destacar productos con mejor salida.",
       "badge": "Promo",
-      "image": "Content/Images/Banners/pf-hero-04.jpg",
-      "imageMobile": "Content/Images/Banners/pf-hero-04-mobile.jpg",
+      "image": "Content/Images/Hero/Slider_04.png",
+      "imageMobile": "Content/Images/Hero/Slider_04_mob.png",
       "link": "galeria.html?source=/Galeria/693-nuevos-ingresos",
       "active": true,
       "homeSpotlight": false
-    },
-    {
-      "id": 5,
-      "order": 5,
-      "title": "Novedades listas",
-      "subtitle": "Este banner queda marcado para la seccion intermedia del home.",
-      "badge": "Spotlight",
-      "image": "Content/Images/Banners/pf-hero-05.jpg",
-      "imageMobile": "Content/Images/Banners/pf-hero-05-mobile.jpg",
-      "link": "galeria.html?source=/Galeria/2-marcas",
-      "homeSpotlight": true,
-      "active": true
     }
   ],
   "banners": [
