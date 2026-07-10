@@ -1,7 +1,7 @@
 {
   "sessionRole": "admin",
   "viewMode": "public",
-  "activeAdminPanel": "banner",
+  "activeAdminPanel": "categories",
   "panelSearchQuery": "",
   "activeModalAction": "edit",
   "headerNavigation": {

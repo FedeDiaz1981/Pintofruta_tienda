@@ -231,9 +231,17 @@ h6 {
 .main-header-menu .logo-block {
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 245, 236, 0.96));
-  border: 1px solid rgba(75, 123, 100, 0.22);
-  box-shadow: 0 12px 28px rgba(53, 72, 61, 0.16);
+  background:
+    linear-gradient(90deg,
+      rgba(133, 42, 89, 0.30) 0%,
+      rgba(214, 103, 35, 0.28) 18%,
+      rgba(232, 175, 53, 0.10) 30%,
+      rgba(50, 90, 63, 0.52) 38%,
+      rgba(34, 64, 52, 0.62) 70%,
+      rgba(66, 126, 182, 0.18) 81%,
+      rgba(118, 73, 171, 0.22) 100%);
+  border: 2px solid rgba(53, 85, 67, 0.62);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.22), 0 8px 18px rgba(53, 72, 61, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.10);
   isolation: isolate;
 }
 
@@ -241,7 +249,7 @@ h6 {
   display: block;
   max-height: 64px;
   width: auto;
-  filter: contrast(1.14) saturate(1.16) drop-shadow(0 2px 3px rgba(53, 72, 61, 0.12));
+  filter: contrast(1.08) saturate(1.14) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
 }
 
 .toggle-nav i,
@@ -513,6 +521,16 @@ h6 {
 .btn-rounded.btn-outline:hover {
   background: var(--pf-primary) !important;
   color: #fff !important;
+}
+
+.btn.btn-sm.btn-warning[href="admin-demo.html"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-height: 36px;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
 }
 
 input,

@@ -582,6 +582,10 @@ function renderMainPanel() {
     `).join("");
 
     const tableParts = renderPanelTableHTML(state.activeAdminPanel, filtered);
+    const tableShell = els.panelTable && els.panelTable.closest(".table-shell");
+    if (tableShell) {
+        tableShell.dataset.activePanel = state.activeAdminPanel;
+    }
     els.panelTableHead.innerHTML = tableParts.head;
     els.panelTableBody.innerHTML = tableParts.body;
 
@@ -1314,15 +1318,15 @@ function renderPanelTableHTML(panel, records) {
             `,
             body: records.map((banner) => `
                     <tr>
-                        <td><strong>${escapeHtml(banner.text || "")}</strong></td>
-                        <td>${escapeHtml(String(banner.order || ""))}</td>
-                        <td>${banner.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto")}</td>
-                        <td>
+                        ${tableCell("Texto", `<strong>${escapeHtml(banner.text || "")}</strong>`)}
+                        ${tableCell("Orden", escapeHtml(String(banner.order || "")))}
+                        ${tableCell("Estado", banner.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto"))}
+                        ${tableCell("Acciones", `
                             <div class="sql-actions">
                                 <button class="sql-action primary" type="button" data-edit-type="banner" data-id="${banner.id}">Editar</button>
                                 <button class="sql-action danger" type="button" data-delete-type="banner" data-id="${banner.id}">Borrar</button>
                             </div>
-                        </td>
+                        `)}
                     </tr>
                 `).join(""),
         };
@@ -1344,17 +1348,17 @@ function renderPanelTableHTML(panel, records) {
                     const category = state.categories.find((item) => item.id === product.categoryId);
                     return `
                         <tr>
-                            <td><strong>${escapeHtml(product.sku)}</strong></td>
-                            <td>${escapeHtml(product.detail || product.name || "")}</td>
-                            <td>${escapeHtml(product.presentation || "")}</td>
-                            <td>${category ? escapeHtml(category.name) : "Sin categoria"}</td>
-                            <td>${escapeHtml(product.brand || "")}</td>
-                            <td>
+                            ${tableCell("SKU", `<strong>${escapeHtml(product.sku)}</strong>`)}
+                            ${tableCell("Detalle", escapeHtml(product.detail || product.name || ""))}
+                            ${tableCell("Presentación", escapeHtml(product.presentation || ""))}
+                            ${tableCell("Categoría", category ? escapeHtml(category.name) : "Sin categoria")}
+                            ${tableCell("Marca", escapeHtml(product.brand || ""))}
+                            ${tableCell("Acciones", `
                                 <div class="sql-actions">
                                     <button class="sql-action primary" type="button" data-edit-type="product" data-id="${product.id}">Editar</button>
                                     <button class="sql-action danger" type="button" data-delete-type="product" data-id="${product.id}">Borrar</button>
                                 </div>
-                            </td>
+                            `)}
                         </tr>
                     `;
                 }).join(""),
@@ -1373,15 +1377,15 @@ function renderPanelTableHTML(panel, records) {
             `,
             body: records.map((category) => `
                     <tr>
-                        <td><strong>${escapeHtml(category.name)}</strong></td>
-                        <td>${escapeHtml(category.slug)}</td>
-                        <td>${category.visible ? badgeHtml("green", "Visible") : badgeHtml("red", "Oculta")}</td>
-                        <td>
+                        ${tableCell("Nombre", `<strong>${escapeHtml(category.name)}</strong>`)}
+                        ${tableCell("Slug", escapeHtml(category.slug))}
+                        ${tableCell("Visible", category.visible ? badgeHtml("green", "Visible") : badgeHtml("red", "Oculta"))}
+                        ${tableCell("Acciones", `
                             <div class="sql-actions">
                                 <button class="sql-action primary" type="button" data-edit-type="category" data-id="${category.id}">Editar</button>
                                 <button class="sql-action danger" type="button" data-delete-type="category" data-id="${category.id}">Borrar</button>
                             </div>
-                        </td>
+                        `)}
                     </tr>
                 `).join(""),
         };
@@ -1400,16 +1404,16 @@ function renderPanelTableHTML(panel, records) {
             `,
             body: records.map((user) => `
                     <tr>
-                        <td><strong>${escapeHtml(user.name)}</strong></td>
-                        <td>${escapeHtml(user.email)}</td>
-                        <td>${user.role === "admin" ? badgeHtml("amber", "Administrador") : badgeHtml("", "Cliente")}</td>
-                        <td>${user.canSeePrices ? badgeHtml("green", "Lista de precios") : badgeHtml("red", "Sin acceso")}<span class="row-sub">${user.active ? "Activo" : "Inactivo"}</span></td>
-                        <td>
+                        ${tableCell("Nombre", `<strong>${escapeHtml(user.name)}</strong>`)}
+                        ${tableCell("Email", escapeHtml(user.email))}
+                        ${tableCell("Rol", user.role === "admin" ? badgeHtml("amber", "Administrador") : badgeHtml("", "Cliente"))}
+                        ${tableCell("Acceso", `${user.canSeePrices ? badgeHtml("green", "Lista de precios") : badgeHtml("red", "Sin acceso")}<span class="row-sub">${user.active ? "Activo" : "Inactivo"}</span>`)}
+                        ${tableCell("Acciones", `
                             <div class="sql-actions">
                                 <button class="sql-action primary" type="button" data-edit-type="user" data-id="${user.id}">Editar</button>
                                 <button class="sql-action danger" type="button" data-delete-type="user" data-id="${user.id}">Borrar</button>
                             </div>
-                        </td>
+                        `)}
                     </tr>
                 `).join(""),
         };
@@ -1428,17 +1432,17 @@ function renderPanelTableHTML(panel, records) {
             `,
             body: records.map((slide) => `
                     <tr>
-                        <td><strong>${slide.order}</strong></td>
-                        <td>${escapeHtml(slide.title)}<span class="row-sub">${escapeHtml(slide.badge || "")}</span></td>
-                        <td>${escapeHtml(slide.image)}</td>
-                        <td>${slide.imageMobile ? `${escapeHtml(slide.imageMobile)}` : "-"}</td>
-                        <td>${slide.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto")}</td>
-                        <td>
+                        ${tableCell("Orden", `<strong>${slide.order}</strong>`)}
+                        ${tableCell("Título", `${escapeHtml(slide.title)}<span class="row-sub">${escapeHtml(slide.badge || "")}</span>`)}
+                        ${tableCell("Imagen", escapeHtml(slide.image))}
+                        ${tableCell("Mobile", slide.imageMobile ? `${escapeHtml(slide.imageMobile)}` : "-")}
+                        ${tableCell("Estado", slide.active ? badgeHtml("green", "Activo") : badgeHtml("red", "Oculto"))}
+                        ${tableCell("Acciones", `
                             <div class="sql-actions">
                                 <button class="sql-action primary" type="button" data-edit-type="hero" data-id="${slide.id}">Editar</button>
                                 <button class="sql-action danger" type="button" data-delete-type="hero" data-id="${slide.id}">Borrar</button>
                             </div>
-                        </td>
+                        `)}
                     </tr>
                 `).join(""),
         };
@@ -1515,6 +1519,10 @@ function badgeHtml(tone, label) {
     };
     const cls = map[tone] || "";
     return `<span class="badge-soft ${cls}">${escapeHtml(label)}</span>`;
+}
+
+function tableCell(label, content) {
+    return `<td data-label="${escapeHtml(label)}">${content}</td>`;
 }
 
 function statusBadge(status) {
