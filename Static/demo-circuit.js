@@ -417,7 +417,7 @@
                             <div class="pf-product-modal__facts" data-pf-product-facts></div>
                             <p class="pf-product-modal__copy" data-pf-product-copy></p>
                             <div class="pf-product-modal__actions">
-                                <a class="primary" href="carrito.html">Ver pedido</a>
+                                <a class="primary" href="javascript:void(0)" data-demo-cart-open>Ver pedido</a>
                                 <a class="secondary" href="busqueda.html">Ir a búsqueda</a>
                             </div>
                         </aside>
@@ -1191,6 +1191,271 @@
         document.head.appendChild(style);
     }
 
+    function ensureCartModalStyles() {
+        if (document.getElementById("demoCartModalStyles")) {
+            return;
+        }
+
+        var style = document.createElement("style");
+        style.id = "demoCartModalStyles";
+        style.textContent = `
+            .pf-cart-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 10070;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 18px;
+                overscroll-behavior: contain;
+            }
+            .pf-cart-modal.is-open { display: flex; }
+            .pf-cart-modal__backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(15, 23, 42, .62);
+                backdrop-filter: blur(8px);
+            }
+            .pf-cart-modal__dialog {
+                position: relative;
+                width: min(1120px, 100%);
+                max-height: calc(100dvh - 36px);
+                overflow: auto;
+                border-radius: 28px;
+                background: linear-gradient(180deg, #fffdf7 0%, #fff8ec 100%);
+                box-shadow: 0 30px 70px rgba(15, 23, 42, .26);
+                border: 1px solid rgba(255, 184, 77, .18);
+            }
+            .pf-cart-modal__inner {
+                padding: 24px;
+            }
+            .pf-cart-modal__head {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 18px;
+                margin-bottom: 18px;
+            }
+            .pf-cart-modal__eyebrow {
+                display: inline-block;
+                padding: 7px 12px;
+                border-radius: 999px;
+                font-size: 12px;
+                letter-spacing: .14em;
+                text-transform: uppercase;
+                color: #b86e00;
+                background: rgba(255, 184, 77, .18);
+                margin-bottom: 10px;
+            }
+            .pf-cart-modal__title {
+                margin: 0;
+                font-size: clamp(28px, 4vw, 54px);
+                line-height: .96;
+                letter-spacing: -.05em;
+                color: #1f2a44;
+            }
+            .pf-cart-modal__copy {
+                margin: 12px 0 0;
+                color: #51607d;
+                line-height: 1.6;
+                max-width: 60ch;
+            }
+            .pf-cart-modal__close {
+                width: 44px;
+                height: 44px;
+                border-radius: 999px;
+                border: 0;
+                background: #1f2a44;
+                color: #fff;
+                font-size: 24px;
+                line-height: 1;
+                cursor: pointer;
+                flex: 0 0 auto;
+            }
+            .pf-cart-modal__meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 14px;
+                color: #51607d;
+                font-size: 13px;
+            }
+            .pf-cart-modal__summary {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 12px;
+                margin: 18px 0;
+            }
+            .pf-cart-modal__summary-card {
+                padding: 16px;
+                border-radius: 18px;
+                background: rgba(255,255,255,.82);
+                border: 1px solid rgba(31,42,68,.08);
+                box-shadow: inset 0 0 0 1px rgba(255,255,255,.24);
+            }
+            .pf-cart-modal__summary-card span {
+                display: block;
+                color: #51607d;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: .12em;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+            .pf-cart-modal__summary-card strong {
+                font-size: 20px;
+                color: #1f2a44;
+            }
+            .pf-cart-modal__layout {
+                display: grid;
+                grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+                gap: 18px;
+                align-items: start;
+            }
+            .pf-cart-modal__items {
+                min-width: 0;
+            }
+            .pf-cart-modal__items-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+            .pf-cart-modal__item {
+                border-radius: 20px;
+                overflow: hidden;
+                background: #fff;
+                border: 1px solid rgba(31,42,68,.08);
+                box-shadow: 0 14px 30px rgba(31,42,68,.08);
+                display: flex;
+                flex-direction: column;
+                min-height: 100%;
+            }
+            .pf-cart-modal__item-image {
+                aspect-ratio: 4 / 3;
+                background: linear-gradient(180deg, #fffdf7 0%, #fff3dc 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+            }
+            .pf-cart-modal__item-image img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                display: block;
+            }
+            .pf-cart-modal__item-body {
+                padding: 14px;
+                display: grid;
+                gap: 8px;
+            }
+            .pf-cart-modal__item-title {
+                margin: 0;
+                color: #1f2a44;
+                font-size: 16px;
+                line-height: 1.25;
+            }
+            .pf-cart-modal__item-line {
+                color: #51607d;
+                font-size: 13px;
+            }
+            .pf-cart-modal__item-price {
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                align-items: center;
+                padding: 10px 12px;
+                border-radius: 14px;
+                background: rgba(255, 184, 77, .14);
+            }
+            .pf-cart-modal__item-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .pf-cart-modal__item-actions a,
+            .pf-cart-modal__item-actions button,
+            .pf-cart-modal__footer a,
+            .pf-cart-modal__footer button {
+                appearance: none;
+                border: 0;
+                border-radius: 999px;
+                padding: 12px 16px;
+                font: inherit;
+                font-weight: 700;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .pf-cart-modal__item-actions .primary,
+            .pf-cart-modal__footer .primary {
+                background: linear-gradient(135deg, #ffb84d, #f6a623);
+                color: #1f2a44;
+            }
+            .pf-cart-modal__item-actions .secondary,
+            .pf-cart-modal__footer .secondary {
+                background: #eef1f6;
+                color: #1f2a44;
+            }
+            .pf-cart-modal__side {
+                display: grid;
+                gap: 12px;
+            }
+            .pf-cart-modal__panel {
+                border-radius: 22px;
+                background: rgba(255,255,255,.82);
+                border: 1px solid rgba(31,42,68,.08);
+                padding: 16px;
+            }
+            .pf-cart-modal__panel h3 {
+                margin: 0 0 10px;
+                color: #1f2a44;
+                font-size: 22px;
+            }
+            .pf-cart-modal__panel p,
+            .pf-cart-modal__panel li {
+                color: #51607d;
+                line-height: 1.6;
+            }
+            .pf-cart-modal__panel ul {
+                margin: 0;
+                padding-left: 18px;
+            }
+            .pf-cart-modal__footer {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 18px;
+                justify-content: flex-end;
+            }
+            @media (max-width: 900px) {
+                .pf-cart-modal__layout { grid-template-columns: 1fr; }
+                .pf-cart-modal__summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                .pf-cart-modal__items-grid { grid-template-columns: 1fr; }
+            }
+            @media (max-width: 767px) {
+                .pf-cart-modal {
+                    align-items: stretch;
+                    justify-content: stretch;
+                    padding: 0;
+                    height: 100dvh;
+                }
+                .pf-cart-modal__dialog {
+                    width: 100%;
+                    max-height: 100dvh;
+                    height: 100dvh;
+                    border-radius: 0;
+                }
+                .pf-cart-modal__inner {
+                    padding: 16px;
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+                .pf-cart-modal__summary { grid-template-columns: 1fr; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     function renderMiniCart() {
         ensureMiniCartStyles();
         var side = document.getElementById("cart_side");
@@ -1239,7 +1504,7 @@
                             </li>
                             <li>
                                 <div class="buttons">
-                                    <a href="carrito.html" class="btn btn-rounded btn-xs">Ver pedido</a>
+                                    <a href="javascript:void(0)" class="btn btn-rounded btn-xs" data-demo-cart-open>Ver pedido</a>
                                 </div>
                             </li>
                         </ul>
@@ -1303,7 +1568,7 @@
                         <li>
                             <div class="buttons">
                                 <a href="javascript:void(0)" class="btn btn-rounded btn-xs" data-demo-cart-clear>Vaciar pedido</a>
-                                <a href="carrito.html" class="btn btn-rounded btn-xs">Ver pedido</a>
+                                <a href="javascript:void(0)" class="btn btn-rounded btn-xs" data-demo-cart-open>Ver pedido</a>
                             </div>
                         </li>
                     </ul>
@@ -1404,6 +1669,182 @@
         }
     }
 
+    function ensureCartModal() {
+        ensureCartModalStyles();
+        if (document.getElementById("pfCartModal")) {
+            return;
+        }
+
+        var modal = document.createElement("div");
+        modal.id = "pfCartModal";
+        modal.className = "pf-cart-modal";
+        modal.innerHTML = `
+            <div class="pf-cart-modal__backdrop" data-pf-cart-close></div>
+            <div class="pf-cart-modal__dialog" role="dialog" aria-modal="true" aria-label="Pedido demo">
+                <div class="pf-cart-modal__inner">
+                    <div class="pf-cart-modal__head">
+                        <div>
+                            <span class="pf-cart-modal__eyebrow">Pedido demo</span>
+                            <div class="pf-cart-modal__meta" data-pf-cart-meta></div>
+                        </div>
+                        <button class="pf-cart-modal__close" type="button" data-pf-cart-close aria-label="Cerrar">&times;</button>
+                    </div>
+                    <div class="pf-cart-modal__summary" data-pf-cart-summary></div>
+                    <div class="pf-cart-modal__items">
+                        <div class="pf-cart-modal__items-grid" data-pf-cart-items></div>
+                    </div>
+                    <div class="pf-cart-modal__footer">
+                        <button class="secondary" type="button" data-pf-cart-close>Cerrar</button>
+                        <button class="primary" type="button" data-demo-cart-download>Enviar pedido</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.addEventListener("click", function (event) {
+            if (event.target && event.target.hasAttribute("data-pf-cart-close")) {
+                event.preventDefault();
+                closeCartModal();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeCartModal();
+            }
+        });
+    }
+
+    function renderCartModal() {
+        ensureCartModal();
+        var modal = document.getElementById("pfCartModal");
+        if (!modal) {
+            return;
+        }
+
+        var items = cartItems();
+        var total = cartSubtotal();
+        var count = cartCount();
+        var hasPrices = items.some(function (item) { return getStoredCartPrice(item) != null; });
+        var userLabel = getUserLabel();
+        var summary = modal.querySelector("[data-pf-cart-summary]");
+        var meta = modal.querySelector("[data-pf-cart-meta]");
+        var list = modal.querySelector("[data-pf-cart-items]");
+        if (meta) {
+            meta.innerHTML = `
+                <span>Artículos ${escapeHtml(count)}</span>
+                <span>${escapeHtml(hasPrices ? formatMoney(total) : "Sin precio")}</span>
+                <span>${escapeHtml(userLabel)}</span>
+            `;
+        }
+        if (summary) {
+            summary.innerHTML = `
+                <div class="pf-cart-modal__summary-card">
+                    <span>Artículos</span>
+                    <strong>${escapeHtml(count)}</strong>
+                </div>
+                <div class="pf-cart-modal__summary-card">
+                    <span>Líneas</span>
+                    <strong>${escapeHtml(items.length)}</strong>
+                </div>
+                <div class="pf-cart-modal__summary-card">
+                    <span>Total estimado</span>
+                    <strong>${escapeHtml(hasPrices ? formatMoney(total) : "Sin calcular")}</strong>
+                </div>
+                <div class="pf-cart-modal__summary-card">
+                    <span>Usuario</span>
+                    <strong>${escapeHtml(userLabel)}</strong>
+                </div>
+            `;
+        }
+        if (list) {
+            if (!items.length) {
+                list.innerHTML = `
+                    <div class="pf-cart-modal__panel">
+                        <h3>Pedido vacío</h3>
+                        <p>Agregá artículos desde Home, Búsqueda o Galería para generar el PDF.</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = items.map(function (item) {
+                    var itemSku = String(item.sku || extractSkuFromHref(item.href) || item.id || "").toUpperCase();
+                    var unitPrice = getStoredCartPrice(item);
+                    var totalPrice = getDisplayCartTotalPrice(item);
+                    return `
+                        <article class="pf-cart-modal__item">
+                            <div class="pf-cart-modal__item-image">
+                                <img src="${escapeHtml(item.image || "assets/images/no-image.svg")}" alt="${escapeHtml(item.name || "")}" onerror="this.onerror=null;this.src='assets/images/no-image.svg'">
+                            </div>
+                            <div class="pf-cart-modal__item-body">
+                                <h4 class="pf-cart-modal__item-title">${escapeHtml(item.name || "")}</h4>
+                                <div class="pf-cart-modal__item-line">${escapeHtml(item.brand || "")}${item.sku ? " · " + escapeHtml(item.sku) : ""}</div>
+                                <div class="pf-cart-modal__item-line">Cantidad: ${escapeHtml(item.qty || 0)}</div>
+                                <div class="pf-cart-modal__item-price">
+                                    <span>Precio unitario</span>
+                                    <strong>${escapeHtml(unitPrice == null ? "Sin precio" : formatMoney(unitPrice))}</strong>
+                                </div>
+                                <div class="pf-cart-modal__item-line"><strong>Importe:</strong> ${escapeHtml(totalPrice == null ? "Sin precio" : formatMoney(totalPrice))}</div>
+                                <div class="pf-cart-modal__item-actions">
+                                    <a class="secondary" href="detallearticulo.html?sku=${encodeURIComponent(itemSku)}" data-product-sku="${escapeHtml(itemSku)}">Ver detalle</a>
+                                    <button class="primary" type="button" data-demo-cart-remove="${escapeHtml(item.id || item.sku || item.name)}">Quitar</button>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join("");
+            }
+        }
+    }
+
+    function openCartModal() {
+        var productModal = document.getElementById("productDetailModal");
+        if (productModal && productModal.classList.contains("show")) {
+            productModal.classList.remove("show");
+            productModal.style.display = "none";
+            document.body.classList.remove("modal-open");
+            document.body.style.overflow = "";
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.left = "";
+            document.body.style.right = "";
+            delete document.body.dataset.modalScrollY;
+        }
+
+        ensureCartModal();
+        renderCartModal();
+        var modal = document.getElementById("pfCartModal");
+        if (!modal) {
+            return;
+        }
+
+        var scrollY = window.scrollY || window.pageYOffset || 0;
+        document.body.dataset.modalScrollY = String(scrollY);
+        document.body.style.position = "fixed";
+        document.body.style.top = "-" + scrollY + "px";
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.classList.add("modal-open");
+        modal.classList.add("is-open");
+    }
+
+    function closeCartModal() {
+        var modal = document.getElementById("pfCartModal");
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove("is-open");
+        var scrollY = Number(document.body.dataset.modalScrollY || "0");
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.classList.remove("modal-open");
+        delete document.body.dataset.modalScrollY;
+        window.scrollTo(0, scrollY);
+    }
+
     function ensureFloatingCartButton() {
         if (document.getElementById("demoFloatingCartButton")) {
             return;
@@ -1414,9 +1855,10 @@
 
         var button = document.createElement("a");
         button.id = "demoFloatingCartButton";
-        button.href = "carrito.html";
+        button.href = "javascript:void(0)";
         button.textContent = "Pedido (0)";
         button.setAttribute("aria-label", "Ir al pedido");
+        button.setAttribute("data-demo-cart-open", "1");
         button.style.position = "fixed";
         button.style.right = "18px";
         button.style.bottom = "18px";
@@ -1530,64 +1972,99 @@
         var doc = new jsPDF({ unit: "pt", format: "a4" });
         var width = doc.internal.pageSize.getWidth();
         var height = doc.internal.pageSize.getHeight();
-        var margin = 40;
-        var y = 54;
-        var rowHeight = 18;
+        var margin = 36;
+        var y = 44;
+        var rowHeight = 16;
         var userLabel = getUserLabel();
         var total = cartSubtotal();
         var hasPrices = items.some(function (item) { return getStoredCartPrice(item) != null; });
 
+        function drawPill(x, yPos, w, h, label, value) {
+            doc.setFillColor(245, 241, 232);
+            doc.roundedRect(x, yPos, w, h, 8, 8, "F");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.text(label, x + 10, yPos + 13);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(13);
+            doc.text(String(value), x + 10, yPos + 26);
+        }
+
         doc.setFont("helvetica", "bold");
-        doc.setFontSize(20);
+        doc.setFontSize(22);
         doc.text("Pintofruta", margin, y);
         doc.setFontSize(12);
         doc.setFont("helvetica", "normal");
-        y += 22;
-        doc.text("Pedido demo", margin, y);
-        y += 16;
-        doc.text("Usuario: " + userLabel, margin, y);
-        y += 16;
-        doc.text("Fecha: " + new Date().toLocaleString("es-AR"), margin, y);
-        y += 24;
+        y += 18;
+        doc.text("Pedido demo listo para enviar", margin, y);
+        y += 10;
+        doc.setTextColor(83, 96, 125);
+        doc.text("Resumen amigable para compartir con el vendedor.", margin, y);
+        doc.setTextColor(31, 42, 68);
+        y += 18;
+
+        drawPill(margin, y, 124, 44, "ARTICULOS", String(items.length));
+        drawPill(margin + 132, y, 144, 44, "USUARIO", userLabel);
+        drawPill(margin + 284, y, 130, 44, "LINEAS", String(items.length));
+        drawPill(margin + 422, y, 120, 44, "TOTAL", hasPrices ? formatMoney(total) : "Sin calcular");
+        y += 58;
 
         doc.setFont("helvetica", "bold");
-        doc.text("Articulo", margin, y);
-        doc.text("SKU", 300, y);
-        doc.text("Cant.", 420, y);
-        if (hasPrices) {
-            doc.text("Importe", 480, y);
-        }
-        y += 8;
-        doc.setDrawColor(210);
+        doc.setFontSize(11);
+        doc.text("Producto", margin, y);
+        doc.text("Marca / SKU", 268, y);
+        doc.text("Cant.", 392, y);
+        doc.text("Unit.", 440, y);
+        doc.text("Importe", 504, y);
+        y += 7;
+        doc.setDrawColor(214);
         doc.line(margin, y, width - margin, y);
-        y += 18;
+        y += 16;
         doc.setFont("helvetica", "normal");
 
         items.forEach(function (item) {
-            if (y > height - 90) {
+            if (y > height - 112) {
                 doc.addPage();
-                y = 54;
+                y = 44;
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("Producto", margin, y);
+                doc.text("Marca / SKU", 268, y);
+                doc.text("Cant.", 392, y);
+                doc.text("Unit.", 440, y);
+                doc.text("Importe", 504, y);
+                y += 7;
+                doc.setDrawColor(214);
+                doc.line(margin, y, width - margin, y);
+                y += 16;
+                doc.setFont("helvetica", "normal");
             }
 
-            var text = item.name || "Producto demo";
-            var lines = doc.splitTextToSize(text, 250);
+            var productName = item.name || "Producto demo";
+            var brandSku = [item.brand || "-", item.sku || "-"].join(" · ");
+            var lines = doc.splitTextToSize(productName, 220);
+            var unitPrice = getStoredCartPrice(item);
+            var lineTotal = getDisplayCartTotalPrice(item);
+            var rowSize = Math.max(lines.length * rowHeight + 6, 28);
+
+            doc.setFont("helvetica", "bold");
             doc.text(lines, margin, y);
-            doc.text(String(item.sku || "-"), 300, y);
-            doc.text(String(item.qty || 0), 420, y);
-            if (hasPrices) {
-                var printablePrice = getDisplayCartTotalPrice(item);
-                doc.text(printablePrice == null ? "Sin precio" : formatMoney(printablePrice), 480, y);
-            }
-            y += Math.max(lines.length * rowHeight, rowHeight);
-            y += 8;
+            doc.setFont("helvetica", "normal");
+            doc.text(brandSku, 268, y);
+            doc.text(String(item.qty || 0), 392, y);
+            doc.text(unitPrice == null ? "Sin precio" : formatMoney(unitPrice), 440, y);
+            doc.text(lineTotal == null ? "Sin precio" : formatMoney(lineTotal), 504, y);
+            y += rowSize + 8;
+            doc.setDrawColor(233);
+            doc.line(margin, y - 6, width - margin, y - 6);
         });
 
-        y += 10;
         doc.setFont("helvetica", "bold");
-        doc.text("Total estimado: " + (items.some(function (item) { return getStoredCartPrice(item) != null; }) ? formatMoney(total) : "Sin calcular"), margin, y);
-        y += 18;
+        doc.setFontSize(13);
+        doc.text("Total estimado: " + (hasPrices ? formatMoney(total) : "Sin calcular"), margin, Math.min(y + 8, height - 40));
         doc.setFont("helvetica", "normal");
-        doc.text("Este archivo es un ejemplo de pedido para compartir con el cliente.", margin, y);
+        doc.setFontSize(10);
+        doc.text("Pedido generado desde la demo de Pintofruta. Compartir este archivo con el vendedor para avanzar con la preparación.", margin, Math.min(y + 24, height - 24));
 
         doc.save("pedido-pintofruta.pdf");
     }
@@ -1598,6 +2075,8 @@
             var removeButton = event.target.closest("[data-demo-cart-remove]");
             var downloadButton = event.target.closest("[data-demo-cart-download]");
             var clearButton = event.target.closest("[data-demo-cart-clear]");
+            var openCartButton = event.target.closest("[data-demo-cart-open]");
+            var cartLink = event.target.closest("a[href*='carrito.html']");
             var productLink = event.target.closest("a[href*='detallearticulo.html'], a[href*='/DetalleArticulo/'], a[data-open-product-detail]");
             var localRouteNode = event.target.closest("[onclick]");
 
@@ -1634,6 +2113,12 @@
             if (clearButton) {
                 event.preventDefault();
                 clearCart();
+                return;
+            }
+
+            if (openCartButton || cartLink) {
+                event.preventDefault();
+                openCartModal();
                 return;
             }
 
@@ -1693,6 +2178,9 @@
         renderDemoButtons();
         patchNativeCart();
         renderMiniCart();
+        if (document.getElementById("pfCartModal") && document.getElementById("pfCartModal").classList.contains("is-open")) {
+            renderCartModal();
+        }
         updateCartCounters();
         renderOrderPage();
         rewriteDomRoutes(document);
