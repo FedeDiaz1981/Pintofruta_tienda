@@ -462,6 +462,18 @@
       "link": "galeria.html?source=/Galeria/693-nuevos-ingresos",
       "active": true,
       "homeSpotlight": false
+    },
+    {
+      "id": 5,
+      "order": 5,
+      "title": "Novedades listas",
+      "subtitle": "Este banner queda marcado para la seccion intermedia del home.",
+      "badge": "Spotlight",
+      "image": "Content/Images/Hero/Slider_03.png",
+      "imageMobile": "Content/Images/Hero/Slider_03_mob.png",
+      "link": "galeria.html?source=/Galeria/2-marcas",
+      "homeSpotlight": false,
+      "active": true
     }
   ],
   "banners": [
